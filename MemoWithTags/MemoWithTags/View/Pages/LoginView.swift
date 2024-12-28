@@ -14,7 +14,7 @@ struct LoginView: View {
     var body: some View {
         
         ZStack {
-            Color(red: 241/255, green: 241/255, blue: 243/255).edgesIgnoringSafeArea(.all)
+            Color.backgroundGray.edgesIgnoringSafeArea(.all)
             
             VStack {
                 VStack(alignment: .leading, spacing: 16) {
@@ -30,7 +30,7 @@ struct LoginView: View {
                         )
                         .padding(14)
                         .font(.system(size: 16, weight: .regular))
-                        .background(Color(red: 241/255, green: 241/255, blue: 243/255))
+                        .background(Color.backgroundGray)
                         .cornerRadius(14)
                         .autocorrectionDisabled(true)
                         .textInputAutocapitalization(.never)
@@ -48,7 +48,7 @@ struct LoginView: View {
                         )
                         .padding(14)
                         .font(.system(size: 16, weight: .regular))
-                        .background(Color(red: 241/255, green: 241/255, blue: 243/255))
+                        .background(Color.backgroundGray)
                         .cornerRadius(14)
                         .autocorrectionDisabled(true)
                         .textInputAutocapitalization(.never)
