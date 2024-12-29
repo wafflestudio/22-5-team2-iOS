@@ -6,7 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
-final class NetworkInterceptor {
-    
+final class NetworkInterceptor: RequestInterceptor {
 }
