@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DACD671D2D2138F900217293 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = DACD671C2D2138F900217293 /* Alamofire */; };
+		55E60FD72D214A0800E452A8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 55E60FD62D214A0800E452A8 /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DACD671D2D2138F900217293 /* Alamofire in Frameworks */,
+				55E60FD72D214A0800E452A8 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,7 +70,7 @@
 			);
 			name = MemoWithTags;
 			packageProductDependencies = (
-				DACD671C2D2138F900217293 /* Alamofire */,
+				55E60FD62D214A0800E452A8 /* Alamofire */,
 			);
 			productName = MemoWithTags;
 			productReference = DA98BFF12D1D4B6B00F992AC /* MemoWithTags.app */;
@@ -101,7 +101,7 @@
 			mainGroup = DA98BFE82D1D4B6B00F992AC;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				DACD671B2D2138F900217293 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				55E60FD52D214A0800E452A8 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DA98BFF22D1D4B6B00F992AC /* Products */;
@@ -335,7 +335,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		DACD671B2D2138F900217293 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		55E60FD52D214A0800E452A8 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
 			requirement = {
@@ -346,9 +346,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		DACD671C2D2138F900217293 /* Alamofire */ = {
+		55E60FD62D214A0800E452A8 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DACD671B2D2138F900217293 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = 55E60FD52D214A0800E452A8 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
