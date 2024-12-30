@@ -6,7 +6,7 @@
 //
 
 protocol LogoutUseCase {
-    func execute(token: AuthToken) async -> Result<Void, LogoutError>
+    func execute() async -> Result<Void, LogoutError>
 }
 
 class DefaultLogoutUseCase: LogoutUseCase {
@@ -16,7 +16,7 @@ class DefaultLogoutUseCase: LogoutUseCase {
         self.authRepository = authRepository
     }
 
-    func execute(token: AuthToken) async -> Result<Void, LogoutError> {
-        return await authRepository.logout(token: token)
+    func execute() async -> Result<Void, LogoutError> {
+        return await authRepository.logout()
     }
 }

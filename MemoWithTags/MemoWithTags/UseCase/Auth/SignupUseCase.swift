@@ -6,7 +6,7 @@
 //
 
 protocol SignupUseCase {
-    func execute(email: String, password: String) async -> Result<Void, LoginError>
+    func execute(email: String, password: String) async -> Result<Auth, RegisterError>
 }
 
 class DefaultSignupUseCase: SignupUseCase {
@@ -15,5 +15,8 @@ class DefaultSignupUseCase: SignupUseCase {
     init(authRepository: AuthRepository) {
         self.authRepository = authRepository
     }
-
+    
+    func execute(email: String, password: String) async -> Result<Auth, RegisterError> {
+        return await authRepository.register(email: email, password: password)
+    }
 }
