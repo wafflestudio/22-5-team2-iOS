@@ -24,34 +24,4 @@ struct AuthDto: Decodable {
     }
 }
 
-enum LoginError: Error {
-    case invalidCredentials
-    case networkError
-    case unknown
-}
-
-enum LogoutError: Error {
-    case networkError
-    case unknown
-}
-
-enum RegisterError: Error {
-    case emailAlreadyExists
-    case invalidEmail
-    case networkError
-    case unknown
-}
-
-enum ResetPasswordError: Error {
-    case invalidPassword
-    case networkError
-    case unknown
-}
-
-enum VerifyEmailError: Error {
-    case emailNotFound
-    case networkError
-    case unknown
-}
-
 

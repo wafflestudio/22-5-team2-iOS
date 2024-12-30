@@ -15,6 +15,8 @@ protocol AuthRepository {
     func login(email: String, password: String) async -> Result<Auth, LoginError>
     ///로그아웃하는 함수. 계정 토큰을 받아와 로그아웃을 실행
     func logout() async -> Result<Void, LogoutError>
+    ///비밀번호 재설정 요청, 인증하는 함수
+    func forgotPassword(email: String) async -> Result<Void, ForgotPasswordError>
     ///비밀번호 재설정하는 함수
     func resetPassword(newPassword: String) async -> Result<Void, ResetPasswordError>
     ///이메일 인증하는 함수
@@ -49,7 +51,7 @@ final class DefaultAuthRepository: AuthRepository {
     func login(email: String, password: String) async -> Result<Auth, LoginError> {
         let endpoint = "/auth/login"
         let requestBody = [
-            "username": email,
+            "email": email,
             "password": password
         ]
 
@@ -84,10 +86,30 @@ final class DefaultAuthRepository: AuthRepository {
         }
     }
     
+    func forgotPassword(email: String) async -> Result<Void, ForgotPasswordError> {
+        let endpoint = "/auth/forgot-password"
+        let requestBody = [
+            "email": email
+        ]
+
+        do {
+            _ = try await AF.request(
+                endpoint,
+                method: .post,
+                parameters: requestBody,
+                encoding: JSONEncoding.default
+            ).serializingData().value
+
+            return .success(())
+        } catch {
+            return .failure(.invalidEmail)
+        }
+    }
+    
     func resetPassword(newPassword: String) async -> Result<Void, ResetPasswordError> {
         let endpoint = "/auth/reset-password"
         let requestBody = [
-            "newPassword": newPassword
+            "password": newPassword
         ]
 
         do {
@@ -123,4 +145,42 @@ final class DefaultAuthRepository: AuthRepository {
             return .failure(.emailNotFound)
         }
     }
+}
+
+
+enum LoginError: Error {
+    case invalidCredentials
+    case networkError
+    case unknown
+}
+
+enum LogoutError: Error {
+    case networkError
+    case unknown
+}
+
+enum RegisterError: Error {
+    case emailAlreadyExists
+    case invalidEmail
+    case networkError
+    case unknown
+}
+
+enum ForgotPasswordError: Error {
+    case invalidEmail
+    case UserNotFound
+    case networkError
+    case unknown
+}
+
+enum ResetPasswordError: Error {
+    case invalidPassword
+    case networkError
+    case unknown
+}
+
+enum VerifyEmailError: Error {
+    case emailNotFound
+    case networkError
+    case unknown
 }
