@@ -6,17 +6,17 @@
 //
 
 protocol ResetPasswordUseCase {
-    func execute(newPassword: String) async -> Result<Void, ResetPasswordError>
+    func execute(email: String, newPassword: String) async -> Result<Void, ResetPasswordError>
 }
 
-final class ResetPasswordUseCaseImpl: ResetPasswordUseCase {
+final class DefaultResetPasswordUseCase: ResetPasswordUseCase {
     let authRepository: AuthRepository
     
     init(authRepository: AuthRepository) {
         self.authRepository = authRepository
     }
     
-    func execute(newPassword: String) async -> Result<Void, ResetPasswordError> {
-        return await authRepository.resetPassword(newPassword: newPassword)
+    func execute(email:String, newPassword: String) async -> Result<Void, ResetPasswordError> {
+        return await authRepository.resetPassword(email: email, newPassword: newPassword)
     }
 }

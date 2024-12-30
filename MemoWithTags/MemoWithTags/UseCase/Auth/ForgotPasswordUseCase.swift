@@ -9,7 +9,7 @@ protocol ForgotPasswordUseCase {
     func execute(email: String) async -> Result<Void, ForgotPasswordError>
 }
 
-final class ForgotPasswordUseCaseImpl: ForgotPasswordUseCase {
+final class DefaultForgotPasswordUseCase: ForgotPasswordUseCase {
     private let authRepository: AuthRepository
 
     init(authRepository: AuthRepository) {

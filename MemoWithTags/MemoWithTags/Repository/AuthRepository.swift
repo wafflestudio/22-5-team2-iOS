@@ -18,7 +18,7 @@ protocol AuthRepository {
     ///비밀번호 재설정 요청, 인증하는 함수
     func forgotPassword(email: String) async -> Result<Void, ForgotPasswordError>
     ///비밀번호 재설정하는 함수
-    func resetPassword(newPassword: String) async -> Result<Void, ResetPasswordError>
+    func resetPassword(email: String, newPassword: String) async -> Result<Void, ResetPasswordError>
     ///이메일 인증하는 함수
     func verifyEmail(email: String) async -> Result<Void, VerifyEmailError>
 }
@@ -106,9 +106,10 @@ final class DefaultAuthRepository: AuthRepository {
         }
     }
     
-    func resetPassword(newPassword: String) async -> Result<Void, ResetPasswordError> {
+    func resetPassword(email:String, newPassword: String) async -> Result<Void, ResetPasswordError> {
         let endpoint = "/auth/reset-password"
         let requestBody = [
+            "email": email,
             "password": newPassword
         ]
 
