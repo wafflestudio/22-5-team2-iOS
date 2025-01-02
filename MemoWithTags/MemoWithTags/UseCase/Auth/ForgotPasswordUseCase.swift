@@ -17,6 +17,12 @@ final class DefaultForgotPasswordUseCase: ForgotPasswordUseCase {
     }
     
     func execute(email: String) async -> Result<Void, ForgotPasswordError> {
-        return await authRepository.forgotPassword(email: email)
+        do {
+            try await authRepository.forgotPassword(email: email)
+            return .success(())
+        } catch {
+            ///error 맵핑 구현
+            return .failure(.invalidEmail)
+        }
     }
 }

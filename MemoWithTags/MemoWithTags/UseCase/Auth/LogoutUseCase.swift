@@ -17,6 +17,12 @@ class DefaultLogoutUseCase: LogoutUseCase {
     }
 
     func execute() async -> Result<Void, LogoutError> {
-        return await authRepository.logout()
+        do {
+            try await authRepository.logout()
+            return .success(())
+        } catch {
+            ///error 맵핑 구현
+            return .failure(.networkError)
+        }
     }
 }

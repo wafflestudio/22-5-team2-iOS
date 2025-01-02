@@ -17,7 +17,14 @@ class DefaultLoginUseCase: LoginUseCase {
     }
 
     func execute(email: String, password: String) async -> Result<Auth, LoginError> {
-        return await authRepository.login(email: email, password: password)
+        do {
+            let auth = try await authRepository.login(email: email, password: password)
+            return .success(auth)
+        } catch {
+            ///error 맵핑 구현
+            return .failure(.invalidCredentials)
+        }
+
     }
 }
 

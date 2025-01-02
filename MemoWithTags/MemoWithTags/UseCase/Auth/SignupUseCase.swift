@@ -17,6 +17,12 @@ class DefaultSignupUseCase: SignupUseCase {
     }
     
     func execute(email: String, password: String) async -> Result<Auth, RegisterError> {
-        return await authRepository.register(email: email, password: password)
+        do {
+            let auth = try await authRepository.register(email: email, password: password)
+            return .success(auth)
+        } catch {
+            ///error 맵핑 구현
+            return .failure(.invalidEmail)
+        }
     }
 }

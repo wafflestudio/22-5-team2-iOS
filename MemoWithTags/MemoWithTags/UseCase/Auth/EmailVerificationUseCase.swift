@@ -17,6 +17,12 @@ final class DefaultEmailVerificationUseCase: EmailVerificationUseCase {
     }
 
     func execute(email: String) async -> Result<Void, VerifyEmailError> {
-        return await authRepository.verifyEmail(email: email)
+        do {
+            try await authRepository.verifyEmail(email: email)
+            return .success(())
+        } catch {
+            ///error 맵핑 구현
+            return .failure(.emailNotFound)
+        }
     }
 }
