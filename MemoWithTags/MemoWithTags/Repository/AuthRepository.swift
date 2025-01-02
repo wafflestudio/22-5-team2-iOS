@@ -27,6 +27,23 @@ final class DefaultAuthRepository: AuthRepository {
     ///singleton
     static let shared = DefaultAuthRepository()
     
+    ///기본 error 코드 분류를 위한 함수.
+    func handleError<T>(response: DataResponse<T, AFError>) throws -> T {
+        guard let statusCode = response.response?.statusCode else {
+            throw BaseError.UNKNOWN
+        }
+        
+        if let error = BaseError(rawValue: statusCode) {
+            throw error
+        } else {
+            guard let authDto = response.value else {
+                throw BaseError.UNKNOWN
+            }
+            
+            return authDto
+        }
+    }
+    
     func register(email: String, password: String) async throws -> Auth {
         let endpoint = "/auth/register"
         let requestBody = [
@@ -34,14 +51,16 @@ final class DefaultAuthRepository: AuthRepository {
             "password": password
         ]
 
-        let response = try await AF.request(
+        let response = await AF.request(
             endpoint,
             method: .post,
             parameters: requestBody,
             encoding: JSONEncoding.default
-        ).serializingDecodable(AuthDto.self).value
+        ).serializingDecodable(AuthDto.self).response
         
-        return response.toAuth()
+        let dto = try handleError(response: response)
+        
+        return dto.toAuth()
     }
     
     func login(email: String, password: String) async throws -> Auth {
@@ -51,25 +70,29 @@ final class DefaultAuthRepository: AuthRepository {
             "password": password
         ]
 
-        let response = try await AF.request(
+        let response = await AF.request(
             endpoint,
             method: .post,
             parameters: requestBody,
             encoding: JSONEncoding.default
-        ).serializingDecodable(AuthDto.self).value
+        ).serializingDecodable(AuthDto.self).response
         
-        return response.toAuth()
+        let dto = try handleError(response: response)
+        
+        return dto.toAuth()
     }
 
     func logout() async throws {
         let endpoint = "/auth/logout"
         
-        _ = try await AF.request(
+        let response = await AF.request(
             endpoint,
             method: .post,
             parameters: [:],
             encoding: JSONEncoding.default
-        ).serializingData().value
+        ).serializingData().response
+        
+        _ = try handleError(response: response)
     }
     
     func forgotPassword(email: String) async throws {
@@ -78,12 +101,14 @@ final class DefaultAuthRepository: AuthRepository {
             "email": email
         ]
         
-        _ = try await AF.request(
+        let response = await AF.request(
             endpoint,
             method: .post,
             parameters: requestBody,
             encoding: JSONEncoding.default
-        ).serializingData().value
+        ).serializingData().response
+        
+        _ = try handleError(response: response)
     }
     
     func resetPassword(email:String, newPassword: String) async throws {
@@ -93,12 +118,14 @@ final class DefaultAuthRepository: AuthRepository {
             "password": newPassword
         ]
         
-        _ = try await AF.request(
+        let response = await AF.request(
             endpoint,
             method: .post,
             parameters: requestBody,
             encoding: JSONEncoding.default
-        ).serializingData().value
+        ).serializingData().response
+        
+        _ = try handleError(response: response)
     }
     
     func verifyEmail(email: String) async throws {
@@ -107,11 +134,13 @@ final class DefaultAuthRepository: AuthRepository {
             "email": email
         ]
         
-        _ = try await AF.request(
+        let response = await AF.request(
             endpoint,
-            method: .get,
+            method: .post,
             parameters: requestBody,
-            encoding: URLEncoding.queryString
-        ).serializingData().value
+            encoding: JSONEncoding.default
+        ).serializingData().response
+        
+        _ = try handleError(response: response)
     }
 }

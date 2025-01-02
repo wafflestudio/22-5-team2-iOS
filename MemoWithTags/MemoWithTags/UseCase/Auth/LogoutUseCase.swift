@@ -22,7 +22,7 @@ class DefaultLogoutUseCase: LogoutUseCase {
             return .success(())
         } catch {
             ///error 맵핑 구현
-            return .failure(.networkError)
+            return .failure(.from(baseError: error as! BaseError))
         }
     }
 }

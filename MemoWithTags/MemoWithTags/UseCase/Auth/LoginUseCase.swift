@@ -22,7 +22,7 @@ class DefaultLoginUseCase: LoginUseCase {
             return .success(auth)
         } catch {
             ///error 맵핑 구현
-            return .failure(.invalidCredentials)
+            return .failure(.from(baseError: error as! BaseError))
         }
 
     }

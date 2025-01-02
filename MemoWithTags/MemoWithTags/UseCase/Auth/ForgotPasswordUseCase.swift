@@ -4,6 +4,8 @@
 //
 //  Created by 최진모 on 12/30/24.
 //
+import Foundation
+
 
 protocol ForgotPasswordUseCase {
     func execute(email: String) async -> Result<Void, ForgotPasswordError>
