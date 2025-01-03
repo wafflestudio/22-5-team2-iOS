@@ -9,5 +9,4 @@ import Foundation
 
 struct NetworkConfiguration {
     static let baseURL: String = "https://api.memo.dev"
-    
 }

@@ -217,14 +217,8 @@
 			isa = PBXGroup;
 			children = (
 				DABFE2342D28416000B314E2 /* Auth */,
-				DABFE2352D28416000B314E2 /* CreateMemoUseCase.swift */,
-				DABFE2362D28416000B314E2 /* CreateTagUseCase.swift */,
-				DABFE2372D28416000B314E2 /* DeleteMemoUseCase.swift */,
-				DABFE2382D28416000B314E2 /* DeleteTagUseCase.swift */,
-				DABFE2392D28416000B314E2 /* FetchMemoUseCase.swift */,
-				DABFE23A2D28416000B314E2 /* FetchTagUseCase.swift */,
-				DABFE23B2D28416000B314E2 /* UpdateMemoUseCase.swift */,
-				DABFE23C2D28416000B314E2 /* UpdateTagUseCase.swift */,
+				DABFE2862D28585300B314E2 /* Memo */,
+				DABFE2852D28582E00B314E2 /* Tag */,
 			);
 			path = UseCase;
 			sourceTree = "<group>";
@@ -275,18 +269,40 @@
 			children = (
 				DABFE2192D28416000B314E2 /* AppState */,
 				DABFE21E2D28416000B314E2 /* Model */,
-				DABFE2202D28416000B314E2 /* Preview Content */,
 				DABFE22C2D28416000B314E2 /* Repository */,
 				DABFE23D2D28416000B314E2 /* UseCase */,
-				DABFE2452D28416000B314E2 /* View */,
 				DABFE24C2D28416000B314E2 /* ViewModel */,
-				DABFE24D2D28416000B314E2 /* Assets.xcassets */,
-				DABFE24E2D28416000B314E2 /* Config.xcconfig */,
+				DABFE2452D28416000B314E2 /* View */,
 				DABFE24F2D28416000B314E2 /* CustomColor.swift */,
 				DABFE2502D28416000B314E2 /* MainTabView.swift */,
 				DABFE2512D28416000B314E2 /* MemoWithTagsApp.swift */,
+				DABFE24E2D28416000B314E2 /* Config.xcconfig */,
+				DABFE24D2D28416000B314E2 /* Assets.xcassets */,
+				DABFE2202D28416000B314E2 /* Preview Content */,
 			);
 			path = MemoWithTags;
+			sourceTree = "<group>";
+		};
+		DABFE2852D28582E00B314E2 /* Tag */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE2362D28416000B314E2 /* CreateTagUseCase.swift */,
+				DABFE23A2D28416000B314E2 /* FetchTagUseCase.swift */,
+				DABFE23C2D28416000B314E2 /* UpdateTagUseCase.swift */,
+				DABFE2382D28416000B314E2 /* DeleteTagUseCase.swift */,
+			);
+			path = Tag;
+			sourceTree = "<group>";
+		};
+		DABFE2862D28585300B314E2 /* Memo */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE2352D28416000B314E2 /* CreateMemoUseCase.swift */,
+				DABFE2392D28416000B314E2 /* FetchMemoUseCase.swift */,
+				DABFE23B2D28416000B314E2 /* UpdateMemoUseCase.swift */,
+				DABFE2372D28416000B314E2 /* DeleteMemoUseCase.swift */,
+			);
+			path = Memo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -25,7 +25,6 @@ extension BaseRepository {
             guard let dto = response.value else {
                 throw BaseError.UNKNOWN
             }
-            
             return dto
         }
     }

@@ -9,23 +9,10 @@ import Foundation
 import Alamofire
 
 final class NetworkInterceptor: RequestInterceptor {
-    private let authRepository: AuthRepository
-    private let lock = NSLock()
-    private var isRefreshing = false
-    private var requestsToRetry: [(RetryResult) -> Void] = []
-    
-    init(authRepository: AuthRepository = DefaultAuthRepository.shared) {
-        self.authRepository = authRepository
-    }
-    
-    // Adapt the request to include the Access Token in the headers
+    ///header에 토큰 달기
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
         var urlRequest = urlRequest
-        
-        // Fetch the current Access Token
-        if let accessToken = NetworkConfiguration.accessToken {
-            urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        }
+        urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
         completion(.success(urlRequest))
     }
