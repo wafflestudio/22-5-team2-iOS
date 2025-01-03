@@ -8,7 +8,7 @@
 import Foundation
 
 protocol CreateMemoUseCase {
-    func execute(content: String, tags: [Int]) async throws -> Memo
+    func execute(content: String, tags: [Int]) async throws -> Result<Memo, MemoError>
 }
 
 class DefaultCreateMemoUseCase: CreateMemoUseCase {
@@ -18,7 +18,13 @@ class DefaultCreateMemoUseCase: CreateMemoUseCase {
         self.memoRepository = memoRepository
     }
 
-    func execute(content: String, tags: [Int]) async throws -> Memo {
-        return try await memoRepository.createMemo(content: content, tags: tags)
+    func execute(content: String, tags: [Int]) async throws -> Result<Memo, MemoError> {
+        do {
+            let memo = try await memoRepository.createMemo(content: content, tags: tags)
+            return .success(memo)
+        } catch {
+            ///error 맵핑 구현
+            return .failure(.networkError)
+        }
     }
 }

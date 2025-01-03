@@ -18,6 +18,7 @@ protocol MemoRepository: BaseRepository {
 class DefaultMemoRepository: MemoRepository {
     ///singleton
     static let shared = DefaultMemoRepository()
+    private init() {}
     
     func fetchMemos(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?) async throws -> [Memo] {
         let response = await AF.request(MemoRouter.fetchMemos(content: content, tags: tags, dateRange: dateRange)).serializingDecodable([MemoDto].self).response

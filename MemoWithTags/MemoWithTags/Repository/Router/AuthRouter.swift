@@ -15,6 +15,7 @@ enum AuthRouter: Router {
     case forgotPassword(email: String)
     case resetPassword(email: String, newPassword: String)
     case verifyEmail(email: String)
+    case getUserInfo
     
     var baseURL: URL {
         return URL(string: NetworkConfiguration.baseURL + "/auth")!
@@ -24,6 +25,8 @@ enum AuthRouter: Router {
         switch self {
         case .register, .login, .logout, .forgotPassword, .resetPassword, .verifyEmail:
             return .post
+        case .getUserInfo:
+            return .get
         }
     }
     
@@ -41,6 +44,8 @@ enum AuthRouter: Router {
             return "/reset-password"
         case .verifyEmail:
             return "/verify-email"
+        case .getUserInfo:
+            return "/me"
         }
     }
     
@@ -54,7 +59,7 @@ enum AuthRouter: Router {
             return ["email": email]
         case let .resetPassword(email, newPassword):
             return ["email": email, "password": newPassword]
-        case .logout:
+        case .logout, .getUserInfo:
             return nil
         }
     }

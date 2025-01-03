@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct Memo {
+struct Memo: Codable {
     let id: Int
     let content: String
     let tags: [Tag] // Fully constructed Tag objects

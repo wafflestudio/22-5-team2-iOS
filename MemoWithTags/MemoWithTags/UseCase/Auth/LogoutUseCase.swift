@@ -20,7 +20,7 @@ class DefaultLogoutUseCase: LogoutUseCase {
         do {
             try await authRepository.logout()
             return .success(())
-        } catch {
+        } catch let error {
             ///error 맵핑 구현
             return .failure(.from(baseError: error as! BaseError))
         }

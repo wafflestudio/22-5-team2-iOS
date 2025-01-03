@@ -56,6 +56,9 @@
 		DABFE2802D28416000B314E2 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = DABFE24E2D28416000B314E2 /* Config.xcconfig */; };
 		DABFE2822D28481100B314E2 /* MemoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2812D28480B00B314E2 /* MemoRouter.swift */; };
 		DABFE2842D284E7200B314E2 /* TagRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2832D284E6800B314E2 /* TagRouter.swift */; };
+		DABFE2882D28634600B314E2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2872D28634400B314E2 /* User.swift */; };
+		DABFE28A2D286BDF00B314E2 /* EmailVerificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2892D286BD200B314E2 /* EmailVerificationViewModel.swift */; };
+		DABFE28D2D286DFB00B314E2 /* UserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE28C2D286DF400B314E2 /* UserState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,6 +111,9 @@
 		DABFE2512D28416000B314E2 /* MemoWithTagsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoWithTagsApp.swift; sourceTree = "<group>"; };
 		DABFE2812D28480B00B314E2 /* MemoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoRouter.swift; sourceTree = "<group>"; };
 		DABFE2832D284E6800B314E2 /* TagRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagRouter.swift; sourceTree = "<group>"; };
+		DABFE2872D28634400B314E2 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		DABFE2892D286BD200B314E2 /* EmailVerificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVerificationViewModel.swift; sourceTree = "<group>"; };
+		DABFE28C2D286DF400B314E2 /* UserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				DABFE2182D28416000B314E2 /* AppState.swift */,
+				DABFE28B2D286DEB00B314E2 /* states */,
 			);
 			path = AppState;
 			sourceTree = "<group>";
@@ -150,9 +157,10 @@
 			isa = PBXGroup;
 			children = (
 				DABFE21A2D28416000B314E2 /* Auth.swift */,
-				DABFE21B2D28416000B314E2 /* Error.swift */,
+				DABFE2872D28634400B314E2 /* User.swift */,
 				DABFE21C2D28416000B314E2 /* Memo.swift */,
 				DABFE21D2D28416000B314E2 /* Tag.swift */,
+				DABFE21B2D28416000B314E2 /* Error.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -202,12 +210,12 @@
 		DABFE2342D28416000B314E2 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				DABFE22D2D28416000B314E2 /* EmailVerificationUseCase.swift */,
-				DABFE22E2D28416000B314E2 /* ForgotPasswordUseCase.swift */,
+				DABFE2322D28416000B314E2 /* SignupUseCase.swift */,
 				DABFE22F2D28416000B314E2 /* LoginUseCase.swift */,
 				DABFE2302D28416000B314E2 /* LogoutUseCase.swift */,
+				DABFE22D2D28416000B314E2 /* EmailVerificationUseCase.swift */,
+				DABFE22E2D28416000B314E2 /* ForgotPasswordUseCase.swift */,
 				DABFE2312D28416000B314E2 /* ResetPasswordUseCase.swift */,
-				DABFE2322D28416000B314E2 /* SignupUseCase.swift */,
 				DABFE2332D28416000B314E2 /* SocialLoginUseCase.swift */,
 			);
 			path = Auth;
@@ -255,10 +263,11 @@
 			isa = PBXGroup;
 			children = (
 				DABFE2462D28416000B314E2 /* LoginViewModel.swift */,
+				DABFE24A2D28416000B314E2 /* SignupViewModel.swift */,
+				DABFE2892D286BD200B314E2 /* EmailVerificationViewModel.swift */,
 				DABFE2472D28416000B314E2 /* MergeViewModel.swift */,
 				DABFE2482D28416000B314E2 /* SearchViewModel.swift */,
 				DABFE2492D28416000B314E2 /* SettingsViewModel.swift */,
-				DABFE24A2D28416000B314E2 /* SignupViewModel.swift */,
 				DABFE24B2D28416000B314E2 /* TodaysMemoViewModel.swift */,
 			);
 			path = ViewModel;
@@ -303,6 +312,14 @@
 				DABFE2372D28416000B314E2 /* DeleteMemoUseCase.swift */,
 			);
 			path = Memo;
+			sourceTree = "<group>";
+		};
+		DABFE28B2D286DEB00B314E2 /* states */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE28C2D286DF400B314E2 /* UserState.swift */,
+			);
+			path = states;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -405,6 +422,7 @@
 				DABFE2652D28416000B314E2 /* ResetPasswordUseCase.swift in Sources */,
 				DABFE2662D28416000B314E2 /* SignupUseCase.swift in Sources */,
 				DABFE2672D28416000B314E2 /* SocialLoginUseCase.swift in Sources */,
+				DABFE2882D28634600B314E2 /* User.swift in Sources */,
 				DABFE2682D28416000B314E2 /* CreateMemoUseCase.swift in Sources */,
 				DABFE2822D28481100B314E2 /* MemoRouter.swift in Sources */,
 				DABFE2692D28416000B314E2 /* CreateTagUseCase.swift in Sources */,
@@ -419,10 +437,12 @@
 				DABFE2722D28416000B314E2 /* SearchView.swift in Sources */,
 				DABFE2732D28416000B314E2 /* SettingsView.swift in Sources */,
 				DABFE2742D28416000B314E2 /* TodaysMemoView.swift in Sources */,
+				DABFE28A2D286BDF00B314E2 /* EmailVerificationViewModel.swift in Sources */,
 				DABFE2752D28416000B314E2 /* LoginViewModel.swift in Sources */,
 				DABFE2762D28416000B314E2 /* MergeViewModel.swift in Sources */,
 				DABFE2772D28416000B314E2 /* SearchViewModel.swift in Sources */,
 				DABFE2782D28416000B314E2 /* SettingsViewModel.swift in Sources */,
+				DABFE28D2D286DFB00B314E2 /* UserState.swift in Sources */,
 				DABFE2792D28416000B314E2 /* SignupViewModel.swift in Sources */,
 				DABFE27A2D28416000B314E2 /* TodaysMemoViewModel.swift in Sources */,
 				DABFE27B2D28416000B314E2 /* CustomColor.swift in Sources */,

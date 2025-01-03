@@ -12,12 +12,12 @@ import Security
 class KeyChainManager {
     ///singleton
     static let shared = KeyChainManager()
-    
     private init() {}
     
-    /// Keychain에 Access Token 저장
+    private let service = "com.memoWithTags.service"
+    
+    /// Keychain에 Access Token 저장, 이미 존재한다면 덮어씀
     func saveAccessToken(token: String) -> Bool {
-        let service = "com.memoWithTags.service"
         let account = "accessToken"
         guard let data = token.data(using: .utf8) else { return false }
         return save(service: service, account: account, data: data)
@@ -25,7 +25,6 @@ class KeyChainManager {
     
     /// Keychain에 Refresh Token 저장
     func saveRefreshToken(token: String) -> Bool {
-        let service = "com.memoWithTags.service"
         let account = "refreshToken"
         guard let data = token.data(using: .utf8) else { return false }
         return save(service: service, account: account, data: data)
@@ -33,7 +32,6 @@ class KeyChainManager {
     
     /// Keychain에서 Access Token 불러오기
     func readAccessToken() -> String? {
-        let service = "com.memoWithTags.service"
         let account = "accessToken"
         guard let data = read(service: service, account: account) else { return nil }
         return String(data: data, encoding: .utf8)
@@ -41,7 +39,6 @@ class KeyChainManager {
     
     /// Keychain에서 Refresh Token 불러오기
     func readRefreshToken() -> String? {
-        let service = "com.memoWithTags.service"
         let account = "refreshToken"
         guard let data = read(service: service, account: account) else { return nil }
         return String(data: data, encoding: .utf8)
@@ -49,14 +46,12 @@ class KeyChainManager {
     
     /// Keychain에서 Access Token 삭제하기
     func deleteAccessToken() -> Bool {
-        let service = "com.memoWithTags.service"
         let account = "accessToken"
         return delete(service: service, account: account)
     }
     
     /// Keychain에서 Refresh Token 삭제하기
     func deleteRefreshToken() -> Bool {
-        let service = "com.memoWithTags.service"
         let account = "refreshToken"
         return delete(service: service, account: account)
     }

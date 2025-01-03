@@ -102,14 +102,14 @@ enum RegisterError: Error {
 }
 
 enum ForgotPasswordError: Error {
-    case invalidEmail
+    case notMatchCode
     case UserNotFound
     case networkError
     case unknown
     
     func localizedDescription() -> String {
         switch self {
-        case .invalidEmail: return "유효하지 않은 이메일입니다."
+        case .notMatchCode: return "인증 코드가 올바르지 않습니다."
         case .UserNotFound: return "사용자를 찾을 수 없습니다."
         case .networkError: return "Network error"
         case .unknown: return "Unknown error"
@@ -118,13 +118,11 @@ enum ForgotPasswordError: Error {
 }
 
 enum ResetPasswordError: Error {
-    case invalidPassword
     case networkError
     case unknown
     
     func localizedDescription() -> String {
         switch self {
-        case .invalidPassword: return "유효하지 않은 패스워드입니다."
         case .networkError: return "Network error"
         case .unknown: return "Unknown error"
         }
@@ -132,13 +130,37 @@ enum ResetPasswordError: Error {
 }
 
 enum VerifyEmailError: Error {
-    case emailNotFound
+    case notMatchCode
     case networkError
     case unknown
     
     func localizedDescription() -> String {
         switch self {
-        case .emailNotFound: return "유효하지 않은 이메일입니다."
+        case .notMatchCode: return "인증코드가 올바르지 않습니다."
+        case .networkError: return "Network error"
+        case .unknown: return "Unknown error"
+        }
+    }
+}
+
+enum MemoError: Error {
+    case networkError
+    case unknown
+    
+    func localizedDescription() -> String {
+        switch self {
+        case .networkError: return "Network error"
+        case .unknown: return "Unknown error"
+        }
+    }
+}
+
+enum TagError: Error {
+    case networkError
+    case unknown
+    
+    func localizedDescription() -> String {
+        switch self {
         case .networkError: return "Network error"
         case .unknown: return "Unknown error"
         }

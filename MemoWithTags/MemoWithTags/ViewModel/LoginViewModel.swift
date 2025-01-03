@@ -25,7 +25,6 @@ final class LoginViewModel: ObservableObject {
             case .success:
                 isLoggedIn = true
                 errorMessage = nil
-                
             case .failure(let error):
                 
             }

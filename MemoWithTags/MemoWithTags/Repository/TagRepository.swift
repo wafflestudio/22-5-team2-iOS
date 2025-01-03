@@ -17,7 +17,8 @@ protocol TagRepository: BaseRepository {
 class DefaultTagRepository: TagRepository {
     ///singleton
     static let shared = DefaultTagRepository()
-
+    private init() {}
+    
     func fetchTags() async throws -> [Tag] {
         let response = await AF.request(TagRouter.fetchTags).serializingDecodable([TagDto].self).response
         let dto = try handleError(response: response)

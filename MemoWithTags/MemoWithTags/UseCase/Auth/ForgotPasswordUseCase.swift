@@ -24,7 +24,7 @@ final class DefaultForgotPasswordUseCase: ForgotPasswordUseCase {
             return .success(())
         } catch {
             ///error 맵핑 구현
-            return .failure(.invalidEmail)
+            return .failure(.notMatchCode)
         }
     }
 }

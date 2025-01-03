@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FetchTagUseCase {
-    func execute() async -> [Tag]
+    func execute() async -> Result<[Tag], MemoError>
 }
 
 class DefaultFetchTagUseCase: FetchTagUseCase {
@@ -18,7 +18,13 @@ class DefaultFetchTagUseCase: FetchTagUseCase {
         self.tagRepository = tagRepository
     }
 
-    func execute() async -> [Tag] {
-        return await tagRepository.fetchTags()
+    func execute() async -> Result<[Tag], MemoError>{
+        do {
+            let tags = try await tagRepository.fetchTags()
+            return .success(tags)
+        } catch let error {
+            ///error 맵핑 구현
+            return .failure(.networkError)
+        }
     }
 }

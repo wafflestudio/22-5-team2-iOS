@@ -20,7 +20,7 @@ class DefaultLoginUseCase: LoginUseCase {
         do {
             let auth = try await authRepository.login(email: email, password: password)
             return .success(auth)
-        } catch {
+        } catch let error {
             ///error 맵핑 구현
             return .failure(.from(baseError: error as! BaseError))
         }

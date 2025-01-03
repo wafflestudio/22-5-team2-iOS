@@ -8,7 +8,7 @@
 import Foundation
 
 protocol DeleteMemoUseCase {
-    func execute(memoId: Int) async throws
+    func execute(memoId: Int) async throws -> Result<Void, MemoError>
 }
 
 class DefaultDeleteMemoUseCase: DeleteMemoUseCase {
@@ -18,7 +18,13 @@ class DefaultDeleteMemoUseCase: DeleteMemoUseCase {
         self.memoRepository = memoRepository
     }
 
-    func execute(memoId: Int) async throws {
-        try await memoRepository.deleteMemo(memoId: memoId)
+    func execute(memoId: Int) async throws -> Result<Void, MemoError> {
+        do {
+            _ = try await memoRepository.deleteMemo(memoId: memoId)
+            return .success(())
+        } catch let error {
+            ///error 맵핑 구현
+            return .failure(.networkError)
+        }
     }
 }
