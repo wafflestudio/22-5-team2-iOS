@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-protocol AuthRepository {
+protocol AuthRepository: BaseRepository {
     ///회원가입하는 함수.
     func register(email: String, password: String) async throws -> Auth
     ///로그인하는 함수. email과 password를 받아 계정 토큰을 반환함
@@ -27,120 +27,37 @@ final class DefaultAuthRepository: AuthRepository {
     ///singleton
     static let shared = DefaultAuthRepository()
     
-    ///기본 error 코드 분류를 위한 함수.
-    func handleError<T>(response: DataResponse<T, AFError>) throws -> T {
-        guard let statusCode = response.response?.statusCode else {
-            throw BaseError.UNKNOWN
-        }
-        
-        if let error = BaseError(rawValue: statusCode) {
-            throw error
-        } else {
-            guard let authDto = response.value else {
-                throw BaseError.UNKNOWN
-            }
-            
-            return authDto
-        }
-    }
-    
     func register(email: String, password: String) async throws -> Auth {
-        let endpoint = "/auth/register"
-        let requestBody = [
-            "email": email,
-            "password": password
-        ]
-
-        let response = await AF.request(
-            endpoint,
-            method: .post,
-            parameters: requestBody,
-            encoding: JSONEncoding.default
-        ).serializingDecodable(AuthDto.self).response
-        
+        let response = await AF.request(AuthRouter.register(email: email, password: password)).serializingDecodable(AuthDto.self).response
         let dto = try handleError(response: response)
         
         return dto.toAuth()
     }
     
     func login(email: String, password: String) async throws -> Auth {
-        let endpoint = "/auth/login"
-        let requestBody = [
-            "email": email,
-            "password": password
-        ]
-
-        let response = await AF.request(
-            endpoint,
-            method: .post,
-            parameters: requestBody,
-            encoding: JSONEncoding.default
-        ).serializingDecodable(AuthDto.self).response
-        
+        let response = await AF.request(AuthRouter.login(email: email, password: password)).serializingDecodable(AuthDto.self).response
         let dto = try handleError(response: response)
         
         return dto.toAuth()
     }
 
     func logout() async throws {
-        let endpoint = "/auth/logout"
-        
-        let response = await AF.request(
-            endpoint,
-            method: .post,
-            parameters: [:],
-            encoding: JSONEncoding.default
-        ).serializingData().response
-        
+        let response = await AF.request(AuthRouter.logout).serializingData().response
         _ = try handleError(response: response)
     }
     
     func forgotPassword(email: String) async throws {
-        let endpoint = "/auth/forgot-password"
-        let requestBody = [
-            "email": email
-        ]
-        
-        let response = await AF.request(
-            endpoint,
-            method: .post,
-            parameters: requestBody,
-            encoding: JSONEncoding.default
-        ).serializingData().response
-        
+        let response = await AF.request(AuthRouter.forgotPassword(email: email)).serializingData().response
         _ = try handleError(response: response)
     }
     
     func resetPassword(email:String, newPassword: String) async throws {
-        let endpoint = "/auth/reset-password"
-        let requestBody = [
-            "email": email,
-            "password": newPassword
-        ]
-        
-        let response = await AF.request(
-            endpoint,
-            method: .post,
-            parameters: requestBody,
-            encoding: JSONEncoding.default
-        ).serializingData().response
-        
+        let response = await AF.request(AuthRouter.resetPassword(email: email, newPassword: newPassword)).serializingData().response
         _ = try handleError(response: response)
     }
     
     func verifyEmail(email: String) async throws {
-        let endpoint = "/auth/verify-email"
-        let requestBody = [
-            "email": email
-        ]
-        
-        let response = await AF.request(
-            endpoint,
-            method: .post,
-            parameters: requestBody,
-            encoding: JSONEncoding.default
-        ).serializingData().response
-        
+        let response = await AF.request(AuthRouter.verifyEmail(email: email)).serializingData().response
         _ = try handleError(response: response)
     }
 }

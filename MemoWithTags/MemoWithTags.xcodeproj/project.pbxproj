@@ -8,19 +8,107 @@
 
 /* Begin PBXBuildFile section */
 		55E60FD72D214A0800E452A8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 55E60FD62D214A0800E452A8 /* Alamofire */; };
+		DABFE2532D28416000B314E2 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2182D28416000B314E2 /* AppState.swift */; };
+		DABFE2542D28416000B314E2 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE21A2D28416000B314E2 /* Auth.swift */; };
+		DABFE2552D28416000B314E2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE21B2D28416000B314E2 /* Error.swift */; };
+		DABFE2562D28416000B314E2 /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE21C2D28416000B314E2 /* Memo.swift */; };
+		DABFE2572D28416000B314E2 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE21D2D28416000B314E2 /* Tag.swift */; };
+		DABFE2582D28416000B314E2 /* NetworkConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2212D28416000B314E2 /* NetworkConfiguration.swift */; };
+		DABFE2592D28416000B314E2 /* NetworkInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2222D28416000B314E2 /* NetworkInterceptor.swift */; };
+		DABFE25A2D28416000B314E2 /* AuthRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2242D28416000B314E2 /* AuthRouter.swift */; };
+		DABFE25B2D28416000B314E2 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2252D28416000B314E2 /* Router.swift */; };
+		DABFE25C2D28416000B314E2 /* AuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2272D28416000B314E2 /* AuthRepository.swift */; };
+		DABFE25D2D28416000B314E2 /* BaseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2282D28416000B314E2 /* BaseRepository.swift */; };
+		DABFE25E2D28416000B314E2 /* KeyChainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2292D28416000B314E2 /* KeyChainManager.swift */; };
+		DABFE25F2D28416000B314E2 /* MemoRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE22A2D28416000B314E2 /* MemoRepository.swift */; };
+		DABFE2602D28416000B314E2 /* TagRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE22B2D28416000B314E2 /* TagRepository.swift */; };
+		DABFE2612D28416000B314E2 /* EmailVerificationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE22D2D28416000B314E2 /* EmailVerificationUseCase.swift */; };
+		DABFE2622D28416000B314E2 /* ForgotPasswordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE22E2D28416000B314E2 /* ForgotPasswordUseCase.swift */; };
+		DABFE2632D28416000B314E2 /* LoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE22F2D28416000B314E2 /* LoginUseCase.swift */; };
+		DABFE2642D28416000B314E2 /* LogoutUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2302D28416000B314E2 /* LogoutUseCase.swift */; };
+		DABFE2652D28416000B314E2 /* ResetPasswordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2312D28416000B314E2 /* ResetPasswordUseCase.swift */; };
+		DABFE2662D28416000B314E2 /* SignupUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2322D28416000B314E2 /* SignupUseCase.swift */; };
+		DABFE2672D28416000B314E2 /* SocialLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2332D28416000B314E2 /* SocialLoginUseCase.swift */; };
+		DABFE2682D28416000B314E2 /* CreateMemoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2352D28416000B314E2 /* CreateMemoUseCase.swift */; };
+		DABFE2692D28416000B314E2 /* CreateTagUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2362D28416000B314E2 /* CreateTagUseCase.swift */; };
+		DABFE26A2D28416000B314E2 /* DeleteMemoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2372D28416000B314E2 /* DeleteMemoUseCase.swift */; };
+		DABFE26B2D28416000B314E2 /* DeleteTagUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2382D28416000B314E2 /* DeleteTagUseCase.swift */; };
+		DABFE26C2D28416000B314E2 /* FetchMemoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2392D28416000B314E2 /* FetchMemoUseCase.swift */; };
+		DABFE26D2D28416000B314E2 /* FetchTagUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE23A2D28416000B314E2 /* FetchTagUseCase.swift */; };
+		DABFE26E2D28416000B314E2 /* UpdateMemoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE23B2D28416000B314E2 /* UpdateMemoUseCase.swift */; };
+		DABFE26F2D28416000B314E2 /* UpdateTagUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE23C2D28416000B314E2 /* UpdateTagUseCase.swift */; };
+		DABFE2702D28416000B314E2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE23E2D28416000B314E2 /* LoginView.swift */; };
+		DABFE2712D28416000B314E2 /* MergeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE23F2D28416000B314E2 /* MergeView.swift */; };
+		DABFE2722D28416000B314E2 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2402D28416000B314E2 /* SearchView.swift */; };
+		DABFE2732D28416000B314E2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2412D28416000B314E2 /* SettingsView.swift */; };
+		DABFE2742D28416000B314E2 /* TodaysMemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2422D28416000B314E2 /* TodaysMemoView.swift */; };
+		DABFE2752D28416000B314E2 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2462D28416000B314E2 /* LoginViewModel.swift */; };
+		DABFE2762D28416000B314E2 /* MergeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2472D28416000B314E2 /* MergeViewModel.swift */; };
+		DABFE2772D28416000B314E2 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2482D28416000B314E2 /* SearchViewModel.swift */; };
+		DABFE2782D28416000B314E2 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2492D28416000B314E2 /* SettingsViewModel.swift */; };
+		DABFE2792D28416000B314E2 /* SignupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE24A2D28416000B314E2 /* SignupViewModel.swift */; };
+		DABFE27A2D28416000B314E2 /* TodaysMemoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE24B2D28416000B314E2 /* TodaysMemoViewModel.swift */; };
+		DABFE27B2D28416000B314E2 /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE24F2D28416000B314E2 /* CustomColor.swift */; };
+		DABFE27C2D28416000B314E2 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2502D28416000B314E2 /* MainTabView.swift */; };
+		DABFE27D2D28416000B314E2 /* MemoWithTagsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2512D28416000B314E2 /* MemoWithTagsApp.swift */; };
+		DABFE27E2D28416000B314E2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DABFE21F2D28416000B314E2 /* Preview Assets.xcassets */; };
+		DABFE27F2D28416000B314E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DABFE24D2D28416000B314E2 /* Assets.xcassets */; };
+		DABFE2802D28416000B314E2 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = DABFE24E2D28416000B314E2 /* Config.xcconfig */; };
+		DABFE2822D28481100B314E2 /* MemoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2812D28480B00B314E2 /* MemoRouter.swift */; };
+		DABFE2842D284E7200B314E2 /* TagRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2832D284E6800B314E2 /* TagRouter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		DA98BFF12D1D4B6B00F992AC /* MemoWithTags.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemoWithTags.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DABFE2182D28416000B314E2 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		DABFE21A2D28416000B314E2 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
+		DABFE21B2D28416000B314E2 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		DABFE21C2D28416000B314E2 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
+		DABFE21D2D28416000B314E2 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+		DABFE21F2D28416000B314E2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		DABFE2212D28416000B314E2 /* NetworkConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfiguration.swift; sourceTree = "<group>"; };
+		DABFE2222D28416000B314E2 /* NetworkInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkInterceptor.swift; sourceTree = "<group>"; };
+		DABFE2242D28416000B314E2 /* AuthRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRouter.swift; sourceTree = "<group>"; };
+		DABFE2252D28416000B314E2 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		DABFE2272D28416000B314E2 /* AuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepository.swift; sourceTree = "<group>"; };
+		DABFE2282D28416000B314E2 /* BaseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRepository.swift; sourceTree = "<group>"; };
+		DABFE2292D28416000B314E2 /* KeyChainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainManager.swift; sourceTree = "<group>"; };
+		DABFE22A2D28416000B314E2 /* MemoRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoRepository.swift; sourceTree = "<group>"; };
+		DABFE22B2D28416000B314E2 /* TagRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagRepository.swift; sourceTree = "<group>"; };
+		DABFE22D2D28416000B314E2 /* EmailVerificationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVerificationUseCase.swift; sourceTree = "<group>"; };
+		DABFE22E2D28416000B314E2 /* ForgotPasswordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordUseCase.swift; sourceTree = "<group>"; };
+		DABFE22F2D28416000B314E2 /* LoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUseCase.swift; sourceTree = "<group>"; };
+		DABFE2302D28416000B314E2 /* LogoutUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutUseCase.swift; sourceTree = "<group>"; };
+		DABFE2312D28416000B314E2 /* ResetPasswordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordUseCase.swift; sourceTree = "<group>"; };
+		DABFE2322D28416000B314E2 /* SignupUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupUseCase.swift; sourceTree = "<group>"; };
+		DABFE2332D28416000B314E2 /* SocialLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLoginUseCase.swift; sourceTree = "<group>"; };
+		DABFE2352D28416000B314E2 /* CreateMemoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMemoUseCase.swift; sourceTree = "<group>"; };
+		DABFE2362D28416000B314E2 /* CreateTagUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTagUseCase.swift; sourceTree = "<group>"; };
+		DABFE2372D28416000B314E2 /* DeleteMemoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteMemoUseCase.swift; sourceTree = "<group>"; };
+		DABFE2382D28416000B314E2 /* DeleteTagUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTagUseCase.swift; sourceTree = "<group>"; };
+		DABFE2392D28416000B314E2 /* FetchMemoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMemoUseCase.swift; sourceTree = "<group>"; };
+		DABFE23A2D28416000B314E2 /* FetchTagUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchTagUseCase.swift; sourceTree = "<group>"; };
+		DABFE23B2D28416000B314E2 /* UpdateMemoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateMemoUseCase.swift; sourceTree = "<group>"; };
+		DABFE23C2D28416000B314E2 /* UpdateTagUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateTagUseCase.swift; sourceTree = "<group>"; };
+		DABFE23E2D28416000B314E2 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		DABFE23F2D28416000B314E2 /* MergeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeView.swift; sourceTree = "<group>"; };
+		DABFE2402D28416000B314E2 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		DABFE2412D28416000B314E2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		DABFE2422D28416000B314E2 /* TodaysMemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaysMemoView.swift; sourceTree = "<group>"; };
+		DABFE2462D28416000B314E2 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		DABFE2472D28416000B314E2 /* MergeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeViewModel.swift; sourceTree = "<group>"; };
+		DABFE2482D28416000B314E2 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		DABFE2492D28416000B314E2 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		DABFE24A2D28416000B314E2 /* SignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewModel.swift; sourceTree = "<group>"; };
+		DABFE24B2D28416000B314E2 /* TodaysMemoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaysMemoViewModel.swift; sourceTree = "<group>"; };
+		DABFE24D2D28416000B314E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DABFE24E2D28416000B314E2 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		DABFE24F2D28416000B314E2 /* CustomColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColor.swift; sourceTree = "<group>"; };
+		DABFE2502D28416000B314E2 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		DABFE2512D28416000B314E2 /* MemoWithTagsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoWithTagsApp.swift; sourceTree = "<group>"; };
+		DABFE2812D28480B00B314E2 /* MemoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoRouter.swift; sourceTree = "<group>"; };
+		DABFE2832D284E6800B314E2 /* TagRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagRouter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		DA98BFF32D1D4B6B00F992AC /* MemoWithTags */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MemoWithTags;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		DA98BFEE2D1D4B6B00F992AC /* Frameworks */ = {
@@ -37,7 +125,7 @@
 		DA98BFE82D1D4B6B00F992AC = {
 			isa = PBXGroup;
 			children = (
-				DA98BFF32D1D4B6B00F992AC /* MemoWithTags */,
+				DABFE2522D28416000B314E2 /* MemoWithTags */,
 				DA98BFF22D1D4B6B00F992AC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -48,6 +136,157 @@
 				DA98BFF12D1D4B6B00F992AC /* MemoWithTags.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		DABFE2192D28416000B314E2 /* AppState */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE2182D28416000B314E2 /* AppState.swift */,
+			);
+			path = AppState;
+			sourceTree = "<group>";
+		};
+		DABFE21E2D28416000B314E2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE21A2D28416000B314E2 /* Auth.swift */,
+				DABFE21B2D28416000B314E2 /* Error.swift */,
+				DABFE21C2D28416000B314E2 /* Memo.swift */,
+				DABFE21D2D28416000B314E2 /* Tag.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		DABFE2202D28416000B314E2 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE21F2D28416000B314E2 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		DABFE2232D28416000B314E2 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE2212D28416000B314E2 /* NetworkConfiguration.swift */,
+				DABFE2222D28416000B314E2 /* NetworkInterceptor.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		DABFE2262D28416000B314E2 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE2252D28416000B314E2 /* Router.swift */,
+				DABFE2242D28416000B314E2 /* AuthRouter.swift */,
+				DABFE2812D28480B00B314E2 /* MemoRouter.swift */,
+				DABFE2832D284E6800B314E2 /* TagRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		DABFE22C2D28416000B314E2 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE2232D28416000B314E2 /* Network */,
+				DABFE2262D28416000B314E2 /* Router */,
+				DABFE2282D28416000B314E2 /* BaseRepository.swift */,
+				DABFE2272D28416000B314E2 /* AuthRepository.swift */,
+				DABFE22A2D28416000B314E2 /* MemoRepository.swift */,
+				DABFE22B2D28416000B314E2 /* TagRepository.swift */,
+				DABFE2292D28416000B314E2 /* KeyChainManager.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		DABFE2342D28416000B314E2 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE22D2D28416000B314E2 /* EmailVerificationUseCase.swift */,
+				DABFE22E2D28416000B314E2 /* ForgotPasswordUseCase.swift */,
+				DABFE22F2D28416000B314E2 /* LoginUseCase.swift */,
+				DABFE2302D28416000B314E2 /* LogoutUseCase.swift */,
+				DABFE2312D28416000B314E2 /* ResetPasswordUseCase.swift */,
+				DABFE2322D28416000B314E2 /* SignupUseCase.swift */,
+				DABFE2332D28416000B314E2 /* SocialLoginUseCase.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		DABFE23D2D28416000B314E2 /* UseCase */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE2342D28416000B314E2 /* Auth */,
+				DABFE2352D28416000B314E2 /* CreateMemoUseCase.swift */,
+				DABFE2362D28416000B314E2 /* CreateTagUseCase.swift */,
+				DABFE2372D28416000B314E2 /* DeleteMemoUseCase.swift */,
+				DABFE2382D28416000B314E2 /* DeleteTagUseCase.swift */,
+				DABFE2392D28416000B314E2 /* FetchMemoUseCase.swift */,
+				DABFE23A2D28416000B314E2 /* FetchTagUseCase.swift */,
+				DABFE23B2D28416000B314E2 /* UpdateMemoUseCase.swift */,
+				DABFE23C2D28416000B314E2 /* UpdateTagUseCase.swift */,
+			);
+			path = UseCase;
+			sourceTree = "<group>";
+		};
+		DABFE2432D28416000B314E2 /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE23E2D28416000B314E2 /* LoginView.swift */,
+				DABFE23F2D28416000B314E2 /* MergeView.swift */,
+				DABFE2402D28416000B314E2 /* SearchView.swift */,
+				DABFE2412D28416000B314E2 /* SettingsView.swift */,
+				DABFE2422D28416000B314E2 /* TodaysMemoView.swift */,
+			);
+			path = Pages;
+			sourceTree = "<group>";
+		};
+		DABFE2442D28416000B314E2 /* SubView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SubView;
+			sourceTree = "<group>";
+		};
+		DABFE2452D28416000B314E2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE2432D28416000B314E2 /* Pages */,
+				DABFE2442D28416000B314E2 /* SubView */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DABFE24C2D28416000B314E2 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE2462D28416000B314E2 /* LoginViewModel.swift */,
+				DABFE2472D28416000B314E2 /* MergeViewModel.swift */,
+				DABFE2482D28416000B314E2 /* SearchViewModel.swift */,
+				DABFE2492D28416000B314E2 /* SettingsViewModel.swift */,
+				DABFE24A2D28416000B314E2 /* SignupViewModel.swift */,
+				DABFE24B2D28416000B314E2 /* TodaysMemoViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		DABFE2522D28416000B314E2 /* MemoWithTags */ = {
+			isa = PBXGroup;
+			children = (
+				DABFE2192D28416000B314E2 /* AppState */,
+				DABFE21E2D28416000B314E2 /* Model */,
+				DABFE2202D28416000B314E2 /* Preview Content */,
+				DABFE22C2D28416000B314E2 /* Repository */,
+				DABFE23D2D28416000B314E2 /* UseCase */,
+				DABFE2452D28416000B314E2 /* View */,
+				DABFE24C2D28416000B314E2 /* ViewModel */,
+				DABFE24D2D28416000B314E2 /* Assets.xcassets */,
+				DABFE24E2D28416000B314E2 /* Config.xcconfig */,
+				DABFE24F2D28416000B314E2 /* CustomColor.swift */,
+				DABFE2502D28416000B314E2 /* MainTabView.swift */,
+				DABFE2512D28416000B314E2 /* MemoWithTagsApp.swift */,
+			);
+			path = MemoWithTags;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -64,9 +303,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				DA98BFF32D1D4B6B00F992AC /* MemoWithTags */,
 			);
 			name = MemoWithTags;
 			packageProductDependencies = (
@@ -118,6 +354,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DABFE27E2D28416000B314E2 /* Preview Assets.xcassets in Resources */,
+				DABFE27F2D28416000B314E2 /* Assets.xcassets in Resources */,
+				DABFE2802D28416000B314E2 /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,6 +367,51 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DABFE2532D28416000B314E2 /* AppState.swift in Sources */,
+				DABFE2542D28416000B314E2 /* Auth.swift in Sources */,
+				DABFE2552D28416000B314E2 /* Error.swift in Sources */,
+				DABFE2562D28416000B314E2 /* Memo.swift in Sources */,
+				DABFE2572D28416000B314E2 /* Tag.swift in Sources */,
+				DABFE2582D28416000B314E2 /* NetworkConfiguration.swift in Sources */,
+				DABFE2592D28416000B314E2 /* NetworkInterceptor.swift in Sources */,
+				DABFE25A2D28416000B314E2 /* AuthRouter.swift in Sources */,
+				DABFE25B2D28416000B314E2 /* Router.swift in Sources */,
+				DABFE25C2D28416000B314E2 /* AuthRepository.swift in Sources */,
+				DABFE25D2D28416000B314E2 /* BaseRepository.swift in Sources */,
+				DABFE2842D284E7200B314E2 /* TagRouter.swift in Sources */,
+				DABFE25E2D28416000B314E2 /* KeyChainManager.swift in Sources */,
+				DABFE25F2D28416000B314E2 /* MemoRepository.swift in Sources */,
+				DABFE2602D28416000B314E2 /* TagRepository.swift in Sources */,
+				DABFE2612D28416000B314E2 /* EmailVerificationUseCase.swift in Sources */,
+				DABFE2622D28416000B314E2 /* ForgotPasswordUseCase.swift in Sources */,
+				DABFE2632D28416000B314E2 /* LoginUseCase.swift in Sources */,
+				DABFE2642D28416000B314E2 /* LogoutUseCase.swift in Sources */,
+				DABFE2652D28416000B314E2 /* ResetPasswordUseCase.swift in Sources */,
+				DABFE2662D28416000B314E2 /* SignupUseCase.swift in Sources */,
+				DABFE2672D28416000B314E2 /* SocialLoginUseCase.swift in Sources */,
+				DABFE2682D28416000B314E2 /* CreateMemoUseCase.swift in Sources */,
+				DABFE2822D28481100B314E2 /* MemoRouter.swift in Sources */,
+				DABFE2692D28416000B314E2 /* CreateTagUseCase.swift in Sources */,
+				DABFE26A2D28416000B314E2 /* DeleteMemoUseCase.swift in Sources */,
+				DABFE26B2D28416000B314E2 /* DeleteTagUseCase.swift in Sources */,
+				DABFE26C2D28416000B314E2 /* FetchMemoUseCase.swift in Sources */,
+				DABFE26D2D28416000B314E2 /* FetchTagUseCase.swift in Sources */,
+				DABFE26E2D28416000B314E2 /* UpdateMemoUseCase.swift in Sources */,
+				DABFE26F2D28416000B314E2 /* UpdateTagUseCase.swift in Sources */,
+				DABFE2702D28416000B314E2 /* LoginView.swift in Sources */,
+				DABFE2712D28416000B314E2 /* MergeView.swift in Sources */,
+				DABFE2722D28416000B314E2 /* SearchView.swift in Sources */,
+				DABFE2732D28416000B314E2 /* SettingsView.swift in Sources */,
+				DABFE2742D28416000B314E2 /* TodaysMemoView.swift in Sources */,
+				DABFE2752D28416000B314E2 /* LoginViewModel.swift in Sources */,
+				DABFE2762D28416000B314E2 /* MergeViewModel.swift in Sources */,
+				DABFE2772D28416000B314E2 /* SearchViewModel.swift in Sources */,
+				DABFE2782D28416000B314E2 /* SettingsViewModel.swift in Sources */,
+				DABFE2792D28416000B314E2 /* SignupViewModel.swift in Sources */,
+				DABFE27A2D28416000B314E2 /* TodaysMemoViewModel.swift in Sources */,
+				DABFE27B2D28416000B314E2 /* CustomColor.swift in Sources */,
+				DABFE27C2D28416000B314E2 /* MainTabView.swift in Sources */,
+				DABFE27D2D28416000B314E2 /* MemoWithTagsApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

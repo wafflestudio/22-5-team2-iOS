@@ -7,58 +7,40 @@
 
 import Alamofire
 
-protocol TagRepository {
-    func fetchTags() async -> [Tag]
+protocol TagRepository: BaseRepository {
+    func fetchTags() async throws -> [Tag]
     func createTag(name: String, color: Int) async throws -> Tag
     func deleteTag(tagId: Int) async throws
     func updateTag(tagId: Int, name: String, color: Int) async throws -> Tag
 }
 
 class DefaultTagRepository: TagRepository {
-    private let baseURL: String
+    ///singleton
+    static let shared = DefaultTagRepository()
 
-    init(baseURL: String) {
-        self.baseURL = baseURL
-    }
-
-    func fetchTags() async -> [Tag] {
-        let url = "\(baseURL)/tag"
-
-        do {
-            let data = try await AF.request(url, method: .get).serializingDecodable([TagDto].self).value
-            return data.map { $0.toTag() }
-        } catch {
-            print("Failed to fetch tags: \(error)")
-            return []
-        }
+    func fetchTags() async throws -> [Tag] {
+        let response = await AF.request(TagRouter.fetchTags).serializingDecodable([TagDto].self).response
+        let dto = try handleError(response: response)
+        
+        return dto.map { $0.toTag() }
     }
 
     func createTag(name: String, color: Int) async throws -> Tag {
-        let url = "\(baseURL)/tag"
-        let parameters: [String: Any] = [
-            "name": name,
-            "color": color
-        ]
-
-        let data = try await AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default)
-            .serializingDecodable(TagDto.self).value
-        return data.toTag()
+        let response = await AF.request(TagRouter.createTag(name: name, color: color)).serializingDecodable(TagDto.self).response
+        let dto = try handleError(response: response)
+        
+        return dto.toTag()
     }
 
     func deleteTag(tagId: Int) async throws {
-        let url = "\(baseURL)/tag/\(tagId)"
-        _ = try await AF.request(url, method: .delete).validate().serializingData().value
+        let response =  await AF.request(TagRouter.deleteTag(tagId: tagId)).serializingData().response
+        _ = try handleError(response: response)
     }
 
     func updateTag(tagId: Int, name: String, color: Int) async throws -> Tag {
-        let url = "\(baseURL)/tag/\(tagId)"
-        let parameters: [String: Any] = [
-            "name": name,
-            "color": color
-        ]
-
-        let data = try await AF.request(url, method: .put, parameters: parameters, encoding: JSONEncoding.default)
-            .serializingDecodable(TagDto.self).value
-        return data.toTag()
+        let response = await AF.request(TagRouter.updateTag(tagId: tagId, name: name, color: color)).serializingDecodable(TagDto.self).response
+        let dto = try handleError(response: response)
+        
+        return dto.toTag()
     }
 }
