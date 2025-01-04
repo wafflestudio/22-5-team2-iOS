@@ -17,6 +17,13 @@ class DefaultLogoutUseCase: LogoutUseCase {
     }
 
     func execute() async -> Result<Void, LogoutError> {
-        return await authRepository.logout()
+        let isAccessDeleted = KeyChainManager.shared.deleteAccessToken()
+        let isRefreshDeleted = KeyChainManager.shared.deleteRefreshToken()
+        
+        if isAccessDeleted && isRefreshDeleted {
+            return .success(())
+        } else {
+            return .failure(.tokenDeleteError)
+        }
     }
 }

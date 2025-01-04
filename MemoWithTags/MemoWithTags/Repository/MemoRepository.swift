@@ -8,70 +8,53 @@
 import Foundation
 import Alamofire
 
-protocol MemoRepository {
-    func fetchMemos(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?) async -> [Memo]
+protocol MemoRepository: BaseRepository {
+    func fetchMemos(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?) async throws -> [Memo]
     func createMemo(content: String, tags: [Int]) async throws -> Memo
     func deleteMemo(memoId: Int) async throws
     func updateMemo(memoId: Int, content: String, tags: [Int]) async throws -> Memo
 }
 
 class DefaultMemoRepository: MemoRepository {
-    private let baseURL: String
-
-    init(baseURL: String) {
-        self.baseURL = baseURL
-    }
-
-    func fetchMemos(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?) async -> [Memo] {
-        var parameters: [String: Any] = [:]
-        if let content = content {
-            parameters["content"] = content
-        }
-        if let tags = tags {
-            parameters["tags"] = tags.map { String($0) }.joined(separator: ",")
-        }
-        if let dateRange = dateRange {
-            parameters["startDate"] = ISO8601DateFormatter().string(from: dateRange.lowerBound)
-            parameters["endDate"] = ISO8601DateFormatter().string(from: dateRange.upperBound)
-        }
-
-        let url = "\(baseURL)/search-memo"
-
-        do {
-            let data = try await AF.request(url, method: .get, parameters: parameters).serializingDecodable([MemoDto].self).value
-            return data.map { $0.toMemo() }.sorted(by: { $0.createdAt < $1.createdAt })
-        } catch {
-            print("Failed to fetch memos: \(error)")
-            return []
-        }
+    ///singleton
+    static let shared = DefaultMemoRepository()
+    private init() {}
+    
+    let tokenInterceptor = TokenInterceptor()
+    
+    func fetchMemos(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?) async throws -> [Memo] {
+        let response = await AF.request(
+            MemoRouter.fetchMemos(content: content, tags: tags, dateRange: dateRange),
+            interceptor: tokenInterceptor
+        ).serializingDecodable([MemoDto].self).response
+        let dto = try handleError(response: response)
+        
+        return dto.map { $0.toMemo() }
     }
 
     func createMemo(content: String, tags: [Int]) async throws -> Memo {
-        let url = "\(baseURL)/memo"
-        let parameters: [String: Any] = [
-            "content": content,
-            "tags": tags
-        ]
-
-        let data = try await AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default)
-            .serializingDecodable(MemoDto.self).value
-        return data.toMemo()
+        let response = await AF.request(
+            MemoRouter.createMemo(content: content, tags: tags), interceptor: tokenInterceptor
+        ).serializingDecodable(MemoDto.self).response
+        let dto = try handleError(response: response)
+        
+        return dto.toMemo()
     }
 
     func deleteMemo(memoId: Int) async throws {
-        let url = "\(baseURL)/memo/\(memoId)"
-        _ = try await AF.request(url, method: .delete).validate().serializingData().value
+        let response = await AF.request(
+            MemoRouter.deleteMemo(memoId: memoId), interceptor: tokenInterceptor
+        ).serializingData().response
+        _ = try handleError(response: response)
     }
 
     func updateMemo(memoId: Int, content: String, tags: [Int]) async throws -> Memo {
-        let url = "\(baseURL)/memo/\(memoId)"
-        let parameters: [String: Any] = [
-            "content": content,
-            "tags": tags
-        ]
-
-        let data = try await AF.request(url, method: .put, parameters: parameters, encoding: JSONEncoding.default)
-            .serializingDecodable(MemoDto.self).value
-        return data.toMemo()
+        let response = await AF.request(
+            MemoRouter.updateMemo(memoId: memoId, content: content, tags: tags),
+            interceptor: tokenInterceptor
+        ).serializingDecodable(MemoDto.self).response
+        let dto = try handleError(response: response)
+        
+        return dto.toMemo()
     }
 }

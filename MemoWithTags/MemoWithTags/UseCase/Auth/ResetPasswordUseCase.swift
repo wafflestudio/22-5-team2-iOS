@@ -17,6 +17,12 @@ final class DefaultResetPasswordUseCase: ResetPasswordUseCase {
     }
     
     func execute(email:String, newPassword: String) async -> Result<Void, ResetPasswordError> {
-        return await authRepository.resetPassword(email: email, newPassword: newPassword)
+        do {
+            try await authRepository.resetPassword(email: email, newPassword: newPassword)
+            return .success(())
+        } catch {
+            ///error 맵핑 구현
+            return .failure(.unknown)
+        }
     }
 }
