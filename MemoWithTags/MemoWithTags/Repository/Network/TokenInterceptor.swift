@@ -42,9 +42,11 @@ final class TokenInterceptor: RequestInterceptor {
                 if isAccessSaved && isRefreshSaved {
                     return completion(.retry)
                 } else {
+                    ///재로그인 요청 구현
                     return completion(.doNotRetry)
                 }
-            } catch let error {
+            } catch {
+                ///재로그인 요청 구현
                 return completion(.doNotRetry)
             }
         }
