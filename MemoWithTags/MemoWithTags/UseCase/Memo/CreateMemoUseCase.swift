@@ -22,7 +22,7 @@ class DefaultCreateMemoUseCase: CreateMemoUseCase {
         do {
             let memo = try await memoRepository.createMemo(content: content, tags: tags)
             return .success(memo)
-        } catch {
+        } catch let error {
             ///error 맵핑 구현
             return .failure(.networkError)
         }

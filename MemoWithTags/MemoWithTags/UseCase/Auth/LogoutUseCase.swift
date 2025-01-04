@@ -17,12 +17,13 @@ class DefaultLogoutUseCase: LogoutUseCase {
     }
 
     func execute() async -> Result<Void, LogoutError> {
-        do {
-            try await authRepository.logout()
+        let isAccessDeleted = KeyChainManager.shared.deleteAccessToken()
+        let isRefreshDeleted = KeyChainManager.shared.deleteRefreshToken()
+        
+        if isAccessDeleted && isRefreshDeleted {
             return .success(())
-        } catch let error {
-            ///error 맵핑 구현
-            return .failure(.from(baseError: error as! BaseError))
+        } else {
+            return .failure(.tokenDeleteError)
         }
     }
 }

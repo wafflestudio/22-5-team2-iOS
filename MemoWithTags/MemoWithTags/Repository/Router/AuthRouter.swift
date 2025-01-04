@@ -11,10 +11,10 @@ import Alamofire
 enum AuthRouter: Router {
     case register(email: String, password: String)
     case login(email: String, password: String)
-    case logout
     case forgotPassword(email: String)
     case resetPassword(email: String, newPassword: String)
     case verifyEmail(email: String)
+    case refreshToken
     case getUserInfo
     
     var baseURL: URL {
@@ -23,7 +23,7 @@ enum AuthRouter: Router {
     
     var method: HTTPMethod {
         switch self {
-        case .register, .login, .logout, .forgotPassword, .resetPassword, .verifyEmail:
+        case .register, .login, .forgotPassword, .resetPassword, .verifyEmail, .refreshToken:
             return .post
         case .getUserInfo:
             return .get
@@ -36,14 +36,14 @@ enum AuthRouter: Router {
             return "/register"
         case .login:
             return "/login"
-        case .logout:
-            return "/logout"
         case .forgotPassword:
             return "/forgot-password"
         case .resetPassword:
             return "/reset-password"
         case .verifyEmail:
             return "/verify-email"
+        case .refreshToken:
+            return "/refresh-token"
         case .getUserInfo:
             return "/me"
         }
@@ -59,7 +59,7 @@ enum AuthRouter: Router {
             return ["email": email]
         case let .resetPassword(email, newPassword):
             return ["email": email, "password": newPassword]
-        case .logout, .getUserInfo:
+        case .getUserInfo, .refreshToken:
             return nil
         }
     }
