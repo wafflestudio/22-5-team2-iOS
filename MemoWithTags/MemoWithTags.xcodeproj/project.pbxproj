@@ -50,7 +50,6 @@
 		DABFE27D2D28416000B314E2 /* MemoWithTagsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2512D28416000B314E2 /* MemoWithTagsApp.swift */; };
 		DABFE27E2D28416000B314E2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DABFE21F2D28416000B314E2 /* Preview Assets.xcassets */; };
 		DABFE27F2D28416000B314E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DABFE24D2D28416000B314E2 /* Assets.xcassets */; };
-		DABFE2802D28416000B314E2 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = DABFE24E2D28416000B314E2 /* Config.xcconfig */; };
 		DABFE2822D28481100B314E2 /* MemoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2812D28480B00B314E2 /* MemoRouter.swift */; };
 		DABFE2842D284E7200B314E2 /* TagRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2832D284E6800B314E2 /* TagRouter.swift */; };
 		DABFE2882D28634600B314E2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2872D28634400B314E2 /* User.swift */; };
@@ -99,7 +98,6 @@
 		DABFE24A2D28416000B314E2 /* SignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewModel.swift; sourceTree = "<group>"; };
 		DABFE24B2D28416000B314E2 /* TodaysMemoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaysMemoViewModel.swift; sourceTree = "<group>"; };
 		DABFE24D2D28416000B314E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		DABFE24E2D28416000B314E2 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		DABFE24F2D28416000B314E2 /* CustomColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColor.swift; sourceTree = "<group>"; };
 		DABFE2512D28416000B314E2 /* MemoWithTagsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoWithTagsApp.swift; sourceTree = "<group>"; };
 		DABFE2812D28480B00B314E2 /* MemoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoRouter.swift; sourceTree = "<group>"; };
@@ -273,7 +271,6 @@
 				DABFE2452D28416000B314E2 /* View */,
 				DABFE24F2D28416000B314E2 /* CustomColor.swift */,
 				DABFE2512D28416000B314E2 /* MemoWithTagsApp.swift */,
-				DABFE24E2D28416000B314E2 /* Config.xcconfig */,
 				DABFE24D2D28416000B314E2 /* Assets.xcassets */,
 				DABFE2202D28416000B314E2 /* Preview Content */,
 			);
@@ -369,7 +366,6 @@
 			files = (
 				DABFE27E2D28416000B314E2 /* Preview Assets.xcassets in Resources */,
 				DABFE27F2D28416000B314E2 /* Assets.xcassets in Resources */,
-				DABFE2802D28416000B314E2 /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
