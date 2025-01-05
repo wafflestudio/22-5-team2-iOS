@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 final class SignupViewModel {
     private let signupUseCase = DefaultSignupUseCase(authRepository: DefaultAuthRepository.shared)
     

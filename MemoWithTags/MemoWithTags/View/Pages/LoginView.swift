@@ -11,6 +11,8 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     
+    @StateObject private var viewModel = LoginViewModel()
+    
     var body: some View {
         
         ZStack {
@@ -71,6 +73,10 @@ struct LoginView: View {
                     
                     Button {
                         //action
+                        Task {
+                            await viewModel.login(email: email, password: password)
+                        }
+
                     } label: {
                         Text("로그인")
                             .frame(maxWidth: .infinity)

@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 final class SplashViewModel: ObservableObject {
     @Published var isLoading: Bool = true
     @Published var isLoggedIn: Bool = false
