@@ -26,6 +26,8 @@ extension Color {
     
     static let tagTextColor: Color = .init(red: 26 / 255, green: 26 / 255, blue: 27 / 255).opacity(0.8)
     
+    
+    // HEX 값을 받아서 swiftUI Color로 바꾸는 로직
     init(hex: String) {
         // HEX 문자열에서 # 제거
         let cleanedHex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -60,5 +62,29 @@ extension Color {
         }
         
         self.init(.sRGB, red: red, green: green, blue: blue, opacity: alpha)
+    }
+    
+    // TagColor enum
+    enum TagColor: String {
+        case color1 = "#FF9C9C"
+        case color2 = "#FFBDBD"
+        case color3 = "#FFE3DA"
+        case color4 = "#FFF0B8"
+        case color5 = "#FFF56F"
+        case color6 = "#DCF794"
+        case color7 = "#D4FDCB"
+        case color8 = "#92EDA1"
+        case color9 = "#CCFFF7"
+        case color10 = "#A6F7EA"
+        case color11 = "#D2E8FE"
+        case color12 = "#B3D9FF"
+        case color13 = "#EEDEFE"
+        case color14 = "#DEBDFF"
+        case color15 = "#FFBDDE"
+        case color16 = "#FFD9EC"
+        
+        var color: Color {
+            return Color(hex: self.rawValue)
+        }
     }
 }
