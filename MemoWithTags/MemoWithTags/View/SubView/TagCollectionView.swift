@@ -24,10 +24,10 @@ struct TagCollectionView: UIViewRepresentable {
         let layout = LeftAlignedCollectionViewFlowLayout()
         layout.minimumInteritemSpacing = horizontalSpacing
         layout.minimumLineSpacing = verticalSpacing
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(TagCollectionViewCell.self, forCellWithReuseIdentifier: TagCollectionViewCell.reuseIdentifier)
+        collectionView.register(TagCell.self, forCellWithReuseIdentifier: TagCell.reuseIdentifier)
         collectionView.dataSource = context.coordinator
         collectionView.delegate = context.coordinator
         collectionView.backgroundColor = UIColor.clear
@@ -56,12 +56,27 @@ struct TagCollectionView: UIViewRepresentable {
         }
         
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCollectionViewCell.reuseIdentifier, for: indexPath) as? TagCollectionViewCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.reuseIdentifier, for: indexPath) as? TagCell else {
                 return UICollectionViewCell()
             }
             let tag = parent.tags[indexPath.item]
             cell.configure(with: tag)
             return cell
+        }
+        
+        // sizeForItemAt 구현하여 태그의 크기를 동적으로 계산
+        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+            let tag = parent.tags[indexPath.item]
+            let maxWidth = collectionView.bounds.width // 셀의 최대 너비를 컬렉션 뷰의 너비로 설정
+            let label = UILabel()
+            label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+            label.text = tag.name
+            label.numberOfLines = 1
+            label.lineBreakMode = .byTruncatingTail
+            let size = label.sizeThatFits(CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude))
+            let width = min(size.width + 14, maxWidth) // 좌우 패딩 7 + 7
+            let height: CGFloat = 23 // 수직 패딩 1 + 1, 폰트 크기 15에 적합한 높이 설정
+            return CGSize(width: width, height: height)
         }
     }
 }
@@ -92,5 +107,13 @@ class LeftAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {
         }
         
         return newAttributesForElementsInRect
+    }
+}
+
+struct HeightPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = max(value, nextValue())
     }
 }

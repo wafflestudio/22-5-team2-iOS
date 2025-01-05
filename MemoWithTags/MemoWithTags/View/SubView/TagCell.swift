@@ -8,8 +8,8 @@
 import UIKit
 import SwiftUI
 
-class TagCollectionViewCell: UICollectionViewCell {
-    static let reuseIdentifier = "TagCollectionViewCell"
+class TagCell: UICollectionViewCell {
+    static let reuseIdentifier = "TagCell"
     
     private let label: UILabel = {
         let lbl = UILabel()
@@ -17,6 +17,7 @@ class TagCollectionViewCell: UICollectionViewCell {
         lbl.textColor = UIColor(Color.tagTextColor)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.numberOfLines = 1
+        lbl.lineBreakMode = .byTruncatingTail // 넘칠 경우 ...으로 표시
         return lbl
     }()
     
