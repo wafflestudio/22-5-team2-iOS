@@ -10,7 +10,6 @@
 		55E610BC2D2A5FA600E452A8 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E610BB2D2A5FA600E452A8 /* MainViewModel.swift */; };
 		55E610BE2D2A65B200E452A8 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E610BD2D2A65B200E452A8 /* SearchView.swift */; };
 		55E610C02D2A65C400E452A8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E610BF2D2A65C400E452A8 /* SettingsView.swift */; };
-		55E610D02D2AD47E00E452A8 /* WrappingHStack in Frameworks */ = {isa = PBXBuildFile; productRef = 55E610CF2D2AD47E00E452A8 /* WrappingHStack */; };
 		55E610D32D2AD5A500E452A8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 55E610D22D2AD5A500E452A8 /* Alamofire */; };
 		DA3C9E542D29072F00F28D07 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3C9E532D29072C00F28D07 /* MainView.swift */; };
 		DA3C9E562D290D1500F28D07 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3C9E552D290D0E00F28D07 /* SplashView.swift */; };
@@ -118,7 +117,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55E610D02D2AD47E00E452A8 /* WrappingHStack in Frameworks */,
 				55E610D32D2AD5A500E452A8 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -319,7 +317,6 @@
 			);
 			name = MemoWithTags;
 			packageProductDependencies = (
-				55E610CF2D2AD47E00E452A8 /* WrappingHStack */,
 				55E610D22D2AD5A500E452A8 /* Alamofire */,
 			);
 			productName = MemoWithTags;
@@ -351,7 +348,6 @@
 			mainGroup = DA98BFE82D1D4B6B00F992AC;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				55E610CE2D2AD47E00E452A8 /* XCRemoteSwiftPackageReference "WrappingHStack" */,
 				55E610D12D2AD5A500E452A8 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -631,14 +627,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		55E610CE2D2AD47E00E452A8 /* XCRemoteSwiftPackageReference "WrappingHStack" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dkk/WrappingHStack";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.2.11;
-			};
-		};
 		55E610D12D2AD5A500E452A8 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -650,11 +638,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		55E610CF2D2AD47E00E452A8 /* WrappingHStack */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 55E610CE2D2AD47E00E452A8 /* XCRemoteSwiftPackageReference "WrappingHStack" */;
-			productName = WrappingHStack;
-		};
 		55E610D22D2AD5A500E452A8 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 55E610D12D2AD5A500E452A8 /* XCRemoteSwiftPackageReference "Alamofire" */;

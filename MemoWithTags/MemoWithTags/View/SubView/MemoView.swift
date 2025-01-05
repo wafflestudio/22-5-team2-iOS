@@ -29,7 +29,7 @@ struct MemoView: View {
                 )
                 .frame(width: geometry.size.width, alignment: .leading)
             }
-            .frame(height: collectionViewHeight) // 컬렉션 뷰의 높이를 설정
+            .frame(height: collectionViewHeight)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 13)
