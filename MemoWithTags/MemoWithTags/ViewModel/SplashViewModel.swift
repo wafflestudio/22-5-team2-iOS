@@ -12,17 +12,20 @@ final class SplashViewModel: ObservableObject {
     @Published var isLoggedIn: Bool = false
     
     func checkLogin() {
-        isLoading = true
-        
-        guard let _ = KeyChainManager.shared.readAccessToken(),
-              let _ = KeyChainManager.shared.readRefreshToken() else {
+        Task {
+            isLoading = true
+            
+            try? await Task.sleep(nanoseconds: 1_000_000_000) // 일부러 1초 딜레이
+            
+            guard let _ = KeyChainManager.shared.readAccessToken(),
+                  let _ = KeyChainManager.shared.readRefreshToken() else {
+                isLoading = false
+                isLoggedIn = false
+                return
+            }
+            
             isLoading = false
-            isLoggedIn = false
-            return
+            isLoggedIn = true
         }
-        
-        isLoading = false
-        isLoggedIn = true
     }
-    
 }
