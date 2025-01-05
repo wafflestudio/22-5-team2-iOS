@@ -16,120 +16,114 @@ struct LoginView: View {
         ZStack {
             Color.backgroundGray.edgesIgnoringSafeArea(.all)
             
-            VStack {
-                VStack(alignment: .leading, spacing: 16) {
-                    //---------------email text field---------------
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("email")
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundColor(.black)
-                            .padding(.horizontal, 7)
-                        
-                        TextField("", text: $email, prompt: Text("\("example@email.com")")
-                            .font(.system(size: 16, weight: .regular))
+            VStack(spacing: 36) {
+                //title
+                HStack(spacing: 4) {
+                    Text("Memo with")
+                        .font(.system(size: 22, weight: .semibold))
+                        .foregroundStyle(Color.titleTextBlack)
+                    Tag(text: "Tags", size: 19, color: .init(white: 0, opacity: 0.1)) {}
+                }
+                .background(.clear)
+                
+                //login panel
+                VStack {
+                    VStack(spacing: 10) {
+                        //이메일 입력 필드
+                        TextField (
+                            "",
+                            text: $email,
+                            prompt:
+                                Text("이메일")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(Color(hex: "#94979F"))
                         )
-                        .padding(14)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 14)
                         .font(.system(size: 16, weight: .regular))
-                        .background(Color.backgroundGray)
-                        .cornerRadius(14)
+                        .background(.white)
+                        .overlay (
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(Color(hex: "#181E2226"), lineWidth: 1)
+                        )
+                        .autocorrectionDisabled(true)
+                        .textInputAutocapitalization(.never)
+                        
+                        // 비밀번호 입력 필드
+                        SecureField(
+                            "",
+                            text: $password,
+                            prompt: Text("비밀번호")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundStyle(Color(hex: "#94979F"))
+                        )
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 14)
+                        .font(.system(size: 16, weight: .regular))
+                        .background(Color.white)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(Color(hex: "#181E2226"), lineWidth: 1)
+                        )
                         .autocorrectionDisabled(true)
                         .textInputAutocapitalization(.never)
                     }
                     
-                    //---------------password text field---------------
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("password")
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundColor(.black)
-                            .padding(.horizontal, 7)
-                        
-                        SecureField("", text: $password, prompt: Text("****************")
-                            .font(.system(size: 16, weight: .regular))
-                        )
-                        .padding(14)
-                        .font(.system(size: 16, weight: .regular))
-                        .background(Color.backgroundGray)
-                        .cornerRadius(14)
-                        .autocorrectionDisabled(true)
-                        .textInputAutocapitalization(.never)
-                    }
-                    
-                    //---------------Login button---------------
                     Button {
                         //action
                     } label: {
-                        Text("Login")
+                        Text("로그인")
                             .frame(maxWidth: .infinity)
-                            .font(.system(size: 20, weight: .bold))
+                            .font(.system(size: 16, weight: .semibold))
                             .foregroundStyle(.white)
                             .padding(.vertical, 12)
 
                     }
-                    .background(.black)
-                    .cornerRadius(30)
-                    .padding(.horizontal, 20)
+                    .background(Color.titleTextBlack)
+                    .cornerRadius(22)
+                    .padding(.top, 16)
                     
-                    //---------------비밀번호 찾기---------------
-                    Divider()
-                    
-                    HStack {
-                        Text("Forgot password?")
-                            .font(.system(size: 16, weight: .medium))
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 20))
-                    }
-                    .padding(.horizontal, 4)
-                    .onTapGesture {
-                        //action
-                    }
-                    
-                    //---------------회원가입---------------
-                    Divider()
-                    
-                    HStack {
-                        Text("Don't have an account?")
-                            .font(.system(size: 16, weight: .medium))
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 20))
-                    }
-                    .padding(.horizontal, 4)
-                    .onTapGesture {
-                        //action
-                    }
-
-                    
-                    //---------------구글로 가입---------------
-                    Divider()
-                    
-                    HStack {
-                        Text("Or...")
-                        Spacer()
-                        Button {
+                    HStack(spacing: 8) {
+                        Tag(text: "이메일로 회원가입", size: 13, color: .init(hex: "#FFBDBD")) {
                             //action
-                        } label: {
-                            Text("Continue with Google")
-                                .font(.system(size: 16, weight: .semibold))
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 12)
                         }
-                        .border(Color(white: 30/255, opacity: 0.1))
+                        
+                        Spacer()
+                        
+                        Tag(text: "이메일 찾기", size: 13, color: .init(hex: "#F1F1F3")) {
+                            //action
+                        }
+                        
+                        Tag(text: "비밀번호 찾기", size: 13, color: .init(hex: "#F1F1F3")) {
+                            //action
+                        }
                     }
-                    .padding(.horizontal, 4)
-                    
-                    //태그는 이후에 추가
+                    .padding(.top, 36)
                 }
-                .padding(14)
+                .padding(16)
+                .background(.white)
+                .cornerRadius(14)
             }
-            .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .padding(.horizontal, 14)
-            .shadow(color: Color(white: 0, opacity: 0.06), radius: 6, x: 0, y: 2)
+            .padding(.horizontal, 12)
+            .background(.clear)
 
         }
         
     }
+    
+    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClink: @escaping () -> Void) -> some View {
+        Text(text)
+            .font(.system(size: size, weight: .regular))
+            .foregroundStyle(Color.tagTextColor)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(color)
+            .cornerRadius(4)
+            .onTapGesture {
+                onClink()
+            }
+    }
+    
 }
 
 #Preview {
