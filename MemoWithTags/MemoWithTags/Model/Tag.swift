@@ -6,16 +6,16 @@
 //
 import Foundation
 
-struct Tag: Codable {
+struct Tag: Codable, Identifiable {
     let id: Int
     let name: String
-    let color: Int // Representing 0-359 (Hue)
+    let color: String // HEX값을 받는다.
 }
 
 struct TagDto: Decodable {
     let id: Int
     let name: String
-    let color: Int
+    let color: String
 
     func toTag() -> Tag {
         return Tag(id: id, name: name, color: color)
