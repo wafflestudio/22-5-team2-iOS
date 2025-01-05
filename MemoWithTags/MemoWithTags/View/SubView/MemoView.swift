@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MemoView: View {
     let memo: Memo
+    @State private var collectionViewHeight: CGFloat = .zero
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -19,11 +20,16 @@ struct MemoView: View {
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             
             // 태그들
-            // HStack, ForEach tag 사용
+            TagCollectionView(
+                tags: memo.tags,
+                horizontalSpacing: 9, // 수평 간격
+                verticalSpacing: 7,   // 수직 간격
+                collectionViewHeight: $collectionViewHeight
+            )
+            .frame(height: collectionViewHeight)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 13)
-        .frame(maxWidth: .infinity, alignment: .topLeading)
         .background(Color.memoBackgroundWhite)
         .cornerRadius(14)
         .shadow(color: Color.black.opacity(0.06), radius: 3, x: 0, y: 2)
