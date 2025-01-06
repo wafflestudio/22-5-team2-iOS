@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct Memo: Codable {
+struct Memo: Codable, Identifiable {
     let id: Int
     let content: String
     let tags: [Tag] // Fully constructed Tag objects
@@ -26,7 +26,7 @@ struct MemoDto: Decodable {
         return Memo(
             id: id,
             content: content,
-            tags: tags.map { Tag(id: $0, name: "", color: 0) }, // Placeholder Tag objects
+            tags: tags.map { Tag(id: $0, name: "", color: "#000000") }, // Placeholder Tag objects
             createdAt: dateFormatter.date(from: createdAt) ?? Date(),
             updatedAt: dateFormatter.date(from: updatedAt) ?? Date()
         )
