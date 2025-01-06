@@ -43,20 +43,20 @@ struct MemoView_Previews: PreviewProvider {
     static var previews: some View {
         // 샘플 Tag 인스턴스 생성
         let sampleTags = [
-            Tag(id: 1, name: "이것은 엄청나게 긴 태그 이름을 자랑하는 태그ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ", color: "#FF9C9C"),
-            Tag(id: 2, name: "나는 노랭이", color: "#FFF56F"),
-            Tag(id: 3, name: "나는 퍼랭이", color: "#A6F7EA"),
-            Tag(id: 4, name: "SwiftUI", color: "#D2E8FE"),
-            Tag(id: 5, name: "UI Design", color: "#92EDA1"),
-            Tag(id: 6, name: "Development", color: "#CCFFF7"),
-            Tag(id: 7, name: "Custom Tag", color: "#FFD9EC"),
-            Tag(id: 8, name: "A very very very long tag name that should be truncated", color: "#B0E0E6")
+            Tag(id: 1, name: "Lorem ipsum", color: "#FF9C9C"),
+            Tag(id: 2, name: "dolor", color: "#FFF56F"),
+            Tag(id: 3, name: "sit", color: "#A6F7EA"),
+            Tag(id: 4, name: "amet", color: "#D2E8FE"),
+            Tag(id: 5, name: "consectetur adipiscing elit", color: "#92EDA1"),
+            Tag(id: 6, name: "sed", color: "#CCFFF7"),
+            Tag(id: 7, name: "do", color: "#FFD9EC"),
+            Tag(id: 8, name: "eiusmod tempor incididunt ut labore et dolore magna aliqua", color: "#B0E0E6")
         ]
         
         // 샘플 Memo 인스턴스 생성
         let sampleMemo = Memo(
             id: 1,
-            content: "When writing a memo, avoiding common mistakes can significantly enhance clarity and effectiveness. Bla Bla Bla",
+            content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
             tags: sampleTags,
             createdAt: Date(),
             updatedAt: Date()
