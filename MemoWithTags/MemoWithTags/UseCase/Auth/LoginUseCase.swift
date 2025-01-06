@@ -18,6 +18,7 @@ class DefaultLoginUseCase: LoginUseCase {
 
     func execute(email: String, password: String) async -> Result<Void, LoginError> {
         do {
+            print(email, password)
             let auth = try await authRepository.login(email: email, password: password)
             let isAccessSaved = KeyChainManager.shared.saveAccessToken(token: auth.accessToken)
             let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: auth.refreshToken)

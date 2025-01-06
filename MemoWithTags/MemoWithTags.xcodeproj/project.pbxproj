@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		55E60FD72D214A0800E452A8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 55E60FD62D214A0800E452A8 /* Alamofire */; };
+		DA2DA6632D2A9492000C0495 /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2DA6622D2A9487000C0495 /* SignupView.swift */; };
 		DA3C9E542D29072F00F28D07 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3C9E532D29072C00F28D07 /* MainView.swift */; };
 		DA3C9E562D290D1500F28D07 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3C9E552D290D0E00F28D07 /* SplashView.swift */; };
 		DA3C9E5B2D2931BC00F28D07 /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3C9E5A2D2931B700F28D07 /* SplashViewModel.swift */; };
@@ -57,6 +58,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DA2DA6622D2A9487000C0495 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
+		DA2DA6642D2AF00D000C0495 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		DA3C9E532D29072C00F28D07 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		DA3C9E552D290D0E00F28D07 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		DA3C9E5A2D2931B700F28D07 /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
@@ -223,6 +226,7 @@
 			isa = PBXGroup;
 			children = (
 				DABFE23E2D28416000B314E2 /* LoginView.swift */,
+				DA2DA6622D2A9487000C0495 /* SignupView.swift */,
 				DA3C9E552D290D0E00F28D07 /* SplashView.swift */,
 				DA3C9E532D29072C00F28D07 /* MainView.swift */,
 			);
@@ -263,6 +267,7 @@
 		DABFE2522D28416000B314E2 /* MemoWithTags */ = {
 			isa = PBXGroup;
 			children = (
+				DA2DA6642D2AF00D000C0495 /* Info.plist */,
 				DA3C9E572D291BBF00F28D07 /* Application */,
 				DABFE21E2D28416000B314E2 /* Model */,
 				DABFE22C2D28416000B314E2 /* Repository */,
@@ -385,6 +390,7 @@
 				DABFE25A2D28416000B314E2 /* AuthRouter.swift in Sources */,
 				DABFE25B2D28416000B314E2 /* Router.swift in Sources */,
 				DABFE25C2D28416000B314E2 /* AuthRepository.swift in Sources */,
+				DA2DA6632D2A9492000C0495 /* SignupView.swift in Sources */,
 				DABFE25D2D28416000B314E2 /* BaseRepository.swift in Sources */,
 				DABFE2842D284E7200B314E2 /* TagRouter.swift in Sources */,
 				DABFE25E2D28416000B314E2 /* KeyChainManager.swift in Sources */,
@@ -553,8 +559,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MemoWithTags/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MemoWithTags/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -582,8 +590,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MemoWithTags/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MemoWithTags/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

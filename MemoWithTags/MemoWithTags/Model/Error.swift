@@ -52,7 +52,7 @@ enum LoginError: Error {
     
     static func from(baseError: BaseError) -> LoginError {
         switch baseError {
-        case .BAD_REQUEST: return .invalidCredentials
+        case .UNAUTHORIZED: return .invalidCredentials
         case .INTERNAL_SERVER_ERROR: return .networkError
         default: return .unknown
         }
