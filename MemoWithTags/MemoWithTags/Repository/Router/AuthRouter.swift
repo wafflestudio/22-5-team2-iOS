@@ -13,7 +13,7 @@ enum AuthRouter: Router {
     case login(email: String, password: String)
     case forgotPassword(email: String)
     case resetPassword(email: String, newPassword: String)
-    case verifyEmail(email: String)
+    case verifyEmail(email: String, code: String)
     case refreshToken
     case getUserInfo
     
@@ -54,8 +54,9 @@ enum AuthRouter: Router {
         case let .register(email, password),
              let .login(email, password):
             return ["email": email, "password": password]
-        case let .forgotPassword(email),
-             let .verifyEmail(email):
+        case let .verifyEmail(email, code):
+            return ["email": email, "code": code]
+        case let .forgotPassword(email):
             return ["email": email]
         case let .resetPassword(email, newPassword):
             return ["email": email, "password": newPassword]

@@ -12,6 +12,8 @@ struct SignupView: View {
     @State private var password: String = ""
     @State private var passwordRepeat: String = ""
     
+    @StateObject private var viewModel = SignupViewModel()
+    
     var body: some View {
         
         ZStack {
@@ -69,13 +71,18 @@ struct SignupView: View {
                             )
                             .autocorrectionDisabled(true)
                             .textInputAutocapitalization(.never)
+                            .onChange(of: password) {
+                                viewModel.checkPasswordValidity(password: password)
+                            }
                             
                             //조건 표시
                             HStack {
                                 Spacer()
-                                Text("0/8")
+                                Text("\(viewModel.satisfiedCount)/5")
                                     .font(.system(size: 12, weight: .regular))
-                                    .foregroundStyle(Color.dateGray)
+                                    .foregroundStyle(
+                                        viewModel.isValidPassword ? Color.green : Color.dateGray
+                                    )
                                     .padding(.horizontal, 6)
                             }
                         }
