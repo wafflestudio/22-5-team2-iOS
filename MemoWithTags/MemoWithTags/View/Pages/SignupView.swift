@@ -119,6 +119,19 @@ struct SignupView: View {
                         }
                         
                         Spacer()
+                        
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color(hex: "#FFBDBD"))
+                            .frame(width: 12, height: 24)
+                        
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color(hex: "#F1F1F3"))
+                            .frame(width: 12, height: 24)
+                        
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color(hex: "#F1F1F3"))
+                            .frame(width: 12, height: 24)
+                        
                     }
                     .padding(.top, 36)
                 }
