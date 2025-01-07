@@ -145,25 +145,63 @@ enum VerifyEmailError: Error {
 }
 
 enum MemoError: Error {
-    case networkError
+    case wrongFormat
+    case notSureUser
+    case wrongUser
+    case nonExistingMemo
+    case serverError
     case unknown
     
     func localizedDescription() -> String {
         switch self {
-        case .networkError: return "Network error"
-        case .unknown: return "Unknown error"
+        case .wrongFormat: return "NO NO NO FUCK SWIFT AND IOS"
+        case .notSureUser: return "Are you the right user????"
+        case .wrongUser: return "EXISTING MEMO, WRONG USER"
+        case .nonExistingMemo: return "NO MEMO"
+        case .serverError: return "Spring 화이팅!!!"
+        case .unknown: return "WTF"
+        }
+    }
+    
+    static func from(baseError: BaseError) -> MemoError {
+        switch baseError {
+        case .BAD_REQUEST: return .wrongFormat
+        case .UNAUTHORIZED: return .notSureUser
+        case .FORBIDDEN: return .wrongUser
+        case .NOT_FOUND: return .nonExistingMemo
+        case .INTERNAL_SERVER_ERROR: return .serverError
+        default: return .unknown
         }
     }
 }
 
 enum TagError: Error {
-    case networkError
+    case wrongFormat
+    case notSureUser
+    case wrongUser
+    case nonExistingMemo
+    case serverError
     case unknown
     
     func localizedDescription() -> String {
         switch self {
-        case .networkError: return "Network error"
-        case .unknown: return "Unknown error"
+        case .wrongFormat: return "NO NO NO FUCK SWIFT AND IOS"
+        case .notSureUser: return "Are you the right user????"
+        case .wrongUser: return "EXISTING TAG, WRONG USER"
+        case .nonExistingMemo: return "NO TAG"
+        case .serverError: return "Spring 화이팅!!"
+        case .unknown: return "WTF"
+        }
+    }
+    
+    static func from(baseError: BaseError) -> TagError {
+        switch baseError {
+        case .BAD_REQUEST: return .wrongFormat
+        case .UNAUTHORIZED: return .notSureUser
+        case .FORBIDDEN: return .wrongUser
+        case .NOT_FOUND: return .nonExistingMemo
+        case .INTERNAL_SERVER_ERROR: return .serverError
+        default: return .unknown
         }
     }
 }

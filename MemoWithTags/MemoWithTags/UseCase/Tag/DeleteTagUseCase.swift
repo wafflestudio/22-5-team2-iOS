@@ -8,7 +8,7 @@
 import Foundation
 
 protocol DeleteTagUseCase {
-    func execute(tagId: Int) async throws -> Result<Void, MemoError>
+    func execute(tagId: Int) async -> Result<Void, TagError>
 }
 
 class DefaultDeleteTagUseCase: DeleteTagUseCase {
@@ -18,13 +18,14 @@ class DefaultDeleteTagUseCase: DeleteTagUseCase {
         self.tagRepository = tagRepository
     }
 
-    func execute(tagId: Int) async throws -> Result<Void, MemoError>{
+    func execute(tagId: Int) async -> Result<Void, TagError>{
         do {
             _ = try await tagRepository.deleteTag(tagId: tagId)
             return .success(())
-        } catch let error {
-            ///error 맵핑 구현
-            return .failure(.networkError)
+        } catch let error as BaseError {
+            return .failure(.from(baseError: error))
+        } catch {
+            return .failure(.unknown)
         }
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 protocol CreateTagUseCase {
-    func execute(name: String, color: Int) async throws -> Result<Tag, TagError>
+    func execute(name: String, color: String) async -> Result<Tag, TagError>
 }
 
 class DefaultCreateTagUseCase: CreateTagUseCase {
@@ -18,13 +18,14 @@ class DefaultCreateTagUseCase: CreateTagUseCase {
         self.tagRepository = tagRepository
     }
 
-    func execute(name: String, color: Int) async throws -> Result<Tag, TagError> {
+    func execute(name: String, color: String) async -> Result<Tag, TagError> {
         do {
             let tag = try await tagRepository.createTag(name: name, color: color)
             return .success(tag)
-        } catch let error {
-            ///error 맵핑 구현
-            return .failure(.networkError)
+        } catch let error as BaseError {
+            return .failure(.from(baseError: error))
+        } catch {
+            return .failure(.unknown)
         }
     }
 }

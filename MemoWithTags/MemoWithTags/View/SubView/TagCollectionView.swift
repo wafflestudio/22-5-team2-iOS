@@ -20,14 +20,13 @@ struct TagCollectionView: UIViewRepresentable {
     }
     
     func makeUIView(context: Context) -> UICollectionView {
-        // 커스텀 레이아웃 설정
         let layout = LeftAlignedCollectionViewFlowLayout()
         layout.minimumInteritemSpacing = horizontalSpacing
         layout.minimumLineSpacing = verticalSpacing
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        
+
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(TagCell.self, forCellWithReuseIdentifier: TagCell.reuseIdentifier)
+        collectionView.register(HostingTagCell.self, forCellWithReuseIdentifier: HostingTagCell.reuseIdentifier)
         collectionView.dataSource = context.coordinator
         collectionView.delegate = context.coordinator
         collectionView.backgroundColor = UIColor.clear
@@ -35,7 +34,7 @@ struct TagCollectionView: UIViewRepresentable {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }
-    
+
     func updateUIView(_ uiView: UICollectionView, context: Context) {
         context.coordinator.parent = self
         uiView.reloadData()
@@ -43,7 +42,7 @@ struct TagCollectionView: UIViewRepresentable {
             self.collectionViewHeight = uiView.collectionViewLayout.collectionViewContentSize.height
         }
     }
-    
+
     class Coordinator: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
         var parent: TagCollectionView
         
@@ -56,7 +55,7 @@ struct TagCollectionView: UIViewRepresentable {
         }
         
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TagCell.reuseIdentifier, for: indexPath) as? TagCell else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HostingTagCell.reuseIdentifier, for: indexPath) as? HostingTagCell else {
                 return UICollectionViewCell()
             }
             let tag = parent.tags[indexPath.item]
@@ -64,10 +63,9 @@ struct TagCollectionView: UIViewRepresentable {
             return cell
         }
         
-        // sizeForItemAt 구현하여 태그의 크기를 동적으로 계산
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
             let tag = parent.tags[indexPath.item]
-            let maxWidth = collectionView.bounds.width // 셀의 최대 너비를 컬렉션 뷰의 너비로 설정
+            let maxWidth = collectionView.bounds.width
             let label = UILabel()
             label.font = UIFont.systemFont(ofSize: 15, weight: .regular)
             label.text = tag.name
@@ -75,11 +73,12 @@ struct TagCollectionView: UIViewRepresentable {
             label.lineBreakMode = .byTruncatingTail
             let size = label.sizeThatFits(CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude))
             let width = min(size.width + 14, maxWidth) // 좌우 패딩 7 + 7
-            let height: CGFloat = 23 // 수직 패딩 1 + 1, 폰트 크기 15에 적합한 높이 설정
+            let height: CGFloat = 23 // 수직 패딩 포함 높이
             return CGSize(width: width, height: height)
         }
     }
 }
+
 
 // 왼쪽 정렬을 위한 커스텀 레이아웃
 class LeftAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {
@@ -117,3 +116,39 @@ struct HeightPreferenceKey: PreferenceKey {
         value = max(value, nextValue())
     }
 }
+
+class HostingTagCell: UICollectionViewCell {
+    static let reuseIdentifier = "HostingTagCell"
+    private var hostController: UIHostingController<TagView>?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.layer.cornerRadius = 4
+        contentView.layer.masksToBounds = true
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(with tag: Tag) {
+        let tagView = TagView(tag: tag)
+        
+        if hostController == nil {
+            let controller = UIHostingController(rootView: tagView)
+            controller.view.translatesAutoresizingMaskIntoConstraints = false
+            hostController = controller
+            contentView.addSubview(controller.view)
+            
+            NSLayoutConstraint.activate([
+                controller.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                controller.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                controller.view.topAnchor.constraint(equalTo: contentView.topAnchor),
+                controller.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            ])
+        } else {
+            hostController?.rootView = tagView
+        }
+    }
+}
+

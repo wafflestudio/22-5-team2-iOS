@@ -9,9 +9,9 @@ import Alamofire
 
 protocol TagRepository: BaseRepository {
     func fetchTags() async throws -> [Tag]
-    func createTag(name: String, color: Int) async throws -> Tag
+    func createTag(name: String, color: String) async throws -> Tag
     func deleteTag(tagId: Int) async throws
-    func updateTag(tagId: Int, name: String, color: Int) async throws -> Tag
+    func updateTag(tagId: Int, name: String, color: String) async throws -> Tag
 }
 
 class DefaultTagRepository: TagRepository {
@@ -28,7 +28,7 @@ class DefaultTagRepository: TagRepository {
         return dto.map { $0.toTag() }
     }
 
-    func createTag(name: String, color: Int) async throws -> Tag {
+    func createTag(name: String, color: String) async throws -> Tag {
         let response = await AF.request(
             TagRouter.createTag(name: name, color: color), interceptor: tokenInterceptor
         ).serializingDecodable(TagDto.self).response
@@ -44,7 +44,7 @@ class DefaultTagRepository: TagRepository {
         _ = try handleError(response: response)
     }
 
-    func updateTag(tagId: Int, name: String, color: Int) async throws -> Tag {
+    func updateTag(tagId: Int, name: String, color: String) async throws -> Tag {
         let response = await AF.request(
             TagRouter.updateTag(tagId: tagId, name: name, color: color), interceptor: tokenInterceptor
         ).serializingDecodable(TagDto.self).response

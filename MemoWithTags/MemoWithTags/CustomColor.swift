@@ -10,7 +10,7 @@ import SwiftUICore
 extension Color {
     static let backgroundGray: Color = .init(red: 241 / 255, green: 241 / 255, blue: 243 / 255)
     
-    static let tabBarDividerGray: Color = .init(red: 176 / 255, green: 176 / 255, blue: 177 / 255)
+    static let dividerGray: Color = .init(red: 176 / 255, green: 176 / 255, blue: 177 / 255)
     static let tabBarSelectecdIconBlack: Color = .init(red: 32 / 255, green: 32 / 255, blue: 33 / 255)
     static let tabBarNotSelectecdIconGray: Color = .init(red: 160 / 255, green: 160 / 255, blue: 161 / 255)
     

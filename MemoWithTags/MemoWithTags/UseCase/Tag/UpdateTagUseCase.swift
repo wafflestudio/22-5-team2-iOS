@@ -8,7 +8,7 @@
 import Foundation
 
 protocol UpdateTagUseCase {
-    func execute(tagId: Int, name: String, color: Int) async throws -> Result<Tag, MemoError>
+    func execute(tagId: Int, name: String, color: String) async -> Result<Tag, TagError>
 }
 
 class DefaultUpdateTagUseCase: UpdateTagUseCase {
@@ -18,13 +18,14 @@ class DefaultUpdateTagUseCase: UpdateTagUseCase {
         self.tagRepository = tagRepository
     }
 
-    func execute(tagId: Int, name: String, color: Int) async throws -> Result<Tag, MemoError> {
+    func execute(tagId: Int, name: String, color: String) async -> Result<Tag, TagError> {
         do {
             let tag = try await tagRepository.updateTag(tagId: tagId, name: name, color: color)
             return .success(tag)
-        } catch let error {
-            ///error 맵핑 구현
-            return .failure(.networkError)
+        } catch let error as BaseError {
+            return .failure(.from(baseError: error))
+        } catch {
+            return .failure(.unknown)
         }
     }
 }
