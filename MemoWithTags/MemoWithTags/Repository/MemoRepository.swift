@@ -31,6 +31,12 @@ class DefaultMemoRepository: MemoRepository {
         let dto = try handleError(response: response)
         
         let memos = dto.results.map { $0.toMemo() }
+        
+        // 메모가 내림차순으로 정렬되어 있는지 확인
+        if !isDescendingOrder(memos: memos) {
+            throw MemoError.invalidOrder
+        }
+        
         let paginatedMemos = PaginatedMemos(
             memos: memos,
             currentPage: dto.page,
@@ -39,6 +45,16 @@ class DefaultMemoRepository: MemoRepository {
         )
         
         return paginatedMemos
+    }
+    
+    private func isDescendingOrder(memos: [Memo]) -> Bool {
+        guard memos.count > 1 else { return true }
+        for i in 1..<memos.count {
+            if memos[i].createdAt > memos[i-1].createdAt {
+                return false
+            }
+        }
+        return true
     }
 
     func createMemo(content: String, tags: [Int]) async throws -> Memo {

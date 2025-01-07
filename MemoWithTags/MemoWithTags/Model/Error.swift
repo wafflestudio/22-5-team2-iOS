@@ -150,6 +150,7 @@ enum MemoError: Error {
     case wrongUser
     case nonExistingMemo
     case serverError
+    case invalidOrder
     case unknown
     
     func localizedDescription() -> String {
@@ -159,6 +160,7 @@ enum MemoError: Error {
         case .wrongUser: return "EXISTING MEMO, WRONG USER"
         case .nonExistingMemo: return "NO MEMO"
         case .serverError: return "Spring 화이팅!!!"
+        case .invalidOrder: return "WRONG ORDER!!!"
         case .unknown: return "WTF"
         }
     }
