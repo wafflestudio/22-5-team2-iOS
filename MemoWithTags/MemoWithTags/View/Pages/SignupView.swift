@@ -110,6 +110,9 @@ struct SignupView: View {
                     //회원가입 버튼
                     Button {
                         //action
+                        Task {
+                            await viewModel.signup(email: email, password: password, passwordRepeat: passwordRepeat)
+                        }
                     } label: {
                         Text("다음")
                             .frame(maxWidth: .infinity)
@@ -123,8 +126,8 @@ struct SignupView: View {
                     .padding(.top, 16)
                     
                     HStack(spacing: 8) {
-                        Tag(text: "로그인", size: 14, color: .init(hex: "#E3E3E7")) {
-                            //action
+                        NavigationLink(destination: LoginView()) {
+                            Tag(text: "로그인", size: 14, color: .init(hex: "#E3E3E7"))
                         }
                         
                         Spacer()
@@ -152,12 +155,13 @@ struct SignupView: View {
             }
             .padding(.horizontal, 12)
             .background(.clear)
-
+            .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
         }
-        
+        .navigationBarBackButtonHidden()
     }
     
-    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClink: @escaping () -> Void) -> some View {
+    
+    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color) -> some View {
         Text(text)
             .font(.system(size: size, weight: .regular))
             .foregroundStyle(Color.tagTextColor)
@@ -165,9 +169,6 @@ struct SignupView: View {
             .padding(.vertical, 3)
             .background(color)
             .cornerRadius(4)
-            .onTapGesture {
-                onClink()
-            }
     }
     
 }

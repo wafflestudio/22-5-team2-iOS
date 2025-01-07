@@ -12,7 +12,7 @@ final class LoginViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var isLoggedIn: Bool = false
     
-    private let loginUseCase = DefaultSignupUseCase(authRepository: DefaultAuthRepository.shared)
+    private let loginUseCase = DefaultLoginUseCase(authRepository: DefaultAuthRepository.shared)
     
     ///정규식으로 이메일 형식 검사
     func checkEmailValidity(email: String) -> Bool {
@@ -32,7 +32,7 @@ final class LoginViewModel: ObservableObject {
         
         let result = await loginUseCase.execute(email: email, password: password)
         isLoading = false
-        
+
         switch result {
         case .success:
             isLoggedIn = true

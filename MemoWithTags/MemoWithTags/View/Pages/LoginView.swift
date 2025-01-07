@@ -24,7 +24,7 @@ struct LoginView: View {
                     Text("Memo with")
                         .font(.system(size: 22, weight: .semibold))
                         .foregroundStyle(Color.titleTextBlack)
-                    Tag(text: "Tags", size: 19, color: .init(white: 0, opacity: 0.1)) {}
+                    Tag(text: "Tags", size: 19, color: .init(white: 0, opacity: 0.1))
                 }
                 .padding(.vertical, 8)
                 .background(.clear)
@@ -91,19 +91,15 @@ struct LoginView: View {
                     .padding(.top, 16)
                     
                     HStack(spacing: 8) {
-                        Tag(text: "이메일로 회원가입", size: 14, color: .init(hex: "#FFBDBD")) {
-                            //action
+                        NavigationLink(destination: SignupView()) {
+                            Tag(text: "이메일로 회원가입", size: 14, color: .init(hex: "#FFBDBD"))
                         }
                         
                         Spacer()
                         
-                        Tag(text: "이메일 찾기", size: 14, color: .init(hex: "#F1F1F3")) {
-                            //action
-                        }
+                        Tag(text: "이메일 찾기", size: 14, color: .init(hex: "#F1F1F3"))
                         
-                        Tag(text: "비밀번호 찾기", size: 14, color: .init(hex: "#F1F1F3")) {
-                            //action
-                        }
+                        Tag(text: "비밀번호 찾기", size: 14, color: .init(hex: "#F1F1F3"))
                     }
                     .padding(.top, 36)
                 }
@@ -115,12 +111,14 @@ struct LoginView: View {
             }
             .padding(.horizontal, 12)
             .background(.clear)
+            .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
 
         }
+        .navigationBarBackButtonHidden()
         
     }
     
-    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClink: @escaping () -> Void) -> some View {
+    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color) -> some View {
         Text(text)
             .font(.system(size: size, weight: .regular))
             .foregroundStyle(Color.tagTextColor)
@@ -128,9 +126,6 @@ struct LoginView: View {
             .padding(.vertical, 3)
             .background(color)
             .cornerRadius(4)
-            .onTapGesture {
-                onClink()
-            }
     }
     
 }
