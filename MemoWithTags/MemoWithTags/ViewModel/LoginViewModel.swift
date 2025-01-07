@@ -12,6 +12,9 @@ final class LoginViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var isLoggedIn: Bool = false
     
+    @Published var showAlert: Bool = false
+    @Published var errorMessage: String = ""
+    
     private let loginUseCase = DefaultLoginUseCase(authRepository: DefaultAuthRepository.shared)
     
     ///정규식으로 이메일 형식 검사
@@ -22,11 +25,12 @@ final class LoginViewModel: ObservableObject {
     }
     
     func login(email: String, password: String) async {
+        isLoggedIn = false
         isLoading = true
         
         if !checkEmailValidity(email: email) {
-            isLoading = false
-            isLoggedIn = false
+            showAlert = true
+            errorMessage = LoginError.invalidEmail.localizedDescription()
             return
         }
         
@@ -36,8 +40,11 @@ final class LoginViewModel: ObservableObject {
         switch result {
         case .success:
             isLoggedIn = true
-        case .failure:
+            showAlert = false
+        case .failure(let error):
             isLoggedIn = false
+            showAlert = true
+            errorMessage = error.localizedDescription()
         }
     }
 }

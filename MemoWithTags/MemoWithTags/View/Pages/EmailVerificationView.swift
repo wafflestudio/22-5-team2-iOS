@@ -11,6 +11,8 @@ struct EmailVerificationView: View {
     
     @State private var code: String = ""
     
+    @StateObject private var viewModel = EmailVerificationViewModel()
+    
     var body: some View {
         
         ZStack {
@@ -84,6 +86,13 @@ struct EmailVerificationView: View {
             .background(.clear)
             .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
 
+        }
+        .alert(isPresented: $viewModel.showAlert) {
+            Alert(
+                title: Text("Error"),
+                message: Text(viewModel.errorMessage),
+                dismissButton: .default(Text("확인"))
+            )
         }
         
     }
