@@ -8,7 +8,7 @@
 import Foundation
 
 protocol UpdateMemoUseCase {
-    func execute(memoId: Int, content: String, tags: [Int]) async throws -> Result<Memo, MemoError>
+    func execute(memoId: Int, content: String, tags: [Int]) async -> Result<Memo, MemoError>
 }
 
 class DefaultUpdateMemoUseCase: UpdateMemoUseCase {
@@ -18,13 +18,14 @@ class DefaultUpdateMemoUseCase: UpdateMemoUseCase {
         self.memoRepository = memoRepository
     }
 
-    func execute(memoId: Int, content: String, tags: [Int]) async throws -> Result<Memo, MemoError> {
+    func execute(memoId: Int, content: String, tags: [Int]) async -> Result<Memo, MemoError> {
         do {
             let memo = try await memoRepository.updateMemo(memoId: memoId, content: content, tags: tags)
             return .success(memo)
-        } catch let error {
-            ///error 맵핑 구현
-            return .failure(.networkError)
+        } catch let error as BaseError {
+            return .failure(.from(baseError: error))
+        } catch {
+            return .failure(.unknown)
         }
     }
 }

@@ -8,8 +8,8 @@ import Foundation
 
 struct Tag: Codable, Identifiable {
     let id: Int
-    let name: String
-    let color: String // HEX값을 받는다.
+    var name: String
+    var color: String // HEX값을 받는다.
 }
 
 struct TagDto: Decodable {

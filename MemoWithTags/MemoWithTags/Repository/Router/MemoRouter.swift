@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 
 enum MemoRouter: Router {
-    case fetchMemos(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?)
+    case fetchMemos(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?, page: Int)
     case createMemo(content: String, tags: [Int])
     case deleteMemo(memoId: Int)
     case updateMemo(memoId: Int, content: String, tags: [Int])
@@ -44,8 +44,8 @@ enum MemoRouter: Router {
     
     var parameters: Parameters? {
         switch self {
-        case let .fetchMemos(content, tags, dateRange):
-            var params: [String: Any] = [:]
+        case let .fetchMemos(content, tags, dateRange, page):
+            var params: [String: Any] = ["page": page]
             if let content = content {
                 params["content"] = content
             }
@@ -67,3 +67,4 @@ enum MemoRouter: Router {
         }
     }
 }
+

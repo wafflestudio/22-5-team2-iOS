@@ -10,9 +10,9 @@ import Alamofire
 
 enum TagRouter: Router {
     case fetchTags
-    case createTag(name: String, color: Int)
+    case createTag(name: String, color: String)
     case deleteTag(tagId: Int)
-    case updateTag(tagId: Int, name: String, color: Int)
+    case updateTag(tagId: Int, name: String, color: String)
     
     var baseURL: URL {
         return URL(string: NetworkConfiguration.baseURL)!

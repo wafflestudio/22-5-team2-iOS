@@ -8,10 +8,10 @@ import Foundation
 
 struct Memo: Codable, Identifiable {
     let id: Int
-    let content: String
-    let tags: [Tag] // Fully constructed Tag objects
-    let createdAt: Date
-    let updatedAt: Date
+    var content: String
+    var tags: [Tag] // Fully constructed Tag objects
+    var createdAt: Date
+    var updatedAt: Date
 }
 
 struct MemoDto: Decodable {
@@ -31,4 +31,25 @@ struct MemoDto: Decodable {
             updatedAt: dateFormatter.date(from: updatedAt) ?? Date()
         )
     }
+}
+
+struct MemoResponseDto: Decodable {
+    let page: Int
+    let totalPages: Int
+    let totalResults: Int
+    let results: [MemoDto]
+    
+    enum CodingKeys: String, CodingKey {
+        case page
+        case totalPages = "total_pages"
+        case totalResults = "total_results"
+        case results
+    }
+}
+
+struct PaginatedMemos {
+    let memos: [Memo]
+    let currentPage: Int
+    let totalPages: Int
+    let totalResults: Int
 }

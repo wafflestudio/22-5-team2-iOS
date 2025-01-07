@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FetchMemoUseCase {
-    func execute(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?) async -> Result<[Memo], MemoError>
+    func execute(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?, page: Int) async -> Result<PaginatedMemos, MemoError>
 }
 
 class DefaultFetchMemoUseCase: FetchMemoUseCase {
@@ -18,13 +18,15 @@ class DefaultFetchMemoUseCase: FetchMemoUseCase {
         self.memoRepository = memoRepository
     }
 
-    func execute(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?) async -> Result<[Memo], MemoError> {
+    func execute(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?, page: Int) async -> Result<PaginatedMemos, MemoError> {
         do {
-            let memos = try await memoRepository.fetchMemos(content: content, tags: tags, dateRange: dateRange)
-            return .success(memos)
-        } catch let error {
-            ///error 맵핑 구현
-            return .failure(.networkError)
+            let paginatedMemos = try await memoRepository.fetchMemos(content: content, tags: tags, dateRange: dateRange, page: page)
+            return .success(paginatedMemos)
+        } catch let error as BaseError {
+            return .failure(.from(baseError: error))
+        } catch {
+            return .failure(.unknown)
         }
     }
 }
+
