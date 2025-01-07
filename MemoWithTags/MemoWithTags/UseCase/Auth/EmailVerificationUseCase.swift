@@ -6,7 +6,7 @@
 //
 
 protocol EmailVerificationUseCase {
-    func execute(email: String) async -> Result<Void, VerifyEmailError>
+    func execute(email: String, code: String) async -> Result<Void, VerifyEmailError>
 }
 
 final class DefaultEmailVerificationUseCase: EmailVerificationUseCase {
@@ -16,9 +16,9 @@ final class DefaultEmailVerificationUseCase: EmailVerificationUseCase {
         self.authRepository = authRepository
     }
 
-    func execute(email: String) async -> Result<Void, VerifyEmailError> {
+    func execute(email: String, code: String) async -> Result<Void, VerifyEmailError> {
         do {
-            let auth = try await authRepository.verifyEmail(email: email)
+            let auth = try await authRepository.verifyEmail(email: email, code: code)
             let isAccessSaved = KeyChainManager.shared.saveAccessToken(token: auth.accessToken)
             let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: auth.refreshToken)
             

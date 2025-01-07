@@ -10,6 +10,9 @@ import SwiftUI
 struct SignupView: View {
     @State private var email: String = ""
     @State private var password: String = ""
+    @State private var passwordRepeat: String = ""
+    
+    @StateObject private var viewModel = SignupViewModel()
     
     var body: some View {
         
@@ -23,10 +26,11 @@ struct SignupView: View {
                         .font(.system(size: 21, weight: .semibold))
                         .foregroundStyle(Color.titleTextBlack)
                 }
+                .padding(.vertical, 8)
                 .background(.clear)
                 
-                //login panel
-                VStack {
+                //signup panel
+                VStack(spacing: 0) {
                     VStack(spacing: 10) {
                         //이메일 입력 필드
                         TextField (
@@ -67,13 +71,18 @@ struct SignupView: View {
                             )
                             .autocorrectionDisabled(true)
                             .textInputAutocapitalization(.never)
+                            .onChange(of: password) {
+                                viewModel.checkPasswordValidity(password: password)
+                            }
                             
                             //조건 표시
                             HStack {
                                 Spacer()
-                                Text("0/8")
+                                Text("\(viewModel.satisfiedCount)/5")
                                     .font(.system(size: 12, weight: .regular))
-                                    .foregroundStyle(Color.dateGray)
+                                    .foregroundStyle(
+                                        viewModel.isValidPassword ? Color.green : Color.dateGray
+                                    )
                                     .padding(.horizontal, 6)
                             }
                         }
@@ -81,7 +90,7 @@ struct SignupView: View {
                         //비밀번호 확인 필드
                         SecureField(
                             "",
-                            text: $password,
+                            text: $passwordRepeat,
                             prompt: Text("비밀번호 확인")
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(Color(hex: "#94979F"))
@@ -101,6 +110,9 @@ struct SignupView: View {
                     //회원가입 버튼
                     Button {
                         //action
+                        Task {
+                            await viewModel.signup(email: email, password: password, passwordRepeat: passwordRepeat)
+                        }
                     } label: {
                         Text("다음")
                             .frame(maxWidth: .infinity)
@@ -114,11 +126,24 @@ struct SignupView: View {
                     .padding(.top, 16)
                     
                     HStack(spacing: 8) {
-                        Tag(text: "로그인", size: 13, color: .init(hex: "#E3E3E7")) {
-                            //action
+                        NavigationLink(destination: LoginView()) {
+                            Tag(text: "로그인", size: 14, color: .init(hex: "#E3E3E7"))
                         }
                         
                         Spacer()
+                        
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color(hex: "#FFBDBD"))
+                            .frame(width: 12, height: 24)
+                        
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color(hex: "#F1F1F3"))
+                            .frame(width: 12, height: 24)
+                        
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color(hex: "#F1F1F3"))
+                            .frame(width: 12, height: 24)
+                        
                     }
                     .padding(.top, 36)
                 }
@@ -130,22 +155,27 @@ struct SignupView: View {
             }
             .padding(.horizontal, 12)
             .background(.clear)
-
+            .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
         }
-        
+        .navigationBarBackButtonHidden()
+        .alert(isPresented: $viewModel.showAlert) {
+            Alert(
+                title: Text("Error"),
+                message: Text(viewModel.errorMessage),
+                dismissButton: .default(Text("확인"))
+            )
+        }
     }
     
-    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClink: @escaping () -> Void) -> some View {
+    
+    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color) -> some View {
         Text(text)
             .font(.system(size: size, weight: .regular))
             .foregroundStyle(Color.tagTextColor)
-            .padding(.horizontal, 6)
-            .padding(.vertical, 2)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
             .background(color)
             .cornerRadius(4)
-            .onTapGesture {
-                onClink()
-            }
     }
     
 }

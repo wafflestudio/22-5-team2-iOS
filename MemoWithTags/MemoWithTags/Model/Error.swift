@@ -40,6 +40,7 @@ enum LoginError: Error {
     case networkError
     case unknown
     case tokenSaveError
+    case invalidEmail
     
     func localizedDescription() -> String {
         switch self {
@@ -47,6 +48,7 @@ enum LoginError: Error {
         case .networkError: return "Network error"
         case .unknown: return "Unknown error"
         case .tokenSaveError: return "Token save error"
+        case .invalidEmail: return "이메일 형식이 잘못되었습니다."
         }
     }
     
@@ -71,22 +73,26 @@ enum LogoutError: Error {
 
 enum RegisterError: Error {
     case emailAlreadyExists
-    case invalidCreditentials
     case networkError
     case unknown
+    case invalidEmail
+    case invalidPassword
+    case passwordNotMatch
     
     func localizedDescription() -> String {
         switch self {
         case .emailAlreadyExists: return "이미 사용중인 이메일입니다."
-        case .invalidCreditentials: return "아이디, 패스워드가 잘못되었습니다."
         case .networkError: return "Network error"
         case .unknown: return "Unknown error"
+        case .invalidEmail: return "이메일 형식이 잘못되었습니다."
+        case .invalidPassword: return "비밀번호 형식이 잘못되었습니다."
+        case .passwordNotMatch: return "비밀번호가 일치하지 않습니다."
         }
     }
     
     static func from(baseError: BaseError) -> RegisterError {
         switch baseError {
-        case .BAD_REQUEST: return .invalidCreditentials
+        case .BAD_REQUEST: return .invalidEmail
         case .CONFLICT: return .emailAlreadyExists
         case .INTERNAL_SERVER_ERROR: return .networkError
         default: return .unknown
