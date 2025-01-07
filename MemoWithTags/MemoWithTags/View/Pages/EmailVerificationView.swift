@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EmailVerificationView: View {
     
+    private let email: String = "oopp333@naver.com"
     @State private var code: String = ""
     
     @StateObject private var viewModel = EmailVerificationViewModel()
@@ -41,6 +42,10 @@ struct EmailVerificationView: View {
                     
                     Button {
                         //action
+                        Task {
+                            await viewModel.verifiy(email: email, code: code)
+                        }
+                        
                     } label: {
                         Text("다음")
                             .frame(maxWidth: .infinity)
