@@ -15,6 +15,9 @@ final class SignupViewModel: ObservableObject {
     @Published var satisfiedCount: Int = 0
     @Published var isValidPassword: Bool = false
     
+    @Published var showAlert: Bool = false
+    @Published var errorMessage: String = ""
+    
     private let signupUseCase = DefaultSignupUseCase(authRepository: DefaultAuthRepository.shared)
     
     ///정규식으로 비밀번호 형식 검사
@@ -45,10 +48,16 @@ final class SignupViewModel: ObservableObject {
         
         if !isEmailValid {
             isSignedUp = false
+            showAlert = true
+            errorMessage = RegisterError.invalidEmail.localizedDescription()
         } else if !isValidPassword {
             isSignedUp = false
+            showAlert = true
+            errorMessage = RegisterError.invalidPassword.localizedDescription()
         } else if !isPasswordSame {
             isSignedUp = false
+            showAlert = true
+            errorMessage = RegisterError.passwordNotMatch.localizedDescription()
         } else {
             let result = await signupUseCase.execute(email: email, password: password)
             isLoading = false
@@ -56,8 +65,11 @@ final class SignupViewModel: ObservableObject {
             switch result {
             case .success:
                 isSignedUp = true
-            case .failure:
+                showAlert = false
+            case .failure(let error):
                 isSignedUp = false
+                showAlert = true
+                errorMessage = error.localizedDescription()
             }
         }
         isLoading = false

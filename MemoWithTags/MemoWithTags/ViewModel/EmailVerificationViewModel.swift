@@ -12,6 +12,9 @@ final class EmailVerificationViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var isVerified: Bool = false
     
+    @Published var showAlert: Bool = false
+    @Published var errorMessage: String = ""
+    
     private let emailVerificationUseCase = DefaultEmailVerificationUseCase(authRepository: DefaultAuthRepository.shared)
     
     func verifiy(email: String, code: String) async {
@@ -23,8 +26,11 @@ final class EmailVerificationViewModel: ObservableObject {
         switch result {
         case .success:
             isVerified = true
-        case .failure:
+            showAlert = false
+        case .failure(let error):
             isVerified = false
+            showAlert = true
+            errorMessage = error.localizedDescription()
         }
     }
 }

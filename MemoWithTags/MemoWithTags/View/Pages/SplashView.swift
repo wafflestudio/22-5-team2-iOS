@@ -13,11 +13,17 @@ struct SplashView: View {
     var body: some View {
         Group {
             if viewModel.isLoading {
-                LoadingView()
+                NavigationStack {
+                    LoadingView()
+                }
             } else if viewModel.isLoggedIn{
-                MainView()
+                NavigationStack {
+                    MainView()
+                }
             } else {
-                LoginView()
+                NavigationStack {
+                    LoginView()
+                }
             }
         }
         .onAppear() {

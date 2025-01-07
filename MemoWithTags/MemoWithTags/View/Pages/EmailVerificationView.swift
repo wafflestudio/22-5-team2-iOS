@@ -9,7 +9,10 @@ import SwiftUI
 
 struct EmailVerificationView: View {
     
+    private let email: String = "oopp333@naver.com"
     @State private var code: String = ""
+    
+    @StateObject private var viewModel = EmailVerificationViewModel()
     
     var body: some View {
         
@@ -39,6 +42,10 @@ struct EmailVerificationView: View {
                     
                     Button {
                         //action
+                        Task {
+                            await viewModel.verifiy(email: email, code: code)
+                        }
+                        
                     } label: {
                         Text("다음")
                             .frame(maxWidth: .infinity)
@@ -47,9 +54,10 @@ struct EmailVerificationView: View {
                             .padding(.vertical, 12)
 
                     }
-                    .background(Color.titleTextBlack)
+                    .background(code.count < 6 ? Color(hex: "#E3E3E7") : Color.titleTextBlack)
                     .cornerRadius(22)
                     .padding(.top, 16)
+                    .disabled(code.count < 6)
                     
                     HStack(spacing: 8) {
                         Tag(text: "이전", size: 14, color: .init(hex: "#E3E3E7")) {
@@ -81,7 +89,15 @@ struct EmailVerificationView: View {
             }
             .padding(.horizontal, 12)
             .background(.clear)
+            .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
 
+        }
+        .alert(isPresented: $viewModel.showAlert) {
+            Alert(
+                title: Text("Error"),
+                message: Text(viewModel.errorMessage),
+                dismissButton: .default(Text("확인"))
+            )
         }
         
     }
