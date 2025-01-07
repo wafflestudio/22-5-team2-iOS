@@ -26,10 +26,11 @@ struct LoginView: View {
                         .foregroundStyle(Color.titleTextBlack)
                     Tag(text: "Tags", size: 19, color: .init(white: 0, opacity: 0.1)) {}
                 }
+                .padding(.vertical, 8)
                 .background(.clear)
                 
                 //login panel
-                VStack {
+                VStack(spacing: 0) {
                     VStack(spacing: 10) {
                         //이메일 입력 필드
                         TextField (
@@ -90,17 +91,17 @@ struct LoginView: View {
                     .padding(.top, 16)
                     
                     HStack(spacing: 8) {
-                        Tag(text: "이메일로 회원가입", size: 13, color: .init(hex: "#FFBDBD")) {
+                        Tag(text: "이메일로 회원가입", size: 14, color: .init(hex: "#FFBDBD")) {
                             //action
                         }
                         
                         Spacer()
                         
-                        Tag(text: "이메일 찾기", size: 13, color: .init(hex: "#F1F1F3")) {
+                        Tag(text: "이메일 찾기", size: 14, color: .init(hex: "#F1F1F3")) {
                             //action
                         }
                         
-                        Tag(text: "비밀번호 찾기", size: 13, color: .init(hex: "#F1F1F3")) {
+                        Tag(text: "비밀번호 찾기", size: 14, color: .init(hex: "#F1F1F3")) {
                             //action
                         }
                     }
@@ -123,8 +124,8 @@ struct LoginView: View {
         Text(text)
             .font(.system(size: size, weight: .regular))
             .foregroundStyle(Color.tagTextColor)
-            .padding(.horizontal, 6)
-            .padding(.vertical, 2)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
             .background(color)
             .cornerRadius(4)
             .onTapGesture {

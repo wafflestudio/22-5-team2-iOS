@@ -10,7 +10,9 @@
 		55E610BC2D2A5FA600E452A8 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E610BB2D2A5FA600E452A8 /* MainViewModel.swift */; };
 		55E610BE2D2A65B200E452A8 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E610BD2D2A65B200E452A8 /* SearchView.swift */; };
 		55E610C02D2A65C400E452A8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E610BF2D2A65C400E452A8 /* SettingsView.swift */; };
-		55E60FD72D214A0800E452A8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 55E60FD62D214A0800E452A8 /* Alamofire */; };
+		DA0A4E752D2B7AFE007E481D /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 55E610D22D2AD5A500E452A8 /* Alamofire */; };
+		DA0A4EB82D2B9F0A007E481D /* EmailVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0A4EB72D2B9EF8007E481D /* EmailVerificationView.swift */; };
+		DA0A4EBA2D2BC544007E481D /* SignupSuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0A4EB92D2BC536007E481D /* SignupSuccessView.swift */; };
 		DA2DA6632D2A9492000C0495 /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2DA6622D2A9487000C0495 /* SignupView.swift */; };
 		DA3C9E542D29072F00F28D07 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3C9E532D29072C00F28D07 /* MainView.swift */; };
 		DA3C9E562D290D1500F28D07 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3C9E552D290D0E00F28D07 /* SplashView.swift */; };
@@ -60,6 +62,8 @@
 		55E610BB2D2A5FA600E452A8 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		55E610BD2D2A65B200E452A8 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		55E610BF2D2A65C400E452A8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		DA0A4EB72D2B9EF8007E481D /* EmailVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVerificationView.swift; sourceTree = "<group>"; };
+		DA0A4EB92D2BC536007E481D /* SignupSuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupSuccessView.swift; sourceTree = "<group>"; };
 		DA2DA6622D2A9487000C0495 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
 		DA2DA6642D2AF00D000C0495 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		DA3C9E532D29072C00F28D07 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -120,7 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55E610D32D2AD5A500E452A8 /* Alamofire in Frameworks */,
+				DA0A4E752D2B7AFE007E481D /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,6 +237,8 @@
 			children = (
 				DABFE23E2D28416000B314E2 /* LoginView.swift */,
 				DA2DA6622D2A9487000C0495 /* SignupView.swift */,
+				DA0A4EB72D2B9EF8007E481D /* EmailVerificationView.swift */,
+				DA0A4EB92D2BC536007E481D /* SignupSuccessView.swift */,
 				DA3C9E552D290D0E00F28D07 /* SplashView.swift */,
 				DA3C9E532D29072C00F28D07 /* MainView.swift */,
 				55E610BD2D2A65B200E452A8 /* SearchView.swift */,
@@ -253,9 +259,9 @@
 		DABFE24C2D28416000B314E2 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				DABFE2462D28416000B314E2 /* LoginViewModel.swift */,
 				DA3C9E5A2D2931B700F28D07 /* SplashViewModel.swift */,
 				55E610BB2D2A5FA600E452A8 /* MainViewModel.swift */,
+				DABFE2462D28416000B314E2 /* LoginViewModel.swift */,
 				DABFE24A2D28416000B314E2 /* SignupViewModel.swift */,
 				DABFE2892D286BD200B314E2 /* EmailVerificationViewModel.swift */,
 			);
@@ -411,6 +417,7 @@
 				DABFE2882D28634600B314E2 /* User.swift in Sources */,
 				DABFE2682D28416000B314E2 /* CreateMemoUseCase.swift in Sources */,
 				DABFE2822D28481100B314E2 /* MemoRouter.swift in Sources */,
+				DA0A4EBA2D2BC544007E481D /* SignupSuccessView.swift in Sources */,
 				DABFE2692D28416000B314E2 /* CreateTagUseCase.swift in Sources */,
 				DABFE26A2D28416000B314E2 /* DeleteMemoUseCase.swift in Sources */,
 				DABFE26B2D28416000B314E2 /* DeleteTagUseCase.swift in Sources */,
@@ -423,6 +430,7 @@
 				DABFE28A2D286BDF00B314E2 /* EmailVerificationViewModel.swift in Sources */,
 				DABFE2752D28416000B314E2 /* LoginViewModel.swift in Sources */,
 				DABFE2792D28416000B314E2 /* SignupViewModel.swift in Sources */,
+				DA0A4EB82D2B9F0A007E481D /* EmailVerificationView.swift in Sources */,
 				DABFE27B2D28416000B314E2 /* CustomColor.swift in Sources */,
 				55E610BC2D2A5FA600E452A8 /* MainViewModel.swift in Sources */,
 				DABFE27D2D28416000B314E2 /* MemoWithTagsApp.swift in Sources */,

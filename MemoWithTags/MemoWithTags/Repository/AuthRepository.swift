@@ -18,7 +18,7 @@ protocol AuthRepository: BaseRepository {
     ///비밀번호 재설정하는 함수
     func resetPassword(email: String, newPassword: String) async throws
     ///이메일 인증하는 함수
-    func verifyEmail(email: String) async throws -> Auth
+    func verifyEmail(email: String, code: String) async throws -> Auth
     ///token refresh 함수
     func refreshToken() async throws -> Auth
     ///유저 정보 가져오는 함수
@@ -44,8 +44,8 @@ final class DefaultAuthRepository: AuthRepository {
         return dto.toAuth()
     }
     
-    func verifyEmail(email: String) async throws -> Auth {
-        let response = await AF.request(AuthRouter.verifyEmail(email: email)).serializingDecodable(AuthDto.self).response
+    func verifyEmail(email: String, code: String) async throws -> Auth {
+        let response = await AF.request(AuthRouter.verifyEmail(email: email, code: code)).serializingDecodable(AuthDto.self).response
         let dto = try handleError(response: response)
         
         return dto.toAuth()

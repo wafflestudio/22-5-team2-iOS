@@ -26,6 +26,8 @@ extension Color {
     
     static let tagTextColor: Color = .init(red: 26 / 255, green: 26 / 255, blue: 27 / 255).opacity(0.8)
     
+    static let highlightRed: Color = .init(hex: "#FFBDBD")
+    
     
     // HEX 값을 받아서 swiftUI Color로 바꾸는 로직
     init(hex: String) {
