@@ -121,9 +121,10 @@ struct SignupView: View {
                             .padding(.vertical, 12)
 
                     }
-                    .background(Color.titleTextBlack)
+                    .background(email.isEmpty || password.isEmpty || passwordRepeat.isEmpty ? Color(hex: "#E3E3E7") : Color.titleTextBlack)
                     .cornerRadius(22)
                     .padding(.top, 16)
+                    .disabled(email.isEmpty || password.isEmpty || passwordRepeat.isEmpty)
                     
                     HStack(spacing: 8) {
                         NavigationLink(destination: LoginView()) {
@@ -157,13 +158,16 @@ struct SignupView: View {
             .background(.clear)
             .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
         }
-        .navigationBarBackButtonHidden()
         .alert(isPresented: $viewModel.showAlert) {
             Alert(
                 title: Text("Error"),
                 message: Text(viewModel.errorMessage),
                 dismissButton: .default(Text("확인"))
             )
+        }
+        .navigationBarBackButtonHidden()
+        .navigationDestination(isPresented: $viewModel.isSignedUp) {
+            EmailVerificationView(email: email)
         }
     }
     

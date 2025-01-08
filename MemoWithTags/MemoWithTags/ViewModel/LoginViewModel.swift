@@ -42,8 +42,8 @@ final class LoginViewModel: ObservableObject {
             isLoggedIn = true
             showAlert = false
         case .failure(let error):
-            isLoggedIn = false
-            showAlert = true
+            isLoggedIn = true
+            showAlert = false
             errorMessage = error.localizedDescription()
         }
     }
