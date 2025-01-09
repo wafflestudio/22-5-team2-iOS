@@ -86,9 +86,10 @@ struct LoginView: View {
                             .padding(.vertical, 12)
 
                     }
-                    .background(Color.titleTextBlack)
+                    .background(email.isEmpty || password.isEmpty ? Color(hex: "#E3E3E7") : Color.titleTextBlack)
                     .cornerRadius(22)
                     .padding(.top, 16)
+                    .disabled(email.isEmpty || password.isEmpty)
                     
                     HStack(spacing: 8) {
                         NavigationLink(destination: SignupView()) {
@@ -114,7 +115,6 @@ struct LoginView: View {
             .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
 
         }
-        .navigationBarBackButtonHidden()
         .alert(isPresented: $viewModel.showAlert) {
             Alert(
                 title: Text("Error"),
@@ -122,6 +122,11 @@ struct LoginView: View {
                 dismissButton: .default(Text("확인"))
             )
         }
+        .navigationBarBackButtonHidden()
+        .navigationDestination(isPresented: $viewModel.isLoggedIn) {
+            MainView()
+        }
+
         
     }
     

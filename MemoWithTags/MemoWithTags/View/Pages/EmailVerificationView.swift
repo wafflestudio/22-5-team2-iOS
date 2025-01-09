@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct EmailVerificationView: View {
+    @Environment(\.dismiss) private var dismiss
     
-    private let email: String = "oopp333@naver.com"
+    let email: String
+    
     @State private var code: String = ""
     
     @StateObject private var viewModel = EmailVerificationViewModel()
@@ -43,7 +45,7 @@ struct EmailVerificationView: View {
                     Button {
                         //action
                         Task {
-                            await viewModel.verifiy(email: email, code: code)
+                            await viewModel.verify(email: email, code: code)
                         }
                         
                     } label: {
@@ -62,6 +64,7 @@ struct EmailVerificationView: View {
                     HStack(spacing: 8) {
                         Tag(text: "이전", size: 14, color: .init(hex: "#E3E3E7")) {
                             //action
+                            dismiss()
                         }
                         
                         Spacer()
@@ -98,6 +101,10 @@ struct EmailVerificationView: View {
                 message: Text(viewModel.errorMessage),
                 dismissButton: .default(Text("확인"))
             )
+        }
+        .navigationBarBackButtonHidden()
+        .navigationDestination(isPresented: $viewModel.isVerified) {
+            SignupSuccessView()
         }
         
     }
@@ -185,8 +192,4 @@ struct SeparatedTextField: View {
             focusedIndex = index - 1 // 이전 필드로 포커스 이동
         }
     }
-}
-
-#Preview {
-    EmailVerificationView()
 }

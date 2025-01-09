@@ -79,6 +79,7 @@ struct SignupSuccessView: View {
             .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
 
         }
+        .navigationBarBackButtonHidden()
     }
     
     @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClink: @escaping () -> Void) -> some View {
@@ -93,8 +94,4 @@ struct SignupSuccessView: View {
                 onClink()
             }
     }
-}
-
-#Preview {
-    SignupSuccessView()
 }
