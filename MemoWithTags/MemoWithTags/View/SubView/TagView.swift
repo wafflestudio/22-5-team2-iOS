@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TagView: View {
     var tag: Tag
+    var onTap: (() -> Void)? = nil
     
     var body: some View {
         Text(tag.name)
@@ -20,6 +21,9 @@ struct TagView: View {
             .cornerRadius(4)
             .lineLimit(1)
             .truncationMode(.tail)
+            .onTapGesture {
+                onTap?()
+            }
             //디버깅
             .onAppear {
                 print("TagView: \nTags: \(tag)")

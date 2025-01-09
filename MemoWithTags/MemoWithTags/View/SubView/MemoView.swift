@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MemoView: View {
     let memo: Memo
-    @State private var collectionViewHeight: CGFloat = .zero
+    @State private var dynamicTagCollectionViewHeight: CGFloat = .zero
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -21,15 +21,15 @@ struct MemoView: View {
             
             // 태그들
             GeometryReader { geometry in
-                TagCollectionView(
+                DynamicHeightTagCollection(
                     tags: .constant(memo.tags),
-                    collectionViewHeight: $collectionViewHeight,
+                    collectionViewHeight: $dynamicTagCollectionViewHeight,
                     horizontalSpacing: 9,
                     verticalSpacing: 7
                 )
                 .frame(width: geometry.size.width, alignment: .leading)
             }
-            .frame(height: collectionViewHeight)
+            .frame(height: dynamicTagCollectionViewHeight)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 13)

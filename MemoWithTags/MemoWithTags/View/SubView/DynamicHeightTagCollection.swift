@@ -1,5 +1,5 @@
 //
-//  TagCollectionView.swift
+//  DynamicHeightTagCollectionView.swift
 //  MemoWithTags
 //
 //  Created by Swimming Ryu on 1/6/25.
@@ -8,17 +8,17 @@
 import SwiftUI
 import UIKit
 
-struct TagCollectionView: UIViewRepresentable {
+struct DynamicHeightTagCollection: UIViewRepresentable {
     @Binding var tags: [Tag]
     @Binding var collectionViewHeight: CGFloat
-    
+
     var horizontalSpacing: CGFloat
     var verticalSpacing: CGFloat
 
     func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
     }
-    
+
     func makeUIView(context: Context) -> UICollectionView {
         let layout = LeftAlignedCollectionViewFlowLayout()
         layout.minimumInteritemSpacing = horizontalSpacing
@@ -36,29 +36,34 @@ struct TagCollectionView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UICollectionView, context: Context) {
-        context.coordinator.parent = self
-        uiView.reloadData()
+        // Only reload data if tags have changed
+        if context.coordinator.previousTags != tags {
+            uiView.reloadData()
+            context.coordinator.previousTags = tags
+        }
+
         DispatchQueue.main.async {
-            uiView.layoutIfNeeded() // 레이아웃 강제 업데이트
+            uiView.layoutIfNeeded()
             let newHeight = uiView.collectionViewLayout.collectionViewContentSize.height
             if self.collectionViewHeight != newHeight {
                 self.collectionViewHeight = newHeight
-                print("Updated collectionViewHeight: \(newHeight)") // 디버깅
+                print("Updated collectionViewHeight: \(newHeight)") // Debugging
             }
         }
     }
 
     class Coordinator: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-        var parent: TagCollectionView
-        
-        init(parent: TagCollectionView) {
+        var parent: DynamicHeightTagCollection
+        var previousTags: [Tag] = []
+
+        init(parent: DynamicHeightTagCollection) {
             self.parent = parent
         }
-        
+
         func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             return parent.tags.count
         }
-        
+
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HostingTagCell.reuseIdentifier, for: indexPath) as? HostingTagCell else {
                 return UICollectionViewCell()
@@ -67,7 +72,7 @@ struct TagCollectionView: UIViewRepresentable {
             cell.configure(with: tag)
             return cell
         }
-        
+
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
             let tag = parent.tags[indexPath.item]
             let maxWidth = collectionView.bounds.width
@@ -77,30 +82,30 @@ struct TagCollectionView: UIViewRepresentable {
             label.numberOfLines = 1
             label.lineBreakMode = .byTruncatingTail
             let size = label.sizeThatFits(CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude))
-            let width = min(size.width + 14, maxWidth) // 좌우 패딩 7 + 7
-            let height: CGFloat = 25 // TagView와 일치하도록 높이 조정
+            let width = min(size.width + 14, maxWidth) // Padding: 7 left + 7 right
+            let height: CGFloat = 32 // Increased height to better match TagView
             return CGSize(width: width, height: height)
         }
     }
 }
 
-// 왼쪽 정렬을 위한 커스텀 레이아웃
+// Custom left-aligned layout
 class LeftAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         guard let attributesForElementsInRect = super.layoutAttributesForElements(in: rect) else {
             return nil
         }
-        
+
         var newAttributesForElementsInRect = [UICollectionViewLayoutAttributes]()
         var leftMargin = sectionInset.left
         var maxY: CGFloat = -1.0
-        
+
         for attributes in attributesForElementsInRect {
             if attributes.representedElementCategory == .cell {
                 if attributes.frame.origin.y >= maxY {
                     leftMargin = sectionInset.left
                 }
-                
+
                 let frame = attributes.frame
                 attributes.frame.origin.x = leftMargin
                 leftMargin += frame.width + minimumInteritemSpacing
@@ -108,14 +113,14 @@ class LeftAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {
             }
             newAttributesForElementsInRect.append(attributes)
         }
-        
+
         return newAttributesForElementsInRect
     }
 }
 
 struct HeightPreferenceKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
-    
+
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = max(value, nextValue())
     }
@@ -127,7 +132,7 @@ class HostingTagCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.layer.cornerRadius = 4
+        contentView.layer.cornerRadius = 12 // Match TagView's corner radius
         contentView.layer.masksToBounds = true
     }
 
@@ -137,13 +142,13 @@ class HostingTagCell: UICollectionViewCell {
 
     func configure(with tag: Tag) {
         let tagView = TagView(tag: tag)
-        
+
         if hostController == nil {
             let controller = UIHostingController(rootView: tagView)
             controller.view.translatesAutoresizingMaskIntoConstraints = false
             hostController = controller
             contentView.addSubview(controller.view)
-            
+
             NSLayoutConstraint.activate([
                 controller.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
                 controller.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -155,3 +160,4 @@ class HostingTagCell: UICollectionViewCell {
         }
     }
 }
+

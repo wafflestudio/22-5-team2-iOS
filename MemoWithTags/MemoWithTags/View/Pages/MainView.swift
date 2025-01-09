@@ -19,6 +19,8 @@ struct MainView: View {
         deleteTagUseCase: DefaultDeleteTagUseCase(tagRepository: MockTagRepository.shared)
     )
     
+    @StateObject private var keyboardResponder = KeyboardResponder() // Add this line
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -26,24 +28,16 @@ struct MainView: View {
                 Color.backgroundGray
                     .ignoresSafeArea()
                 
-                // MemoListView 분리
                 MemoListView(mainViewModel: mainViewModel)
                 
-                // 하단에 표시될 EditingMemoView 추가
-                VStack {
-                    Spacer()
-                    EditingMemoView(
-                        onConfirm: { content, tagIDs in
-                            mainViewModel.createMemo(content: content, tags: tagIDs)
-                        }
-                    )
-                    .padding(.horizontal, 7)
-                    .padding(.bottom, 14)
-                }
+                EditingView()
+                    .environmentObject(mainViewModel)
+                    .environmentObject(keyboardResponder)
+
             }
             .navigationBarBackButtonHidden(true)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) { // 중앙 정렬
+                ToolbarItem(placement: .topBarLeading) {
                     Text("Memo with Tags")
                         .font(.headline)
                 }
@@ -64,7 +58,11 @@ struct MainView: View {
                 if mainViewModel.memos.isEmpty {
                     mainViewModel.fetchMemos()
                 }
+                if mainViewModel.tags.isEmpty {
+                    mainViewModel.fetchTags()
+                }
             }
+            .environmentObject(keyboardResponder)
         }
     }
 }

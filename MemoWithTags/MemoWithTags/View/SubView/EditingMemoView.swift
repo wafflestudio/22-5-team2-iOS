@@ -5,16 +5,14 @@
 //  Created by Swimming Ryu on 1/6/25.
 //
 
-// EditingMemoView.swift
-
 import SwiftUI
 
 struct EditingMemoView: View {
-    @State private var newContent: String = ""
-    @State private var newTags: [Tag] = []
-    @State private var collectionViewHeight: CGFloat = .zero
-    @State private var textViewHeight: CGFloat = 40 // Initial height for the TextEditor
-    @State private var dynamicHeight: CGFloat = 40
+    @Binding var content: String
+    @Binding var selectedTags: [Tag]
+    @Binding var dynamicTextEditorHeight: CGFloat
+    @Binding var dynamicTagCollectionViewHeight: CGFloat
+    
     var onConfirm: (String, [Int]) -> Void
     
     var body: some View {
@@ -22,82 +20,83 @@ struct EditingMemoView: View {
             // Editable Text Area and Confirm Button in HStack
             HStack(alignment: .top, spacing: 8) {
                 // Editable Text Area
-                ZStack(alignment: .topLeading) {
-                    if newContent.isEmpty {
-                        Text("새로운 메모")
-                            .foregroundColor(Color.gray.opacity(0.6))
-                            .padding(8)
-                    }
-                    TextEditor(text: $newContent)
-                        .frame(minHeight: textViewHeight, maxHeight: dynamicHeight)
-                        .background(GeometryReader { geometry in
-                            Color.clear
-                                .onAppear {
-                                    dynamicHeight = geometry.size.height
-                                }
-                                .onChange(of: newContent) { newValue, oldValue in
-                                    let newHeight = newValue.heightWithConstrainedWidth(width: geometry.size.width, font: UIFont.systemFont(ofSize: 17))
-                                    DispatchQueue.main.async {
-                                        dynamicHeight = max(40, newHeight + 20) // Adding padding
-                                    }
-                                }
-                        })
-                        .font(.body)
-                }
+                DynamicHeightTextEditor(
+                    text: $content,
+                    dynamicHeight: $dynamicTextEditorHeight,
+                    placeholder: "새로운 메모"
+                )
+                .frame(height: dynamicTextEditorHeight)
                 
                 // Confirm Button
                 Button(action: {
                     // Trim whitespace and newlines
-                    let trimmedContent = newContent.trimmingCharacters(in: .whitespacesAndNewlines)
+                    let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
                     
-                    // Validation: Ensure there's content or at least one tag
+                    // Validation: Ensure there's content
                     guard !trimmedContent.isEmpty else {
                         return
                     }
                     
                     // Extract tag IDs
-                    let tagIDs = newTags.map { $0.id }
+                    let tagIDs = selectedTags.map { $0.id }
                     
                     // Call the onConfirm closure with content and tag IDs
                     onConfirm(trimmedContent, tagIDs)
                     
                     // Reset the input fields
-                    newContent = ""
-                    newTags = []
+                    content = ""
+                    selectedTags = []
                     
                     // Reset the heights
-                    collectionViewHeight = .zero
-                    dynamicHeight = 40
+                    dynamicTagCollectionViewHeight = .zero
+                    dynamicTextEditorHeight = 40
                     
                     // Dismiss the keyboard
                     hideKeyboard()
                 }) {
-                    Image(systemName: "arrow.up") // Icon change
+                    Image(systemName: "arrow.up")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 20, height: 20) // Adjust icon size
+                        .frame(width: 16, height: 16)
                         .foregroundColor(.white)
-                        .frame(width: 40, height: 40) // Adjust button size
+                        .frame(width: 32, height: 32)
                         .background(Color.blue)
-                        .cornerRadius(20) // Circular button
+                        .cornerRadius(16)
                 }
             }
             
-            // Tags
-            TagCollectionView(
-                tags: newTags,
+            // Selected Tags
+            DynamicHeightTagCollection(
+                tags: $selectedTags,
+                collectionViewHeight: $dynamicTagCollectionViewHeight,
                 horizontalSpacing: 9,
-                verticalSpacing: 7,
-                collectionViewHeight: $collectionViewHeight
+                verticalSpacing: 7
             )
             .frame(maxWidth: .infinity, alignment: .leading)
-            .frame(height: collectionViewHeight)
+            .frame(height: dynamicTagCollectionViewHeight)
+            .overlay(
+                // Overlay to allow tapping on tags to remove them
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(selectedTags, id: \.id) { tag in
+                            TagView(tag: tag) {
+                                removeTagFromSelectedTags(tag)
+                            }
+                        }
+                    }
+                }
+            )
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 13)
         .background(Color.memoBackgroundWhite)
         .cornerRadius(14)
-        .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 4) // Darker shadow
+        .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 4)
+    }
+    
+    // Function to remove a tag from selectedTags
+    private func removeTagFromSelectedTags(_ tag: Tag) {
+        selectedTags.removeAll { $0.id == tag.id }
     }
     
     // Dismisses the keyboard.
@@ -105,19 +104,3 @@ struct EditingMemoView: View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
-
-
-extension String {
-    /// Calculates the height required for the given string with constrained width and font.
-    func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
-        let adjustedWidth = max(width - 16, 1) // Ensure width is at least 1 to prevent invalid constraints
-        let constraintRect = CGSize(width: adjustedWidth, height: .greatestFiniteMagnitude) // Adjust for padding
-        let boundingBox = self.boundingRect(with: constraintRect,
-                                            options: [.usesLineFragmentOrigin, .usesFontLeading],
-                                            attributes: [.font: font],
-                                            context: nil)
-        return ceil(boundingBox.height)
-    }
-}
-
-
