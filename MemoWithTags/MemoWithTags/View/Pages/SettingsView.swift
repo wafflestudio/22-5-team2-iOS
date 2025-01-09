@@ -8,8 +8,31 @@
 import SwiftUI
 
 struct SettingsView: View {
+    
+    @StateObject private var viewModel = SettingsViewModel()
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button {
+            //action
+            Task {
+                await viewModel.logout()
+            }
+        } label: {
+            Text("로그아웃")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(.white)
+                .padding(12)
+
+        }
+        .background(Color.titleTextBlack)
+        .cornerRadius(22)
+        .alert(isPresented: $viewModel.showAlert) {
+            Alert(
+                title: Text("Error"),
+                message: Text(viewModel.errorMessage),
+                dismissButton: .default(Text("확인"))
+            )
+        }
     }
 }
 
