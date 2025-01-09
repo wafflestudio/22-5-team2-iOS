@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct SettingsView: View {
-    
+    @EnvironmentObject private var router: NavigationRouter
     @StateObject private var viewModel = SettingsViewModel()
     
     var body: some View {
         Button {
             //action
             Task {
-                await viewModel.logout()
+                await viewModel.logout(router: router)
             }
         } label: {
             Text("로그아웃")

@@ -68,8 +68,8 @@ final class SignupViewModel: ObservableObject {
                 isSignedUp = true
                 showAlert = false
             case .failure(let error):
-                isSignedUp = true
-                showAlert = false
+                isSignedUp = false
+                showAlert = true
                 errorMessage = error.localizedDescription()
             }
         }

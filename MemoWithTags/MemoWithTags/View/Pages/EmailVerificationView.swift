@@ -8,13 +8,12 @@
 import SwiftUI
 
 struct EmailVerificationView: View {
-    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var router: NavigationRouter
+    @StateObject private var viewModel = EmailVerificationViewModel()
     
     let email: String
     
     @State private var code: String = ""
-    
-    @StateObject private var viewModel = EmailVerificationViewModel()
     
     var body: some View {
         
@@ -46,6 +45,10 @@ struct EmailVerificationView: View {
                         //action
                         Task {
                             await viewModel.verify(email: email, code: code)
+                            
+                            if !viewModel.isLoading && viewModel.isVerified{
+                                router.push(to: .signupSuccess)
+                            }
                         }
                         
                     } label: {
@@ -63,8 +66,12 @@ struct EmailVerificationView: View {
                     
                     HStack(spacing: 8) {
                         Tag(text: "이전", size: 14, color: .init(hex: "#E3E3E7")) {
-                            //action
-                            dismiss()
+                            
+                            
+                            
+                            
+                            
+                            router.pop()
                         }
                         
                         Spacer()
@@ -103,9 +110,6 @@ struct EmailVerificationView: View {
             )
         }
         .navigationBarBackButtonHidden()
-        .navigationDestination(isPresented: $viewModel.isVerified) {
-            SignupSuccessView()
-        }
         
     }
     

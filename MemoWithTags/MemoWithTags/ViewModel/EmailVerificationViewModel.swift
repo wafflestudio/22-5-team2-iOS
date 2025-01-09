@@ -29,8 +29,8 @@ final class EmailVerificationViewModel: ObservableObject {
             isVerified = true
             showAlert = false
         case .failure(let error):
-            isVerified = true
-            showAlert = false
+            isVerified = false
+            showAlert = true
             errorMessage = error.localizedDescription()
         }
     }

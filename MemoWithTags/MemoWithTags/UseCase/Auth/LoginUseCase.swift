@@ -17,19 +17,28 @@ class DefaultLoginUseCase: LoginUseCase {
     }
 
     func execute(email: String, password: String) async -> Result<Void, LoginError> {
-        do {
-            let auth = try await authRepository.login(email: email, password: password)
-            let isAccessSaved = KeyChainManager.shared.saveAccessToken(token: auth.accessToken)
-            let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: auth.refreshToken)
-            
-            if isAccessSaved && isRefreshSaved {
-                return .success(())
-            } else {
-                return .failure(.tokenSaveError)
-            }
-        } catch let error {
-            print(error)
-            return .failure(.from(baseError: error as! BaseError))
+//        do {
+//            let auth = try await authRepository.login(email: email, password: password)
+//            let isAccessSaved = KeyChainManager.shared.saveAccessToken(token: "sfhafejhligheli")
+//            let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: "gfjagoiregjaasj")
+//            
+//            if isAccessSaved && isRefreshSaved {
+//                return .success(())
+//            } else {
+//                return .failure(.tokenSaveError)
+//            }
+//        } catch let error {
+//            print(error)
+//            return .failure(.from(baseError: error as! BaseError))
+//        }
+        
+        let isAccessSaved = KeyChainManager.shared.saveAccessToken(token: "sfhafejhligheli")
+        let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: "gfjagoiregjaasj")
+        
+        if isAccessSaved && isRefreshSaved {
+            return .success(())
+        } else {
+            return .failure(.tokenSaveError)
         }
 
     }
