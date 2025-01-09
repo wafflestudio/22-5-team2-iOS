@@ -67,22 +67,20 @@ struct MainView: View {
                     .padding(.bottom, 36)
                 }
             }
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(true) // 네비게이션 바 숨기기
             .toolbar {
-                ToolbarItem(placement: .principal) {
+                ToolbarItem(placement: .topBarLeading) {
                     Text("Memo with Tags")
                         .font(.headline)
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 16) {
-                        Button {
-                            // Search action
-                        } label: {
+                        // SearchView로 이동하는 NavigationLink
+                        NavigationLink(destination: SearchView()) {
                             Image(systemName: "magnifyingglass")
                         }
-                        Button {
-                            // List action
-                        } label: {
+                        // SettingsView로 이동하는 NavigationLink
+                        NavigationLink(destination: SettingsView()) {
                             Image(systemName: "list.bullet")
                         }
                     }
@@ -108,4 +106,3 @@ struct MainView_Previews: PreviewProvider {
         MainView()
     }
 }
-
