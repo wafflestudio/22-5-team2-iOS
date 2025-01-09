@@ -10,31 +10,32 @@
 import SwiftUI
 
 struct EditingMemoView: View {
-    @State var memo: Memo
+    @State private var newContent: String = ""
+    @State private var newTags: [Tag] = []
     @State private var collectionViewHeight: CGFloat = .zero
     @State private var textViewHeight: CGFloat = 40 // Initial height for the TextEditor
-    @State private var dynamicHeight: CGFloat = .zero
+    @State private var dynamicHeight: CGFloat = 40
     var onConfirm: (String, [Int]) -> Void
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             // Editable Text Area and Confirm Button in HStack
             HStack(alignment: .top, spacing: 8) {
                 // Editable Text Area
                 ZStack(alignment: .topLeading) {
-                    if memo.content.isEmpty {
-                        Text("Enter your memo here...")
+                    if newContent.isEmpty {
+                        Text("새로운 메모")
                             .foregroundColor(Color.gray.opacity(0.6))
                             .padding(8)
                     }
-                    TextEditor(text: $memo.content)
+                    TextEditor(text: $newContent)
                         .frame(minHeight: textViewHeight, maxHeight: dynamicHeight)
                         .background(GeometryReader { geometry in
                             Color.clear
                                 .onAppear {
                                     dynamicHeight = geometry.size.height
                                 }
-                                .onChange(of: memo.content) { newValue in
+                                .onChange(of: newContent) { newValue, oldValue in
                                     let newHeight = newValue.heightWithConstrainedWidth(width: geometry.size.width, font: UIFont.systemFont(ofSize: 17))
                                     DispatchQueue.main.async {
                                         dynamicHeight = max(40, newHeight + 20) // Adding padding
@@ -43,15 +44,33 @@ struct EditingMemoView: View {
                         })
                         .font(.body)
                 }
-
+                
                 // Confirm Button
                 Button(action: {
-                    // onConfirm 호출 시 content와 tag IDs 전달
-                    let tagIDs = memo.tags.map { $0.id }
-                    onConfirm(memo.content, tagIDs)
-                    // 메모 내용 초기화
-                    memo.content = ""
-                    memo.tags = []
+                    // Trim whitespace and newlines
+                    let trimmedContent = newContent.trimmingCharacters(in: .whitespacesAndNewlines)
+                    
+                    // Validation: Ensure there's content or at least one tag
+                    guard !trimmedContent.isEmpty else {
+                        return
+                    }
+                    
+                    // Extract tag IDs
+                    let tagIDs = newTags.map { $0.id }
+                    
+                    // Call the onConfirm closure with content and tag IDs
+                    onConfirm(trimmedContent, tagIDs)
+                    
+                    // Reset the input fields
+                    newContent = ""
+                    newTags = []
+                    
+                    // Reset the heights
+                    collectionViewHeight = .zero
+                    dynamicHeight = 40
+                    
+                    // Dismiss the keyboard
+                    hideKeyboard()
                 }) {
                     Image(systemName: "arrow.up") // Icon change
                         .resizable()
@@ -63,10 +82,10 @@ struct EditingMemoView: View {
                         .cornerRadius(20) // Circular button
                 }
             }
-
+            
             // Tags
             TagCollectionView(
-                tags: memo.tags,
+                tags: newTags,
                 horizontalSpacing: 9,
                 verticalSpacing: 7,
                 collectionViewHeight: $collectionViewHeight
@@ -80,13 +99,19 @@ struct EditingMemoView: View {
         .cornerRadius(14)
         .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 4) // Darker shadow
     }
+    
+    // Dismisses the keyboard.
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
 }
 
 
 extension String {
     /// Calculates the height required for the given string with constrained width and font.
     func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
-        let constraintRect = CGSize(width: width - 16, height: .greatestFiniteMagnitude) // Adjust for padding
+        let adjustedWidth = max(width - 16, 1) // Ensure width is at least 1 to prevent invalid constraints
+        let constraintRect = CGSize(width: adjustedWidth, height: .greatestFiniteMagnitude) // Adjust for padding
         let boundingBox = self.boundingRect(with: constraintRect,
                                             options: [.usesLineFragmentOrigin, .usesFontLeading],
                                             attributes: [.font: font],
@@ -94,4 +119,5 @@ extension String {
         return ceil(boundingBox.height)
     }
 }
+
 

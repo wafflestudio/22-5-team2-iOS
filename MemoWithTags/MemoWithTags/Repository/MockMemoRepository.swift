@@ -21,6 +21,7 @@ class MockMemoRepository: MemoRepository {
     
     // Sample Memos
     private var sampleMemos: [Memo] = [
+        // Memo 1
         Memo(
             id: 1,
             content: "Finish the report by Monday.",
@@ -28,6 +29,7 @@ class MockMemoRepository: MemoRepository {
             createdAt: Date(),
             updatedAt: Date()
         ),
+        // Memo 2
         Memo(
             id: 2,
             content: "Buy groceries: milk, eggs, bread.",
@@ -35,12 +37,69 @@ class MockMemoRepository: MemoRepository {
             createdAt: Date().addingTimeInterval(-86400),
             updatedAt: Date().addingTimeInterval(-86400)
         ),
+        // Memo 3
         Memo(
             id: 3,
             content: "Call John regarding the meeting.",
             tags: [Tag(id: 1, name: "Work", color: "#FF5733"), Tag(id: 3, name: "Urgent", color: "#3357FF")],
             createdAt: Date().addingTimeInterval(-86400 * 2),
             updatedAt: Date().addingTimeInterval(-86400 * 2)
+        ),
+        // Memo 4
+        Memo(
+            id: 4,
+            content: "Schedule dentist appointment.",
+            tags: [Tag(id: 2, name: "Personal", color: "#33FF57")],
+            createdAt: Date().addingTimeInterval(-86400 * 3),
+            updatedAt: Date().addingTimeInterval(-86400 * 3)
+        ),
+        // Memo 5
+        Memo(
+            id: 5,
+            content: "Prepare slides for the presentation.",
+            tags: [Tag(id: 1, name: "Work", color: "#FF5733")],
+            createdAt: Date().addingTimeInterval(-86400 * 4),
+            updatedAt: Date().addingTimeInterval(-86400 * 4)
+        ),
+        // Memo 6
+        Memo(
+            id: 6,
+            content: "Read the new book on SwiftUI.",
+            tags: [Tag(id: 2, name: "Personal", color: "#33FF57")],
+            createdAt: Date().addingTimeInterval(-86400 * 5),
+            updatedAt: Date().addingTimeInterval(-86400 * 5)
+        ),
+        // Memo 7
+        Memo(
+            id: 7,
+            content: "Respond to the client emails.",
+            tags: [Tag(id: 1, name: "Work", color: "#FF5733"), Tag(id: 3, name: "Urgent", color: "#3357FF")],
+            createdAt: Date().addingTimeInterval(-86400 * 6),
+            updatedAt: Date().addingTimeInterval(-86400 * 6)
+        ),
+        // Memo 8
+        Memo(
+            id: 8,
+            content: "Plan weekend hiking trip.",
+            tags: [Tag(id: 2, name: "Personal", color: "#33FF57")],
+            createdAt: Date().addingTimeInterval(-86400 * 7),
+            updatedAt: Date().addingTimeInterval(-86400 * 7)
+        ),
+        // Memo 9
+        Memo(
+            id: 9,
+            content: "Update the project roadmap.",
+            tags: [Tag(id: 1, name: "Work", color: "#FF5733")],
+            createdAt: Date().addingTimeInterval(-86400 * 8),
+            updatedAt: Date().addingTimeInterval(-86400 * 8)
+        ),
+        // Memo 10
+        Memo(
+            id: 10,
+            content: "Organize the office files.",
+            tags: [Tag(id: 1, name: "Work", color: "#FF5733")],
+            createdAt: Date().addingTimeInterval(-86400 * 9),
+            updatedAt: Date().addingTimeInterval(-86400 * 9)
         )
     ]
     
@@ -64,6 +123,11 @@ class MockMemoRepository: MemoRepository {
                 dateRange.contains(memo.createdAt)
             }
         }
+        
+        /*
+        // 디버깅
+        print(filteredMemos)
+         */
         
         // Pagination logic (assuming page size of 10)
         let pageSize = 10

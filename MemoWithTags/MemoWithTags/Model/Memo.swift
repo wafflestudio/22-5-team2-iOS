@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct Memo: Codable, Identifiable {
+struct Memo: Codable, Identifiable, Equatable  {
     let id: Int
     var content: String
     var tags: [Tag] // Fully constructed Tag objects

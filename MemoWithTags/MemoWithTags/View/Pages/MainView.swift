@@ -19,12 +19,6 @@ struct MainView: View {
         deleteTagUseCase: DefaultDeleteTagUseCase(tagRepository: MockTagRepository.shared)
     )
     
-    private let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 MM월 dd일"
-        return formatter
-    }()
-    
     var body: some View {
         NavigationView {
             ZStack {
@@ -32,58 +26,13 @@ struct MainView: View {
                 Color.backgroundGray
                     .ignoresSafeArea()
                 
-                // ScrollViewReader로 ScrollView 감싸기
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        LazyVStack(alignment: .leading, spacing: 12) {
-                            ForEach(Array(mainViewModel.memos.enumerated()), id: \.element.id) { index, memo in
-                                // 날짜 헤더 표시
-                                if index == 0 || isDifferentDay(memo, mainViewModel.memos[index - 1]) {
-                                    Text(dateFormatter.string(from: memo.createdAt))
-                                        .font(Font.custom("Pretendard Variable", size: 12).weight(.medium))
-                                        .foregroundColor(Color(red: 0.63, green: 0.63, blue: 0.63))
-                                        .frame(maxWidth: .infinity, alignment: .center)
-                                }
-                                
-                                // 각 메모에 고유한 id 부여
-                                MemoView(memo: memo)
-                                    .id(memo.id)
-                                    .onAppear {
-                                        if index == mainViewModel.memos.count - 1 {
-                                            mainViewModel.fetchMemos()
-                                        }
-                                    }
-                            }
-                            
-                            if mainViewModel.isLoading {
-                                ProgressView()
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                            }
-                        }
-                        .padding(.horizontal, 12)
-                        .frame(maxWidth: .infinity, alignment: .topLeading)
-                        .onAppear {
-                            // 뷰가 나타날 때 마지막 메모로 스크롤
-                            if let lastMemo = mainViewModel.memos.last {
-                                proxy.scrollTo(lastMemo.id, anchor: .bottom)
-                            }
-                        }
-                        .onChange(of: mainViewModel.memos) { _ in
-                            // 메모가 추가될 때마다 마지막 메모로 스크롤
-                            if let lastMemo = mainViewModel.memos.last {
-                                withAnimation {
-                                    proxy.scrollTo(lastMemo.id, anchor: .bottom)
-                                }
-                            }
-                        }
-                    }
-                }
+                // MemoListView 분리
+                MemoListView(mainViewModel: mainViewModel)
                 
                 // 하단에 표시될 EditingMemoView 추가
                 VStack {
                     Spacer()
                     EditingMemoView(
-                        memo: Memo(id: 0, content: "", tags: [], createdAt: Date(), updatedAt: Date()),
                         onConfirm: { content, tagIDs in
                             mainViewModel.createMemo(content: content, tags: tagIDs)
                         }
@@ -94,11 +43,11 @@ struct MainView: View {
             }
             .navigationBarBackButtonHidden(true)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .topBarLeading) { // 중앙 정렬
                     Text("Memo with Tags")
                         .font(.headline)
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: 16) {
                         // SearchView로 이동하는 NavigationLink
                         NavigationLink(destination: SearchView()) {
@@ -118,11 +67,4 @@ struct MainView: View {
             }
         }
     }
-    
-    private func isDifferentDay(_ current: Memo, _ previous: Memo) -> Bool {
-        let currentDay = Calendar.current.startOfDay(for: current.createdAt)
-        let previousDay = Calendar.current.startOfDay(for: previous.createdAt)
-        return currentDay != previousDay
-    }
 }
-

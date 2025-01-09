@@ -39,7 +39,7 @@ struct MemoView: View {
         
          //디버깅
         .onAppear {
-            print("Displaying Memo: \(memo.content) with Tags: \(memo.tags)")
+            print("MemoView: \nContent: \(memo.content) \nTags: \(memo.tags)")
         }
          
     }

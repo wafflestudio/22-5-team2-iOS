@@ -39,7 +39,12 @@ struct TagCollectionView: UIViewRepresentable {
         context.coordinator.parent = self
         uiView.reloadData()
         DispatchQueue.main.async {
-            self.collectionViewHeight = uiView.collectionViewLayout.collectionViewContentSize.height
+            uiView.layoutIfNeeded() // 레이아웃 강제 업데이트
+            let newHeight = uiView.collectionViewLayout.collectionViewContentSize.height
+            if self.collectionViewHeight != newHeight {
+                self.collectionViewHeight = newHeight
+                print("Updated collectionViewHeight: \(newHeight)") // 디버깅
+            }
         }
     }
 
@@ -73,12 +78,11 @@ struct TagCollectionView: UIViewRepresentable {
             label.lineBreakMode = .byTruncatingTail
             let size = label.sizeThatFits(CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude))
             let width = min(size.width + 14, maxWidth) // 좌우 패딩 7 + 7
-            let height: CGFloat = 23 // 수직 패딩 포함 높이
+            let height: CGFloat = 25 // TagView와 일치하도록 높이 조정
             return CGSize(width: width, height: height)
         }
     }
 }
-
 
 // 왼쪽 정렬을 위한 커스텀 레이아웃
 class LeftAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {
@@ -97,10 +101,10 @@ class LeftAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {
                     leftMargin = sectionInset.left
                 }
                 
+                let frame = attributes.frame
                 attributes.frame.origin.x = leftMargin
-                
-                leftMargin += attributes.frame.width + minimumInteritemSpacing
-                maxY = max(attributes.frame.maxY , maxY)
+                leftMargin += frame.width + minimumInteritemSpacing
+                maxY = max(frame.maxY, maxY)
             }
             newAttributesForElementsInRect.append(attributes)
         }
@@ -151,4 +155,3 @@ class HostingTagCell: UICollectionViewCell {
         }
     }
 }
-
