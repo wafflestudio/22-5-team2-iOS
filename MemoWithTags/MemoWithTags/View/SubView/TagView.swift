@@ -20,6 +20,12 @@ struct TagView: View {
             .cornerRadius(4)
             .lineLimit(1)
             .truncationMode(.tail)
+        /*
+         디버깅
+            .onAppear {
+                print("Displaying Tag: \(tag)")
+            }
+         */
     }
 }
 

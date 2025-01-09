@@ -10,7 +10,7 @@ import SwiftUI
 struct MemoView: View {
     let memo: Memo
     @State private var collectionViewHeight: CGFloat = .zero
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             // 본문
@@ -36,6 +36,12 @@ struct MemoView: View {
         .background(Color.memoBackgroundWhite)
         .cornerRadius(14)
         .shadow(color: Color.black.opacity(0.06), radius: 3, x: 0, y: 2)
+        
+         //디버깅
+        .onAppear {
+            print("Displaying Memo: \(memo.content) with Tags: \(memo.tags)")
+        }
+         
     }
 }
 

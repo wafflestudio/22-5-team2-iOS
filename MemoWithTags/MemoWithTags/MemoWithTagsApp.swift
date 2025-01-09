@@ -11,7 +11,7 @@ import SwiftUI
 struct MemoWithTagsApp: App {
     var body: some Scene {
         WindowGroup {
-            SplashView()
+            MainView()
         }
     }
 }

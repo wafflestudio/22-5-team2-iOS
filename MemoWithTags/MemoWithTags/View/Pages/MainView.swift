@@ -9,14 +9,14 @@ import SwiftUI
 
 struct MainView: View {
     @StateObject var mainViewModel = MainViewModel(
-        createMemoUseCase: DefaultCreateMemoUseCase(memoRepository: DefaultMemoRepository.shared),
-        fetchMemoUseCase: DefaultFetchMemoUseCase(memoRepository: DefaultMemoRepository.shared),
-        updateMemoUseCase: DefaultUpdateMemoUseCase(memoRepository: DefaultMemoRepository.shared),
-        deleteMemoUseCase: DefaultDeleteMemoUseCase(memoRepository: DefaultMemoRepository.shared),
-        createTagUseCase: DefaultCreateTagUseCase(tagRepository: DefaultTagRepository.shared),
-        fetchTagUseCase: DefaultFetchTagUseCase(tagRepository: DefaultTagRepository.shared),
-        updateTagUseCase: DefaultUpdateTagUseCase(tagRepository: DefaultTagRepository.shared),
-        deleteTagUseCase: DefaultDeleteTagUseCase(tagRepository: DefaultTagRepository.shared)
+        createMemoUseCase: DefaultCreateMemoUseCase(memoRepository: MockMemoRepository.shared),
+        fetchMemoUseCase: DefaultFetchMemoUseCase(memoRepository: MockMemoRepository.shared),
+        updateMemoUseCase: DefaultUpdateMemoUseCase(memoRepository: MockMemoRepository.shared),
+        deleteMemoUseCase: DefaultDeleteMemoUseCase(memoRepository: MockMemoRepository.shared),
+        createTagUseCase: DefaultCreateTagUseCase(tagRepository: MockTagRepository.shared),
+        fetchTagUseCase: DefaultFetchTagUseCase(tagRepository: MockTagRepository.shared),
+        updateTagUseCase: DefaultUpdateTagUseCase(tagRepository: MockTagRepository.shared),
+        deleteTagUseCase: DefaultDeleteTagUseCase(tagRepository: MockTagRepository.shared)
     )
     
     private let dateFormatter: DateFormatter = {
@@ -28,30 +28,55 @@ struct MainView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                // 메모 리스트 ScrollView
-                ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 12) {
-                        ForEach(Array(mainViewModel.memos.reversed().enumerated()), id: \.element.id) { index, memo in
-                            if index == 0 || isDifferentDay(memo, mainViewModel.memos.reversed()[index - 1]) {
-                                Text(dateFormatter.string(from: memo.createdAt))
-                                    .font(Font.custom("Pretendard Variable", size: 12).weight(.medium))
-                                    .foregroundColor(Color(red: 0.63, green: 0.63, blue: 0.63))
+                // 배경 색상 추가
+                Color.backgroundGray
+                    .ignoresSafeArea()
+                
+                // ScrollViewReader로 ScrollView 감싸기
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        LazyVStack(alignment: .leading, spacing: 12) {
+                            ForEach(Array(mainViewModel.memos.enumerated()), id: \.element.id) { index, memo in
+                                // 날짜 헤더 표시
+                                if index == 0 || isDifferentDay(memo, mainViewModel.memos[index - 1]) {
+                                    Text(dateFormatter.string(from: memo.createdAt))
+                                        .font(Font.custom("Pretendard Variable", size: 12).weight(.medium))
+                                        .foregroundColor(Color(red: 0.63, green: 0.63, blue: 0.63))
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                }
+                                
+                                // 각 메모에 고유한 id 부여
+                                MemoView(memo: memo)
+                                    .id(memo.id)
+                                    .onAppear {
+                                        if index == mainViewModel.memos.count - 1 {
+                                            mainViewModel.fetchMemos()
+                                        }
+                                    }
+                            }
+                            
+                            if mainViewModel.isLoading {
+                                ProgressView()
                                     .frame(maxWidth: .infinity, alignment: .center)
                             }
-                            MemoView(memo: memo)
-                                .onAppear {
-                                    if index == mainViewModel.memos.count - 1 {
-                                        mainViewModel.fetchMemos()
-                                    }
-                                }
                         }
-                        if mainViewModel.isLoading {
-                            ProgressView()
-                                .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.horizontal, 12)
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
+                        .onAppear {
+                            // 뷰가 나타날 때 마지막 메모로 스크롤
+                            if let lastMemo = mainViewModel.memos.last {
+                                proxy.scrollTo(lastMemo.id, anchor: .bottom)
+                            }
+                        }
+                        .onChange(of: mainViewModel.memos) { _ in
+                            // 메모가 추가될 때마다 마지막 메모로 스크롤
+                            if let lastMemo = mainViewModel.memos.last {
+                                withAnimation {
+                                    proxy.scrollTo(lastMemo.id, anchor: .bottom)
+                                }
+                            }
                         }
                     }
-                    .padding(.horizontal, 12)
-                    .frame(maxWidth: .infinity, alignment: .topLeading)
                 }
                 
                 // 하단에 표시될 EditingMemoView 추가
@@ -64,10 +89,10 @@ struct MainView: View {
                         }
                     )
                     .padding(.horizontal, 7)
-                    .padding(.bottom, 36)
+                    .padding(.bottom, 14)
                 }
             }
-            .navigationBarHidden(true) // 네비게이션 바 숨기기
+            .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Text("Memo with Tags")
@@ -101,8 +126,3 @@ struct MainView: View {
     }
 }
 
-struct MainView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView()
-    }
-}
