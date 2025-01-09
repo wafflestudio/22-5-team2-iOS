@@ -22,10 +22,10 @@ struct MemoView: View {
             // 태그들
             GeometryReader { geometry in
                 TagCollectionView(
-                    tags: memo.tags,
+                    tags: .constant(memo.tags),
+                    collectionViewHeight: $collectionViewHeight,
                     horizontalSpacing: 9,
-                    verticalSpacing: 7,
-                    collectionViewHeight: $collectionViewHeight
+                    verticalSpacing: 7
                 )
                 .frame(width: geometry.size.width, alignment: .leading)
             }

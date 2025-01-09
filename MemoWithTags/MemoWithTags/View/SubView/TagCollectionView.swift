@@ -9,11 +9,11 @@ import SwiftUI
 import UIKit
 
 struct TagCollectionView: UIViewRepresentable {
-    var tags: [Tag]
+    @Binding var tags: [Tag]
+    @Binding var collectionViewHeight: CGFloat
+    
     var horizontalSpacing: CGFloat
     var verticalSpacing: CGFloat
-    
-    @Binding var collectionViewHeight: CGFloat
 
     func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
