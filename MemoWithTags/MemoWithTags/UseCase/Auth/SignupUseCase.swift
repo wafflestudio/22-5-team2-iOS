@@ -17,14 +17,11 @@ class DefaultSignupUseCase: SignupUseCase {
     }
     
     func execute(email: String, password: String) async -> Result<Void, RegisterError> {
-//        do {
-//            _ = try await authRepository.register(email: email, password: password)
-//            return .success(())
-//        } catch let error {
-//            print(error)
-//            return .failure(.from(baseError: error as! BaseError))
-//        }
-        
-        return .success(())
+        do {
+            _ = try await authRepository.register(email: email, password: password)
+            return .success(())
+        } catch let error {
+            return .failure(.from(baseError: error as! BaseError))
+        }
     }
 }

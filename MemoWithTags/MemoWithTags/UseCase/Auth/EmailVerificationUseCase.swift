@@ -17,28 +17,19 @@ final class DefaultEmailVerificationUseCase: EmailVerificationUseCase {
     }
 
     func execute(email: String, code: String) async -> Result<Void, VerifyEmailError> {
-//        do {
-//            let auth = try await authRepository.verifyEmail(email: email, code: code)
-//            let isAccessSaved = KeyChainManager.shared.saveAccessToken(token: auth.accessToken)
-//            let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: auth.refreshToken)
-//            
-//            if isAccessSaved && isRefreshSaved {
-//                return .success(())
-//            } else {
-//                return .failure(.tokenSaveError)
-//            }
-//
-//        } catch {
-//            return .failure(.notMatchCode)
-//        }
-        
-        let isAccessSaved = KeyChainManager.shared.saveAccessToken(token: "rusafhrghgarge")
-        let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: "afewgawrgrgaeg")
-        
-        if isAccessSaved && isRefreshSaved {
-            return .success(())
-        } else {
-            return .failure(.tokenSaveError)
+        do {
+            let auth = try await authRepository.verifyEmail(email: email, code: code)
+            let isAccessSaved = KeyChainManager.shared.saveAccessToken(token: auth.accessToken)
+            let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: auth.refreshToken)
+            
+            if isAccessSaved && isRefreshSaved {
+                return .success(())
+            } else {
+                return .failure(.tokenSaveError)
+            }
+
+        } catch {
+            return .failure(.notMatchCode)
         }
     }
 }

@@ -24,16 +24,13 @@ final class NavigationRouter: ObservableObject {
 
     func push(to route: Route) {
         path.append(route)
-        print(path.count)
     }
         
     func pop() {
         path.removeLast()
-        print(path.count)
     }
     
     func reset() {
         path.removeLast(path.count)
-        print(path.count)
     }
 }

@@ -28,7 +28,7 @@ class DefaultMemoRepository: MemoRepository {
             interceptor: tokenInterceptor
         ).serializingDecodable(MemoResponseDto.self).response
         
-        let dto = try handleError(response: response)
+        let dto = try handleErrorDecodable(response: response)
         
         let memos = dto.results.map { $0.toMemo() }
         
@@ -61,7 +61,7 @@ class DefaultMemoRepository: MemoRepository {
         let response = await AF.request(
             MemoRouter.createMemo(content: content, tags: tags), interceptor: tokenInterceptor
         ).serializingDecodable(MemoDto.self).response
-        let dto = try handleError(response: response)
+        let dto = try handleErrorDecodable(response: response)
         return dto.toMemo()
     }
 
@@ -69,7 +69,7 @@ class DefaultMemoRepository: MemoRepository {
         let response = await AF.request(
             MemoRouter.deleteMemo(memoId: memoId), interceptor: tokenInterceptor
         ).serializingData().response
-        _ = try handleError(response: response)
+        try handleError(response: response)
     }
 
     func updateMemo(memoId: Int, content: String, tags: [Int]) async throws -> Memo {
@@ -77,7 +77,7 @@ class DefaultMemoRepository: MemoRepository {
             MemoRouter.updateMemo(memoId: memoId, content: content, tags: tags),
             interceptor: tokenInterceptor
         ).serializingDecodable(MemoDto.self).response
-        let dto = try handleError(response: response)
+        let dto = try handleErrorDecodable(response: response)
         return dto.toMemo()
     }
 }

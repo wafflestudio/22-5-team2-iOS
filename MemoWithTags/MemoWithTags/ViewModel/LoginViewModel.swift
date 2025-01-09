@@ -25,7 +25,6 @@ final class LoginViewModel: ObservableObject {
     }
     
     func login(email: String, password: String) async {
-        isLoggedIn = false
         isLoading = true
         
         if !checkEmailValidity(email: email) {
@@ -35,7 +34,6 @@ final class LoginViewModel: ObservableObject {
         }
         
         let result = await loginUseCase.execute(email: email, password: password)
-        isLoading = false
 
         switch result {
         case .success:
@@ -46,5 +44,7 @@ final class LoginViewModel: ObservableObject {
             showAlert = true
             errorMessage = error.localizedDescription()
         }
+        
+        isLoading = false
     }
 }

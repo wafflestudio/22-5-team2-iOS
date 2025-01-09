@@ -41,7 +41,6 @@ final class SignupViewModel: ObservableObject {
     }
     
     func signup(email: String, password: String, passwordRepeat: String) async {
-        isSignedUp = false
         isLoading = true
         
         let isEmailValid = checkEmailValidity(email: email)
