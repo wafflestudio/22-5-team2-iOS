@@ -24,8 +24,8 @@ struct EditingView: View {
                 content: $newContent,
                 selectedTags: $selectedTags,
                 dynamicTextEditorHeight: $dynamicTextEditorHeight,
-                onConfirm: { content, tagIDs in
-                    mainViewModel.createMemo(content: content, tags: tagIDs)
+                onConfirm: { content, tagIds in
+                    mainViewModel.createMemo(content: content, tagIds: tagIds)
                     // Reset the input fields
                     newContent = ""
                     selectedTags = []
