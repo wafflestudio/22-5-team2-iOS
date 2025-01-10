@@ -44,7 +44,6 @@ struct EditingTagListView: View {
                         }
                         .contextMenu {
                             Button {
-                                print("Update button tapped for tag: \(tag.name)")
                                 hideKeyboard()
                                 tagToUpdate = tag
                             } label: {
@@ -52,7 +51,6 @@ struct EditingTagListView: View {
                             }
                             
                             Button(role: .destructive) {
-                                print("Delete button tapped for tag: \(tag.name)")
                                 mainViewModel.deleteTag(tagId: tag.id)
                             } label: {
                                 Label("Delete", systemImage: "trash")
@@ -67,7 +65,6 @@ struct EditingTagListView: View {
                             randomColor: $randomColor
                         )
                         .onTapGesture {
-                            print("Create Tag tapped with name: \(searchText) and color: \(randomColor)")
                             mainViewModel.createTag(name: searchText, color: randomColor)
                             generateRandomHexColor()
                         }
@@ -88,7 +85,6 @@ struct EditingTagListView: View {
         )
         .onAppear {
             generateRandomHexColor()
-            print("Available Tags:", availableTags)
         }
         // sheet(item:)을 사용하여 tagToUpdate가 설정되면 시트를 표시
         .sheet(item: $tagToUpdate) { tag in

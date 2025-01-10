@@ -31,12 +31,6 @@ struct MemoView: View {
         .background(Color.memoBackgroundWhite)
         .cornerRadius(14)
         .shadow(color: Color.black.opacity(0.06), radius: 3, x: 0, y: 2)
-        // Debugging
-        /*
-        .onAppear {
-            print("MemoView: \nContent: \(memo.content) \nTags: \(memo.tags)")
-        }
-         */
     }
 }
 

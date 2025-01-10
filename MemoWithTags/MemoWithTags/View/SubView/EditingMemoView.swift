@@ -83,8 +83,6 @@ struct EditingMemoView: View {
     // Function to remove a tag from selectedTags
     private func removeTagFromSelectedTags(_ tag: Tag) {
         selectedTags.removeAll { $0.id == tag.id }
-        print("removeTagFromSelectedTags - removed :", tag)
-        print("as a result, selectedTags: ", selectedTags)
     }
     
     // Dismisses the keyboard.
