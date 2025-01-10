@@ -9,14 +9,14 @@ import SwiftUI
 
 struct MainView: View {
     @StateObject var mainViewModel = MainViewModel(
-        createMemoUseCase: DefaultCreateMemoUseCase(memoRepository: MockMemoRepository.shared),
-        fetchMemoUseCase: DefaultFetchMemoUseCase(memoRepository: MockMemoRepository.shared),
-        updateMemoUseCase: DefaultUpdateMemoUseCase(memoRepository: MockMemoRepository.shared),
-        deleteMemoUseCase: DefaultDeleteMemoUseCase(memoRepository: MockMemoRepository.shared),
-        createTagUseCase: DefaultCreateTagUseCase(tagRepository: MockTagRepository.shared),
-        fetchTagUseCase: DefaultFetchTagUseCase(tagRepository: MockTagRepository.shared),
-        updateTagUseCase: DefaultUpdateTagUseCase(tagRepository: MockTagRepository.shared),
-        deleteTagUseCase: DefaultDeleteTagUseCase(tagRepository: MockTagRepository.shared)
+        createMemoUseCase: DefaultCreateMemoUseCase(memoRepository: DefaultMemoRepository.shared),
+        fetchMemoUseCase: DefaultFetchMemoUseCase(memoRepository: DefaultMemoRepository.shared),
+        updateMemoUseCase: DefaultUpdateMemoUseCase(memoRepository: DefaultMemoRepository.shared),
+        deleteMemoUseCase: DefaultDeleteMemoUseCase(memoRepository: DefaultMemoRepository.shared),
+        createTagUseCase: DefaultCreateTagUseCase(tagRepository: DefaultTagRepository.shared),
+        fetchTagUseCase: DefaultFetchTagUseCase(tagRepository: DefaultTagRepository.shared),
+        updateTagUseCase: DefaultUpdateTagUseCase(tagRepository: DefaultTagRepository.shared),
+        deleteTagUseCase: DefaultDeleteTagUseCase(tagRepository: DefaultTagRepository.shared)
     )
     
     @StateObject private var keyboardResponder = KeyboardResponder() // Add this line
