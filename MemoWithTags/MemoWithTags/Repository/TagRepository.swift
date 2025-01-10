@@ -22,6 +22,7 @@ class DefaultTagRepository: TagRepository {
     let tokenInterceptor = TokenInterceptor()
     
     func fetchTags() async throws -> [Tag] {
+        print("fetch tag")
         let response = await AF.request(TagRouter.fetchTags, interceptor: tokenInterceptor).serializingDecodable([TagDto].self).response
         let dto = try handleErrorDecodable(response: response)
         
@@ -29,6 +30,7 @@ class DefaultTagRepository: TagRepository {
     }
 
     func createTag(name: String, color: String) async throws -> Tag {
+        print("create tag")
         let response = await AF.request(
             TagRouter.createTag(name: name, color: color), interceptor: tokenInterceptor
         ).serializingDecodable(TagDto.self).response
@@ -38,6 +40,7 @@ class DefaultTagRepository: TagRepository {
     }
 
     func deleteTag(tagId: Int) async throws {
+        print("delete tag")
         let response =  await AF.request(
             TagRouter.deleteTag(tagId: tagId), interceptor: tokenInterceptor
         ).serializingData().response
@@ -45,6 +48,7 @@ class DefaultTagRepository: TagRepository {
     }
 
     func updateTag(tagId: Int, name: String, color: String) async throws -> Tag {
+        print("update tag")
         let response = await AF.request(
             TagRouter.updateTag(tagId: tagId, name: name, color: color), interceptor: tokenInterceptor
         ).serializingDecodable(TagDto.self).response

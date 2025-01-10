@@ -33,11 +33,13 @@ final class DefaultAuthRepository: AuthRepository {
     let tokenInterceptor = TokenInterceptor()
     
     func register(email: String, password: String) async throws {
+        print("register")
         let response = await AF.request(AuthRouter.register(email: email, password: password)).serializingData().response
         try handleError(response: response)
     }
     
     func login(email: String, password: String) async throws -> Auth {
+        print("login")
         let response = await AF.request(AuthRouter.login(email: email, password: password)).serializingDecodable(AuthDto.self).response
         let dto = try handleErrorDecodable(response: response)
         
@@ -45,6 +47,7 @@ final class DefaultAuthRepository: AuthRepository {
     }
     
     func verifyEmail(email: String, code: String) async throws -> Auth {
+        print("verify email")
         let response = await AF.request(AuthRouter.verifyEmail(email: email, code: code)).serializingDecodable(AuthDto.self).response
         let dto = try handleErrorDecodable(response: response)
         
@@ -62,6 +65,7 @@ final class DefaultAuthRepository: AuthRepository {
     }
     
     func refreshToken() async throws -> Auth {
+        print("refresh token")
         let respone = await AF
             .request(AuthRouter.refreshToken, interceptor: tokenInterceptor).serializingDecodable(AuthDto.self).response
         let dto = try handleErrorDecodable(response: respone)
