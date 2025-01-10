@@ -19,7 +19,7 @@ extension BaseRepository {
         guard let statusCode = response.response?.statusCode else {
             throw BaseError.UNKNOWN
         }
-        print("status: \(statusCode)")
+        print("->status : \(statusCode)")
         
         if let error = BaseError(rawValue: statusCode) {
             throw error
@@ -33,7 +33,7 @@ extension BaseRepository {
         guard let statusCode = response.response?.statusCode else {
             throw BaseError.UNKNOWN
         }
-        print("status: \(statusCode)")
+        print("->status : \(statusCode)")
         
         if let error = BaseError(rawValue: statusCode) {
             throw error
