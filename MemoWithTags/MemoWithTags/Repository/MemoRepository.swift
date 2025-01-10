@@ -23,6 +23,7 @@ class DefaultMemoRepository: MemoRepository {
     let tokenInterceptor = TokenInterceptor()
     
     func fetchMemos(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?, page: Int) async throws -> PaginatedMemos {
+        print("fetch memo")
         let response = await AF.request(
             MemoRouter.fetchMemos(content: content, tags: tags, dateRange: dateRange, page: page),
             interceptor: tokenInterceptor
@@ -58,6 +59,7 @@ class DefaultMemoRepository: MemoRepository {
     }
 
     func createMemo(content: String, tags: [Int]) async throws -> Memo {
+        print("create memo")
         let response = await AF.request(
             MemoRouter.createMemo(content: content, tags: tags), interceptor: tokenInterceptor
         ).serializingDecodable(MemoDto.self).response
@@ -66,6 +68,7 @@ class DefaultMemoRepository: MemoRepository {
     }
 
     func deleteMemo(memoId: Int) async throws {
+        print("delete memo")
         let response = await AF.request(
             MemoRouter.deleteMemo(memoId: memoId), interceptor: tokenInterceptor
         ).serializingData().response
@@ -73,6 +76,7 @@ class DefaultMemoRepository: MemoRepository {
     }
 
     func updateMemo(memoId: Int, content: String, tags: [Int]) async throws -> Memo {
+        print("update memo")
         let response = await AF.request(
             MemoRouter.updateMemo(memoId: memoId, content: content, tags: tags),
             interceptor: tokenInterceptor
