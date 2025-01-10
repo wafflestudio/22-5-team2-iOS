@@ -9,10 +9,10 @@ import Alamofire
 import Foundation
 
 enum MemoRouter: Router {
-    case fetchMemos(content: String?, tagIds: [Int]?, dateRange: ClosedRange<Date>?, page: Int)
-    case createMemo(content: String, tagIds: [Int])
+    case fetchMemos(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?, page: Int)
+    case createMemo(content: String, tags: [Int])
     case deleteMemo(memoId: Int)
-    case updateMemo(memoId: Int, content: String, tagIds: [Int])
+    case updateMemo(memoId: Int, content: String, tags: [Int])
     
     var baseURL: URL {
         return URL(string: NetworkConfiguration.baseURL)!
@@ -44,13 +44,13 @@ enum MemoRouter: Router {
     
     var parameters: Parameters? {
         switch self {
-        case let .fetchMemos(content, tagIds, dateRange, page):
+        case let .fetchMemos(content, tags, dateRange, page):
             var params: [String: Any] = ["page": page]
             if let content = content {
                 params["content"] = content
             }
-            if let tagIds = tagIds {
-                params["tagIds"] = tagIds.map { String($0) }.joined(separator: ",")
+            if let tags = tags {
+                params["tags"] = tags.map { String($0) }.joined(separator: ",")
             }
             if let dateRange = dateRange {
                 let formatter = ISO8601DateFormatter()
@@ -58,10 +58,10 @@ enum MemoRouter: Router {
                 params["endDate"] = formatter.string(from: dateRange.upperBound)
             }
             return params
-        case let .createMemo(content, tagIds):
-            return ["content": content, "tagIds": tagIds]
-        case let .updateMemo(_, content, tagIds):
-            return ["content": content, "tagIds": tagIds]
+        case let .createMemo(content, tags):
+            return ["content": content, "tags": tags]
+        case let .updateMemo(_, content, tags):
+            return ["content": content, "tags": tags]
         case .deleteMemo:
             return nil
         }

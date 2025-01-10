@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FetchMemoUseCase {
-    func execute(content: String?, tagIds: [Int]?, dateRange: ClosedRange<Date>?, page: Int) async -> Result<PaginatedMemos, MemoError>
+    func execute(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?, page: Int) async -> Result<PaginatedMemos, MemoError>
 }
 
 class DefaultFetchMemoUseCase: FetchMemoUseCase {
@@ -18,9 +18,9 @@ class DefaultFetchMemoUseCase: FetchMemoUseCase {
         self.memoRepository = memoRepository
     }
 
-    func execute(content: String?, tagIds: [Int]?, dateRange: ClosedRange<Date>?, page: Int) async -> Result<PaginatedMemos, MemoError> {
+    func execute(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?, page: Int) async -> Result<PaginatedMemos, MemoError> {
         do {
-            let paginatedMemos = try await memoRepository.fetchMemos(content: content, tagIds: tagIds, dateRange: dateRange, page: page)
+            let paginatedMemos = try await memoRepository.fetchMemos(content: content, tags: tags, dateRange: dateRange, page: page)
             return .success(paginatedMemos)
         } catch let error as BaseError {
             return .failure(.from(baseError: error))

@@ -25,6 +25,7 @@ class DefaultTagRepository: TagRepository {
         print("fetch tag")
         let response = await AF.request(TagRouter.fetchTags, interceptor: tokenInterceptor).serializingDecodable([TagDto].self).response
         let dto = try handleErrorDecodable(response: response)
+        
         return dto.map { $0.toTag() }
     }
 
@@ -34,6 +35,7 @@ class DefaultTagRepository: TagRepository {
             TagRouter.createTag(name: name, color: color), interceptor: tokenInterceptor
         ).serializingDecodable(TagDto.self).response
         let dto = try handleErrorDecodable(response: response)
+        
         return dto.toTag()
     }
 
