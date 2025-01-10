@@ -9,10 +9,10 @@ import Foundation
 import Alamofire
 
 protocol MemoRepository: BaseRepository {
-    func fetchMemos(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?, page: Int) async throws -> PaginatedMemos
-    func createMemo(content: String, tags: [Int]) async throws -> Memo
+    func fetchMemos(content: String?, tagIds: [Int]?, dateRange: ClosedRange<Date>?, page: Int) async throws -> PaginatedMemos
+    func createMemo(content: String, tagIds: [Int]) async throws -> Memo
     func deleteMemo(memoId: Int) async throws
-    func updateMemo(memoId: Int, content: String, tags: [Int]) async throws -> Memo
+    func updateMemo(memoId: Int, content: String, tagIds: [Int]) async throws -> Memo
 }
 
 class DefaultMemoRepository: MemoRepository {
@@ -22,10 +22,10 @@ class DefaultMemoRepository: MemoRepository {
     
     let tokenInterceptor = TokenInterceptor()
     
-    func fetchMemos(content: String?, tags: [Int]?, dateRange: ClosedRange<Date>?, page: Int) async throws -> PaginatedMemos {
+    func fetchMemos(content: String?, tagIds: [Int]?, dateRange: ClosedRange<Date>?, page: Int) async throws -> PaginatedMemos {
         print("fetch memo")
         let response = await AF.request(
-            MemoRouter.fetchMemos(content: content, tags: tags, dateRange: dateRange, page: page),
+            MemoRouter.fetchMemos(content: content, tagIds: tagIds, dateRange: dateRange, page: page),
             interceptor: tokenInterceptor
         ).serializingDecodable(MemoResponseDto.self).response
         
@@ -58,12 +58,13 @@ class DefaultMemoRepository: MemoRepository {
         return true
     }
 
-    func createMemo(content: String, tags: [Int]) async throws -> Memo {
+    func createMemo(content: String, tagIds: [Int]) async throws -> Memo {
         print("create memo")
         let response = await AF.request(
-            MemoRouter.createMemo(content: content, tags: tags), interceptor: tokenInterceptor
+            MemoRouter.createMemo(content: content, tagIds: tagIds), interceptor: tokenInterceptor
         ).serializingDecodable(MemoDto.self).response
         let dto = try handleErrorDecodable(response: response)
+        print(dto.toMemo())
         return dto.toMemo()
     }
 
@@ -75,10 +76,10 @@ class DefaultMemoRepository: MemoRepository {
         try handleError(response: response)
     }
 
-    func updateMemo(memoId: Int, content: String, tags: [Int]) async throws -> Memo {
+    func updateMemo(memoId: Int, content: String, tagIds: [Int]) async throws -> Memo {
         print("update memo")
         let response = await AF.request(
-            MemoRouter.updateMemo(memoId: memoId, content: content, tags: tags),
+            MemoRouter.updateMemo(memoId: memoId, content: content, tagIds: tagIds),
             interceptor: tokenInterceptor
         ).serializingDecodable(MemoDto.self).response
         let dto = try handleErrorDecodable(response: response)

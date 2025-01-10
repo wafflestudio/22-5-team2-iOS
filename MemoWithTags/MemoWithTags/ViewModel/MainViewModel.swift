@@ -53,7 +53,7 @@ final class MainViewModel: ObservableObject {
         }
     }
     
-    func fetchMemos(content: String? = nil, tags: [Int]? = nil, dateRange: ClosedRange<Date>? = nil) {
+    func fetchMemos(content: String? = nil, tagIds: [Int]? = nil, dateRange: ClosedRange<Date>? = nil) {
         Task {
             await waitIfLoading() // 대기 후 실행
             guard currentMemoPage < totalMemoPages else { return }
@@ -61,10 +61,15 @@ final class MainViewModel: ObservableObject {
             isLoading = true
             let nextPage = currentMemoPage + 1
             
-            let result = await fetchMemoUseCase.execute(content: content, tags: tags, dateRange: dateRange, page: nextPage)
+            let result = await fetchMemoUseCase.execute(content: content, tagIds: tagIds, dateRange: dateRange, page: nextPage)
             switch result {
             case .success(let paginatedMemos):
-                self.memos.append(contentsOf: paginatedMemos.memos)
+                let updatedMemos = paginatedMemos.memos.map { memo -> Memo in
+                    var updatedMemo = memo
+                    updatedMemo.tags = getTags(from: updatedMemo.tagIds)
+                    return updatedMemo
+                }
+                self.memos.append(contentsOf: updatedMemos)
                 self.currentMemoPage = paginatedMemos.currentPage
                 self.totalMemoPages = paginatedMemos.totalPages
             case .failure(let error):
@@ -74,14 +79,17 @@ final class MainViewModel: ObservableObject {
         }
     }
     
-    func createMemo(content: String, tags: [Int]) {
+    func createMemo(content: String, tagIds: [Int]) {
         Task {
             await waitIfLoading() // 대기 후 실행
             
             isLoading = true
-            let result = await createMemoUseCase.execute(content: content, tags: tags)
+            let result = await createMemoUseCase.execute(content: content, tagIds: tagIds)
+            
             switch result {
-            case .success(let newMemo):
+            case .success(let Memo):
+                var newMemo = Memo
+                newMemo.tags = getTags(from: newMemo.tagIds)
                 self.memos.insert(newMemo, at: 0)
             case .failure(let error):
                 self.memoErrorMessage = error.localizedDescription
@@ -90,12 +98,12 @@ final class MainViewModel: ObservableObject {
         }
     }
     
-    func updateMemo(memoId: Int, newContent: String, newTags: [Int]) {
+    func updateMemo(memoId: Int, newContent: String, newTagIds: [Int]) {
         Task {
             await waitIfLoading() // 대기 후 실행
             
             isLoading = true
-            let result = await updateMemoUseCase.execute(memoId: memoId, content: newContent, tags: newTags)
+            let result = await updateMemoUseCase.execute(memoId: memoId, content: newContent, tagIds: newTagIds)
             switch result {
             case .success(let updatedMemo):
                 if let index = self.memos.firstIndex(where: { $0.id == memoId }) {
@@ -205,6 +213,11 @@ final class MainViewModel: ObservableObject {
     func resetTagState() {
         self.tags = []
         self.tagErrorMessage = nil
+    }
+    
+    /// 주어진 tagIDs를 기반으로 Tag 객체들을 반환합니다.
+    private func getTags(from tagIDs: [Int]) -> [Tag] {
+        return tags.filter { tagIDs.contains($0.id) }
     }
 }
 

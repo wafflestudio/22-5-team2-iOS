@@ -9,7 +9,8 @@ import Foundation
 struct Memo: Codable, Identifiable, Equatable  {
     let id: Int
     var content: String
-    var tags: [Tag] // Fully constructed Tag objects
+    var tagIds: [Int]
+    var tags: [Tag]
     var createdAt: Date
     var updatedAt: Date
 }
@@ -17,7 +18,7 @@ struct Memo: Codable, Identifiable, Equatable  {
 struct MemoDto: Decodable {
     let id: Int
     let content: String
-    let tags: [Int] // Only tag IDs returned from the server
+    let tagIds: [Int]
     let createdAt: String
     let updatedAt: String
 
@@ -26,7 +27,8 @@ struct MemoDto: Decodable {
         return Memo(
             id: id,
             content: content,
-            tags: tags.map { Tag(id: $0, name: "", color: "#000000") }, // Placeholder Tag objects
+            tagIds: tagIds,
+            tags: [],
             createdAt: dateFormatter.date(from: createdAt) ?? Date(),
             updatedAt: dateFormatter.date(from: updatedAt) ?? Date()
         )

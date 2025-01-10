@@ -8,7 +8,7 @@
 import Foundation
 
 protocol CreateMemoUseCase {
-    func execute(content: String, tags: [Int]) async -> Result<Memo, MemoError>
+    func execute(content: String, tagIds: [Int]) async -> Result<Memo, MemoError>
 }
 
 class DefaultCreateMemoUseCase: CreateMemoUseCase {
@@ -18,9 +18,9 @@ class DefaultCreateMemoUseCase: CreateMemoUseCase {
         self.memoRepository = memoRepository
     }
 
-    func execute(content: String, tags: [Int]) async -> Result<Memo, MemoError> {
+    func execute(content: String, tagIds: [Int]) async -> Result<Memo, MemoError> {
         do {
-            let memo = try await memoRepository.createMemo(content: content, tags: tags)
+            let memo = try await memoRepository.createMemo(content: content, tagIds: tagIds)
             return .success(memo)
         } catch let error as BaseError {
             return .failure(.from(baseError: error))
