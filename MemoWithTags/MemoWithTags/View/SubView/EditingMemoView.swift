@@ -5,93 +5,90 @@
 //  Created by Swimming Ryu on 1/6/25.
 //
 
-// EditingMemoView.swift
-
 import SwiftUI
+import Flow
 
 struct EditingMemoView: View {
-    @State var memo: Memo
-    @State private var collectionViewHeight: CGFloat = .zero
-    @State private var textViewHeight: CGFloat = 40 // Initial height for the TextEditor
-    @State private var dynamicHeight: CGFloat = .zero
+    @Binding var content: String
+    @Binding var selectedTags: [Tag]
+    @Binding var dynamicTextEditorHeight: CGFloat
+    
     var onConfirm: (String, [Int]) -> Void
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             // Editable Text Area and Confirm Button in HStack
             HStack(alignment: .top, spacing: 8) {
                 // Editable Text Area
-                ZStack(alignment: .topLeading) {
-                    if memo.content.isEmpty {
-                        Text("Enter your memo here...")
-                            .foregroundColor(Color.gray.opacity(0.6))
-                            .padding(8)
-                    }
-                    TextEditor(text: $memo.content)
-                        .frame(minHeight: textViewHeight, maxHeight: dynamicHeight)
-                        .background(GeometryReader { geometry in
-                            Color.clear
-                                .onAppear {
-                                    dynamicHeight = geometry.size.height
-                                }
-                                .onChange(of: memo.content) { newValue in
-                                    let newHeight = newValue.heightWithConstrainedWidth(width: geometry.size.width, font: UIFont.systemFont(ofSize: 17))
-                                    DispatchQueue.main.async {
-                                        dynamicHeight = max(40, newHeight + 20) // Adding padding
-                                    }
-                                }
-                        })
-                        .font(.body)
-                }
-
+                DynamicHeightTextEditor(
+                    text: $content,
+                    dynamicHeight: $dynamicTextEditorHeight,
+                    placeholder: "새로운 메모"
+                )
+                .frame(height: dynamicTextEditorHeight)
+                .background(Color.clear)
+                
                 // Confirm Button
                 Button(action: {
-                    // onConfirm 호출 시 content와 tag IDs 전달
-                    let tagIDs = memo.tags.map { $0.id }
-                    onConfirm(memo.content, tagIDs)
-                    // 메모 내용 초기화
-                    memo.content = ""
-                    memo.tags = []
+                    // Trim whitespace and newlines
+                    let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
+                    
+                    // Validation: Ensure there's content
+                    guard !trimmedContent.isEmpty else {
+                        return
+                    }
+                    
+                    // Extract tag IDs
+                    let tagIDs = selectedTags.map { $0.id }
+                    
+                    // Call the onConfirm closure with content and tag IDs
+                    onConfirm(trimmedContent, tagIDs)
+                    
+                    // Reset the input fields
+                    content = ""
+                    selectedTags = []
+                    
+                    dynamicTextEditorHeight = 40
+                    
+                    // Dismiss the keyboard
+                    hideKeyboard()
                 }) {
-                    Image(systemName: "arrow.up") // Icon change
+                    Image(systemName: "arrow.up")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 20, height: 20) // Adjust icon size
+                        .frame(width: 16, height: 16)
                         .foregroundColor(.white)
-                        .frame(width: 40, height: 40) // Adjust button size
+                        .frame(width: 32, height: 32)
                         .background(Color.blue)
-                        .cornerRadius(20) // Circular button
+                        .cornerRadius(16)
                 }
             }
-
-            // Tags
-            TagCollectionView(
-                tags: memo.tags,
-                horizontalSpacing: 9,
-                verticalSpacing: 7,
-                collectionViewHeight: $collectionViewHeight
-            )
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .frame(height: collectionViewHeight)
+            
+            HFlow{
+                ForEach(selectedTags, id: \.id) { tag in
+                    TagView(tag: tag) {
+                        removeTagFromSelectedTags(tag)
+                    }
+                }
+            }
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 13)
         .background(Color.memoBackgroundWhite)
         .cornerRadius(14)
-        .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 4) // Darker shadow
+        .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 4)
+        .fixedSize(horizontal: false, vertical: true) // Constrain height dynamically
+    }
+    
+    // Function to remove a tag from selectedTags
+    private func removeTagFromSelectedTags(_ tag: Tag) {
+        selectedTags.removeAll { $0.id == tag.id }
+        print("removeTagFromSelectedTags - removed :", tag)
+        print("as a result, selectedTags: ", selectedTags)
+    }
+    
+    // Dismisses the keyboard.
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
-
-
-extension String {
-    /// Calculates the height required for the given string with constrained width and font.
-    func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
-        let constraintRect = CGSize(width: width - 16, height: .greatestFiniteMagnitude) // Adjust for padding
-        let boundingBox = self.boundingRect(with: constraintRect,
-                                            options: [.usesLineFragmentOrigin, .usesFontLeading],
-                                            attributes: [.font: font],
-                                            context: nil)
-        return ceil(boundingBox.height)
-    }
-}
-

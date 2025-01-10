@@ -7,22 +7,26 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct EditingTagListView: View {
+    var availableTags: [Tag] // Tags not selected in EditingMemoView
+    var onTagSelected: (Tag) -> Void // Callback when a tag is selected
     
-    var tags: [Tag]
+    @ObservedObject var mainViewModel: MainViewModel
     @State private var searchText: String = ""
+    @State private var randomColor: String = ""
+    
+    // 상태 변수를 sheet(item:)에 맞게 수정
+    @State private var tagToUpdate: Tag? = nil
     
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
             // Search Field
-            TextField("Search Tags", text: $searchText)
+            TextField("태그 검색", text: $searchText)
                 .font(.custom("Pretendard", size: 16))
                 .foregroundColor(Color.searchBarPlaceholderGray)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .frame(width: 130) // 이렇게 해야 TextField의 가로 길이가 안 길어진다.
+                .frame(width: 100)
                 .background(Color.searchBarBackgroundGray)
                 .cornerRadius(20)
             
@@ -32,50 +36,90 @@ struct EditingTagListView: View {
                 .frame(width: 0.3, height: 32)
             
             // Scrollable Tag List
-            ScrollView(.horizontal, showsIndicators: false) {
+            ScrollView(.horizontal) {
                 HStack(alignment: .center, spacing: 8) {
                     ForEach(filteredTags(), id: \.id) { tag in
-                        TagView(tag: tag)
+                        TagView(tag: tag) {
+                            onTagSelected(tag)
+                        }
+                        .contextMenu {
+                            Button {
+                                print("Update button tapped for tag: \(tag.name)")
+                                hideKeyboard()
+                                tagToUpdate = tag
+                            } label: {
+                                Label("Update", systemImage: "pencil")
+                            }
+                            
+                            Button(role: .destructive) {
+                                print("Delete button tapped for tag: \(tag.name)")
+                                mainViewModel.deleteTag(tagId: tag.id)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
+                    }
+                    
+                    // "Create Tag" TagView
+                    if canCreateTag() {
+                        CreateTagView(
+                            searchText: $searchText,
+                            randomColor: $randomColor
+                        )
+                        .onTapGesture {
+                            print("Create Tag tapped with name: \(searchText) and color: \(randomColor)")
+                            mainViewModel.createTag(name: searchText, color: randomColor)
+                            generateRandomHexColor()
+                        }
                     }
                 }
+                .padding(.horizontal, 8)
             }
-            .frame(height: 36) // 이렇게 해야 ScrollView의 세로 길이가 안 길어진다.
+            .frame(height: 36) // Prevent ScrollView from expanding vertically
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 2)
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .background(Color.backgroundGray)
         .overlay(
-          Rectangle()
-            .inset(by: 0.2)
-            .stroke(Color(red: 0.6, green: 0.6, blue: 0.6), lineWidth: 0.4)
+            Rectangle()
+                .inset(by: 0.2)
+                .stroke(Color(red: 0.6, green: 0.6, blue: 0.6), lineWidth: 0.4)
         )
+        .onAppear {
+            generateRandomHexColor()
+            print("Available Tags:", availableTags)
+        }
+        // sheet(item:)을 사용하여 tagToUpdate가 설정되면 시트를 표시
+        .sheet(item: $tagToUpdate) { tag in
+            UpdateTagView(mainViewModel: mainViewModel, tag: tag)
+        }
     }
     
     // Function to filter tags based on search text
     private func filteredTags() -> [Tag] {
         if searchText.isEmpty {
-            return tags
+            return availableTags
         } else {
-            return tags.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+            return availableTags.filter { $0.name.lowercased().contains(searchText.lowercased()) }
         }
     }
-}
-
-struct EditingTagListView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditingTagListView(
-            tags: [
-                Tag(id: 1, name: "Lorem ipsum", color: "#FF9C9C"),
-                Tag(id: 2, name: "dolor", color: "#FFF56F"),
-                Tag(id: 3, name: "sit", color: "#A6F7EA"),
-                Tag(id: 4, name: "amet", color: "#D2E8FE"),
-                Tag(id: 5, name: "consectetur adipiscing elit", color: "#92EDA1"),
-                Tag(id: 6, name: "sed", color: "#CCFFF7"),
-                Tag(id: 7, name: "do", color: "#FFD9EC"),
-                Tag(id: 8, name: "eiusmod tempor incididunt ut labore et dolore magna aliqua", color: "#B0E0E6")
-                // Add more tags if needed for testing
-            ]
-        )
+    
+    // Determine if a new tag can be created
+    private func canCreateTag() -> Bool {
+        let trimmedText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        return !trimmedText.isEmpty && !availableTags.contains { $0.name.lowercased() == trimmedText.lowercased() }
+    }
+    
+    // Generate a random HEX color string from TagColor enum
+    private func generateRandomHexColor() {
+        if let randomTagColor = Color.TagColor.allCases.randomElement() {
+            randomColor = randomTagColor.rawValue
+        }
+    }
+    
+    // Dismisses the keyboard.
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
