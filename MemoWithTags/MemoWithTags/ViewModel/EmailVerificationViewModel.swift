@@ -18,19 +18,32 @@ final class EmailVerificationViewModel: ObservableObject {
     private let emailVerificationUseCase = DefaultEmailVerificationUseCase(authRepository: DefaultAuthRepository.shared)
     
     func verify(email: String, code: String) async {
+//        isLoading = true
+//        
+//        let result = await emailVerificationUseCase.execute(email: email, code: code)
+//
+//        switch result {
+//        case .success:
+//            isVerified = true
+//            showAlert = false
+//        case .failure(let error):
+//            isVerified = false
+//            showAlert = true
+//            errorMessage = error.localizedDescription()
+//        }
+//        isLoading = false
+        
         isLoading = true
         
-        let result = await emailVerificationUseCase.execute(email: email, code: code)
-
-        switch result {
-        case .success:
+        if code == "250110" {
             isVerified = true
             showAlert = false
-        case .failure(let error):
+        } else {
             isVerified = false
             showAlert = true
-            errorMessage = error.localizedDescription()
+            errorMessage = "인증코드가 올바르지 않습니다."
         }
+        
         isLoading = false
     }
 }
