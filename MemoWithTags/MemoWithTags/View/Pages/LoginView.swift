@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct LoginView: View {
+    @EnvironmentObject private var router: NavigationRouter
+    @StateObject private var viewModel = LoginViewModel()
+    
     @State private var email: String = ""
     @State private var password: String = ""
     
-    @StateObject private var viewModel = LoginViewModel()
+
     
     var body: some View {
         
@@ -24,7 +27,7 @@ struct LoginView: View {
                     Text("Memo with")
                         .font(.system(size: 22, weight: .semibold))
                         .foregroundStyle(Color.titleTextBlack)
-                    Tag(text: "Tags", size: 19, color: .init(white: 0, opacity: 0.1))
+                    Tag(text: "Tags", size: 19, color: .init(white: 0, opacity: 0.1)) {}
                 }
                 .padding(.vertical, 8)
                 .background(.clear)
@@ -72,10 +75,15 @@ struct LoginView: View {
                         .textInputAutocapitalization(.never)
                     }
                     
+                    
+                    //로그인 버튼
                     Button {
                         //action
                         Task {
                             await viewModel.login(email: email, password: password)
+                            if !viewModel.isLoading && viewModel.isLoggedIn{
+                                router.push(to: .main)
+                            }
                         }
 
                     } label: {
@@ -92,15 +100,15 @@ struct LoginView: View {
                     .disabled(email.isEmpty || password.isEmpty)
                     
                     HStack(spacing: 8) {
-                        NavigationLink(destination: SignupView()) {
-                            Tag(text: "이메일로 회원가입", size: 14, color: .init(hex: "#FFBDBD"))
+                        Tag(text: "이메일로 회원가입", size: 14, color: .init(hex: "#FFBDBD")) {
+                            router.push(to: .signup)
                         }
                         
                         Spacer()
                         
-                        Tag(text: "이메일 찾기", size: 14, color: .init(hex: "#F1F1F3"))
+                        Tag(text: "이메일 찾기", size: 14, color: .init(hex: "#F1F1F3")) {}
                         
-                        Tag(text: "비밀번호 찾기", size: 14, color: .init(hex: "#F1F1F3"))
+                        Tag(text: "비밀번호 찾기", size: 14, color: .init(hex: "#F1F1F3")) {}
                     }
                     .padding(.top, 36)
                 }
@@ -123,14 +131,9 @@ struct LoginView: View {
             )
         }
         .navigationBarBackButtonHidden()
-        .navigationDestination(isPresented: $viewModel.isLoggedIn) {
-            MainView()
-        }
-
-        
     }
     
-    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color) -> some View {
+    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClick: @escaping () -> Void) -> some View {
         Text(text)
             .font(.system(size: size, weight: .regular))
             .foregroundStyle(Color.tagTextColor)
@@ -138,10 +141,9 @@ struct LoginView: View {
             .padding(.vertical, 3)
             .background(color)
             .cornerRadius(4)
+            .onTapGesture {
+                onClick()
+            }
     }
     
-}
-
-#Preview {
-    LoginView()
 }

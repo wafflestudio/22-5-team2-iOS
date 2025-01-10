@@ -21,7 +21,6 @@ class DefaultSignupUseCase: SignupUseCase {
             _ = try await authRepository.register(email: email, password: password)
             return .success(())
         } catch let error {
-            print(error)
             return .failure(.from(baseError: error as! BaseError))
         }
     }

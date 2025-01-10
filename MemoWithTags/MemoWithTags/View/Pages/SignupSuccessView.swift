@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SignupSuccessView: View {
+    @EnvironmentObject private var router: NavigationRouter
+    
     var body: some View {
         ZStack {
             Color.backgroundGray.edgesIgnoringSafeArea(.all)
@@ -15,7 +17,7 @@ struct SignupSuccessView: View {
             VStack(spacing: 36) {
                 //title
                 HStack(spacing: 4) {
-                    Text("이메일로 회원가입")
+                    Text("회원가입이 완료되었습니다!")
                         .font(.system(size: 21, weight: .semibold))
                         .foregroundStyle(Color.titleTextBlack)
                 }
@@ -47,6 +49,7 @@ struct SignupSuccessView: View {
                     //시작버튼
                     Button {
                         //action
+                        router.push(to: .main)
                     } label: {
                         Text("시작하기")
                             .frame(maxWidth: .infinity)
@@ -57,16 +60,6 @@ struct SignupSuccessView: View {
                     .background(Color(hex: "#FF9C9C"))
                     .cornerRadius(22)
                     .padding(.top, 16)
-                    
-                    HStack(spacing: 8) {
-                        Tag(text: "다른 계정으로 로그인", size: 14, color: .init(hex: "#F1F1F3")) {
-                            //action
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.top, 36)
-                    
                 }
                 .padding(.top, 18)
                 .padding(.bottom, 16)

@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct SignupView: View {
+    @EnvironmentObject private var router: NavigationRouter
+    @StateObject private var viewModel = SignupViewModel()
+    
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var passwordRepeat: String = ""
-    
-    @StateObject private var viewModel = SignupViewModel()
     
     var body: some View {
         
@@ -112,6 +113,9 @@ struct SignupView: View {
                         //action
                         Task {
                             await viewModel.signup(email: email, password: password, passwordRepeat: passwordRepeat)
+                            if !viewModel.isLoading && viewModel.isSignedUp{
+                                router.push(to: .emailVerification(email: email))
+                            }
                         }
                     } label: {
                         Text("다음")
@@ -127,8 +131,8 @@ struct SignupView: View {
                     .disabled(email.isEmpty || password.isEmpty || passwordRepeat.isEmpty)
                     
                     HStack(spacing: 8) {
-                        NavigationLink(destination: LoginView()) {
-                            Tag(text: "로그인", size: 14, color: .init(hex: "#E3E3E7"))
+                        Tag(text: "로그인", size: 14, color: .init(hex: "#E3E3E7")) {
+                            router.pop()
                         }
                         
                         Spacer()
@@ -166,13 +170,10 @@ struct SignupView: View {
             )
         }
         .navigationBarBackButtonHidden()
-        .navigationDestination(isPresented: $viewModel.isSignedUp) {
-            EmailVerificationView(email: email)
-        }
     }
     
     
-    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color) -> some View {
+    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClick: @escaping () -> Void) -> some View {
         Text(text)
             .font(.system(size: size, weight: .regular))
             .foregroundStyle(Color.tagTextColor)
@@ -180,10 +181,10 @@ struct SignupView: View {
             .padding(.vertical, 3)
             .background(color)
             .cornerRadius(4)
+            .onTapGesture {
+                onClick()
+            }
     }
     
 }
 
-#Preview {
-    SignupView()
-}

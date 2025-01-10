@@ -41,7 +41,6 @@ final class SignupViewModel: ObservableObject {
     }
     
     func signup(email: String, password: String, passwordRepeat: String) async {
-        isSignedUp = false
         isLoading = true
         
         let isEmailValid = checkEmailValidity(email: email)
@@ -68,8 +67,8 @@ final class SignupViewModel: ObservableObject {
                 isSignedUp = true
                 showAlert = false
             case .failure(let error):
-                isSignedUp = true
-                showAlert = false
+                isSignedUp = false
+                showAlert = true
                 errorMessage = error.localizedDescription()
             }
         }

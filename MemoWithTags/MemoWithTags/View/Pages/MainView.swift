@@ -67,7 +67,6 @@ struct MainView: View {
                     .padding(.bottom, 36)
                 }
             }
-            .navigationBarHidden(true) // 네비게이션 바 숨기기
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Text("Memo with Tags")
@@ -92,6 +91,7 @@ struct MainView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden()
     }
     
     private func isDifferentDay(_ current: Memo, _ previous: Memo) -> Bool {

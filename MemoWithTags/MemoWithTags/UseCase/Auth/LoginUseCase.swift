@@ -28,10 +28,8 @@ class DefaultLoginUseCase: LoginUseCase {
                 return .failure(.tokenSaveError)
             }
         } catch let error {
-            print(error)
             return .failure(.from(baseError: error as! BaseError))
         }
-
     }
 }
 

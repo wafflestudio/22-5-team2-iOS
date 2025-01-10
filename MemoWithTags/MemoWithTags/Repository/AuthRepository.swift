@@ -33,38 +33,38 @@ final class DefaultAuthRepository: AuthRepository {
     let tokenInterceptor = TokenInterceptor()
     
     func register(email: String, password: String) async throws {
-        let response = await AF.request(AuthRouter.register(email: email, password: password)).serializingDecodable(AuthDto.self).response
-        _ = try handleError(response: response)
+        let response = await AF.request(AuthRouter.register(email: email, password: password)).serializingData().response
+        try handleError(response: response)
     }
     
     func login(email: String, password: String) async throws -> Auth {
         let response = await AF.request(AuthRouter.login(email: email, password: password)).serializingDecodable(AuthDto.self).response
-        let dto = try handleError(response: response)
+        let dto = try handleErrorDecodable(response: response)
         
         return dto.toAuth()
     }
     
     func verifyEmail(email: String, code: String) async throws -> Auth {
         let response = await AF.request(AuthRouter.verifyEmail(email: email, code: code)).serializingDecodable(AuthDto.self).response
-        let dto = try handleError(response: response)
+        let dto = try handleErrorDecodable(response: response)
         
         return dto.toAuth()
     }
     
     func forgotPassword(email: String) async throws {
         let response = await AF.request(AuthRouter.forgotPassword(email: email)).serializingData().response
-        _ = try handleError(response: response)
+        try handleError(response: response)
     }
     
     func resetPassword(email:String, newPassword: String) async throws {
         let response = await AF.request(AuthRouter.resetPassword(email: email, newPassword: newPassword)).serializingData().response
-        _ = try handleError(response: response)
+        try handleError(response: response)
     }
     
     func refreshToken() async throws -> Auth {
         let respone = await AF
             .request(AuthRouter.refreshToken, interceptor: tokenInterceptor).serializingDecodable(AuthDto.self).response
-        let dto = try handleError(response: respone)
+        let dto = try handleErrorDecodable(response: respone)
         
         return dto.toAuth()
     }
@@ -72,7 +72,7 @@ final class DefaultAuthRepository: AuthRepository {
     func getUserInfo() async throws -> User {
         let response = await AF
             .request(AuthRouter.getUserInfo, interceptor: tokenInterceptor).serializingDecodable(UserDto.self).response
-        let dto = try handleError(response: response)
+        let dto = try handleErrorDecodable(response: response)
         
         return dto.toUser()
     }
