@@ -1,9 +1,5 @@
-//
-//  MemoListView.swift
-//  MemoWithTags
-//
-//  Created by Swimming Ryu on 1/9/25.
-//
+// MemoListView.swift
+// MemoWithTags
 
 import SwiftUI
 
@@ -33,9 +29,16 @@ struct MemoListView: View {
                                 .frame(maxWidth: .infinity, alignment: .center)
                         }
                         
-                        // MemoView with unique id
+                        // MemoView with unique id and context menu
                         MemoView(memo: memo)
                             .id(memo.id)
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    mainViewModel.deleteMemo(memoId: memo.id)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                            }
                             .onAppear {
                                 if index == reversedMemos.count - 1 {
                                     Task {
@@ -78,8 +81,8 @@ struct MemoListView: View {
     
     // 날짜 헤더 표시 여부를 판단하는 함수 분리
     private func shouldShowDateHeader(at index: Int) -> Bool {
-        if index == 0 {return true}
-        else {return isDifferentDay(current: reversedMemos[index], previous: reversedMemos[index - 1])}
+        if index == 0 { return true }
+        else { return isDifferentDay(current: reversedMemos[index], previous: reversedMemos[index - 1]) }
     }
     
     // 현재 메모와 이전 메모가 다른 날에 생성되었는지 확인
@@ -105,3 +108,4 @@ struct ForEachIndexed<Data: RandomAccessCollection, Content: View>: View where D
         }
     }
 }
+

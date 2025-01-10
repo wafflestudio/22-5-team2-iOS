@@ -30,8 +30,7 @@ struct MainView: View {
                 
                 MemoListView(mainViewModel: mainViewModel)
                 
-                EditingView()
-                    .environmentObject(mainViewModel)
+                EditingView(mainViewModel: mainViewModel)
                     .environmentObject(keyboardResponder)
 
             }
@@ -60,9 +59,9 @@ struct MainView: View {
                 }
                 if mainViewModel.tags.isEmpty {
                     mainViewModel.fetchTags()
+                    print("Tags:", mainViewModel.tags)
                 }
             }
-            .environmentObject(keyboardResponder)
         }
     }
 }

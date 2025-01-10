@@ -22,7 +22,7 @@ struct DynamicHeightTextEditor: View {
                     .padding(8)
             }
             TextEditor(text: $text)
-                .frame(minHeight: minHeight, maxHeight: dynamicHeight)
+                .frame(minHeight: minHeight, maxHeight: maxHeight)
                 .background(GeometryReader { geometry in
                     Color.clear
                         .onAppear {

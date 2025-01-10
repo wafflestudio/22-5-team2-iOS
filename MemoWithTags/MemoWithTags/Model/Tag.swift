@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct Tag: Codable, Identifiable, Equatable {
+struct Tag: Codable, Identifiable, Equatable, Hashable {
     let id: Int
     var name: String
     var color: String // HEX값을 받는다.

@@ -13,7 +13,7 @@ class MockMemoRepository: MemoRepository {
     static let shared = MockMemoRepository()
     
     // Sample Tags
-    private let sampleTags: [Tag] = [
+    var sampleTags: [Tag] = [
         Tag(id: 1, name: "Work", color: "#FF5733"),
         Tag(id: 2, name: "Personal", color: "#33FF57"),
         Tag(id: 3, name: "Urgent", color: "#3357FF")

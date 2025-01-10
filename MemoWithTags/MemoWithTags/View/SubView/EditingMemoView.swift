@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
+import Flow
 
 struct EditingMemoView: View {
     @Binding var content: String
     @Binding var selectedTags: [Tag]
     @Binding var dynamicTextEditorHeight: CGFloat
-    @Binding var dynamicTagCollectionViewHeight: CGFloat
     
     var onConfirm: (String, [Int]) -> Void
     
@@ -26,6 +26,7 @@ struct EditingMemoView: View {
                     placeholder: "새로운 메모"
                 )
                 .frame(height: dynamicTextEditorHeight)
+                .background(Color.clear)
                 
                 // Confirm Button
                 Button(action: {
@@ -47,8 +48,6 @@ struct EditingMemoView: View {
                     content = ""
                     selectedTags = []
                     
-                    // Reset the heights
-                    dynamicTagCollectionViewHeight = .zero
                     dynamicTextEditorHeight = 40
                     
                     // Dismiss the keyboard
@@ -65,38 +64,27 @@ struct EditingMemoView: View {
                 }
             }
             
-            // Selected Tags
-            DynamicHeightTagCollection(
-                tags: $selectedTags,
-                collectionViewHeight: $dynamicTagCollectionViewHeight,
-                horizontalSpacing: 9,
-                verticalSpacing: 7
-            )
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .frame(height: dynamicTagCollectionViewHeight)
-            .overlay(
-                // Overlay to allow tapping on tags to remove them
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(selectedTags, id: \.id) { tag in
-                            TagView(tag: tag) {
-                                removeTagFromSelectedTags(tag)
-                            }
-                        }
+            HFlow{
+                ForEach(selectedTags, id: \.id) { tag in
+                    TagView(tag: tag) {
+                        removeTagFromSelectedTags(tag)
                     }
                 }
-            )
+            }
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 13)
         .background(Color.memoBackgroundWhite)
         .cornerRadius(14)
         .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 4)
+        .fixedSize(horizontal: false, vertical: true) // Constrain height dynamically
     }
     
     // Function to remove a tag from selectedTags
     private func removeTagFromSelectedTags(_ tag: Tag) {
         selectedTags.removeAll { $0.id == tag.id }
+        print("removeTagFromSelectedTags - removed :", tag)
+        print("as a result, selectedTags: ", selectedTags)
     }
     
     // Dismisses the keyboard.
