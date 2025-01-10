@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUICore
 
 class MockMemoRepository: MemoRepository {
     
@@ -14,9 +15,9 @@ class MockMemoRepository: MemoRepository {
     
     // Sample Tags
     var sampleTags: [Tag] = [
-        Tag(id: 1, name: "Work", color: "#FF5733"),
-        Tag(id: 2, name: "Personal", color: "#33FF57"),
-        Tag(id: 3, name: "Urgent", color: "#3357FF")
+        Tag(id: 1, name: "Work", color: Color.TagColor.color1.rawValue),
+        Tag(id: 2, name: "Personal", color:  Color.TagColor.color2.rawValue),
+        Tag(id: 3, name: "Urgent", color: Color.TagColor.color3.rawValue)
     ]
     
     // Sample Memos
@@ -25,7 +26,7 @@ class MockMemoRepository: MemoRepository {
         Memo(
             id: 1,
             content: "Finish the report by Monday.",
-            tags: [Tag(id: 1, name: "Work", color: "#FF5733")],
+            tags: [Tag(id: 1, name: "Work", color: Color.TagColor.color1.rawValue)],
             createdAt: Date(),
             updatedAt: Date()
         ),
@@ -33,7 +34,7 @@ class MockMemoRepository: MemoRepository {
         Memo(
             id: 2,
             content: "Buy groceries: milk, eggs, bread.",
-            tags: [Tag(id: 2, name: "Personal", color: "#33FF57")],
+            tags: [Tag(id: 2, name: "Personal", color: Color.TagColor.color2.rawValue)],
             createdAt: Date().addingTimeInterval(-86400),
             updatedAt: Date().addingTimeInterval(-86400)
         ),
@@ -41,7 +42,7 @@ class MockMemoRepository: MemoRepository {
         Memo(
             id: 3,
             content: "Call John regarding the meeting.",
-            tags: [Tag(id: 1, name: "Work", color: "#FF5733"), Tag(id: 3, name: "Urgent", color: "#3357FF")],
+            tags: [Tag(id: 1, name: "Work", color: Color.TagColor.color1.rawValue), Tag(id: 3, name: "Urgent", color: Color.TagColor.color3.rawValue)],
             createdAt: Date().addingTimeInterval(-86400 * 2),
             updatedAt: Date().addingTimeInterval(-86400 * 2)
         ),
@@ -49,7 +50,7 @@ class MockMemoRepository: MemoRepository {
         Memo(
             id: 4,
             content: "Schedule dentist appointment.",
-            tags: [Tag(id: 2, name: "Personal", color: "#33FF57")],
+            tags: [Tag(id: 2, name: "Personal", color: Color.TagColor.color2.rawValue)],
             createdAt: Date().addingTimeInterval(-86400 * 3),
             updatedAt: Date().addingTimeInterval(-86400 * 3)
         ),
@@ -57,7 +58,7 @@ class MockMemoRepository: MemoRepository {
         Memo(
             id: 5,
             content: "Prepare slides for the presentation.",
-            tags: [Tag(id: 1, name: "Work", color: "#FF5733")],
+            tags: [Tag(id: 1, name: "Work", color: Color.TagColor.color1.rawValue)],
             createdAt: Date().addingTimeInterval(-86400 * 4),
             updatedAt: Date().addingTimeInterval(-86400 * 4)
         ),
@@ -65,7 +66,7 @@ class MockMemoRepository: MemoRepository {
         Memo(
             id: 6,
             content: "Read the new book on SwiftUI.",
-            tags: [Tag(id: 2, name: "Personal", color: "#33FF57")],
+            tags: [Tag(id: 2, name: "Personal", color: Color.TagColor.color2.rawValue)],
             createdAt: Date().addingTimeInterval(-86400 * 5),
             updatedAt: Date().addingTimeInterval(-86400 * 5)
         ),
@@ -73,7 +74,7 @@ class MockMemoRepository: MemoRepository {
         Memo(
             id: 7,
             content: "Respond to the client emails.",
-            tags: [Tag(id: 1, name: "Work", color: "#FF5733"), Tag(id: 3, name: "Urgent", color: "#3357FF")],
+            tags: [Tag(id: 1, name: "Work", color: Color.TagColor.color1.rawValue), Tag(id: 3, name: "Urgent", color: Color.TagColor.color3.rawValue)],
             createdAt: Date().addingTimeInterval(-86400 * 6),
             updatedAt: Date().addingTimeInterval(-86400 * 6)
         ),
@@ -81,7 +82,7 @@ class MockMemoRepository: MemoRepository {
         Memo(
             id: 8,
             content: "Plan weekend hiking trip.",
-            tags: [Tag(id: 2, name: "Personal", color: "#33FF57")],
+            tags: [Tag(id: 2, name: "Personal", color: Color.TagColor.color2.rawValue)],
             createdAt: Date().addingTimeInterval(-86400 * 7),
             updatedAt: Date().addingTimeInterval(-86400 * 7)
         ),
@@ -89,7 +90,7 @@ class MockMemoRepository: MemoRepository {
         Memo(
             id: 9,
             content: "Update the project roadmap.",
-            tags: [Tag(id: 1, name: "Work", color: "#FF5733")],
+            tags: [Tag(id: 1, name: "Work", color: Color.TagColor.color1.rawValue)],
             createdAt: Date().addingTimeInterval(-86400 * 8),
             updatedAt: Date().addingTimeInterval(-86400 * 8)
         ),
@@ -97,7 +98,7 @@ class MockMemoRepository: MemoRepository {
         Memo(
             id: 10,
             content: "Organize the office files.",
-            tags: [Tag(id: 1, name: "Work", color: "#FF5733")],
+            tags: [Tag(id: 1, name: "Work", color: Color.TagColor.color1.rawValue)],
             createdAt: Date().addingTimeInterval(-86400 * 9),
             updatedAt: Date().addingTimeInterval(-86400 * 9)
         )

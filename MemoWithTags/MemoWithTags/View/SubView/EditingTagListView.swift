@@ -39,12 +39,12 @@ struct EditingTagListView: View {
                         TagView(tag: tag) {
                             onTagSelected(tag)
                         }
-                    }
-                    .contextMenu {
-                        Button(role: .destructive) {
-                            mainViewModel.deleteTag(tagId: tag.id)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
+                        .contextMenu {
+                            Button(role: .destructive) {
+                                mainViewModel.deleteTag(tagId: tag.id)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
                         }
                     }
                     
@@ -52,12 +52,10 @@ struct EditingTagListView: View {
                     if canCreateTag() {
                         // Generate a random color for consistency between display and creation
                         
-                        HStack(alignment: .center) {
-                            Text("Create")
-                                .font(.custom("Pretendard", size: 16))
-                            
-                            TagView(tag: Tag(id: -1, name: searchText, color: randomColor)) {}
-                        }
+                        CreateTagView(
+                            searchText: $searchText,
+                            randomColor: $randomColor
+                        )
                         .onTapGesture {
                             // Ensure the entire HStack is tappable
                             mainViewModel.createTag(name: searchText, color: randomColor)
@@ -99,13 +97,10 @@ struct EditingTagListView: View {
         return !trimmedText.isEmpty && !availableTags.contains { $0.name.lowercased() == trimmedText.lowercased() }
     }
     
-    // Generate a random HEX color string
+    // Generate a random HEX color string from TagColor enum
     private func generateRandomHexColor() {
-        let letters = "0123456789ABCDEF"
-        var newColor = "#"
-        for _ in 0..<6 {
-            newColor.append(letters.randomElement()!)
+        if let randomTagColor = Color.TagColor.allCases.randomElement() {
+            randomColor = randomTagColor.rawValue
         }
-        randomColor = newColor
     }
 }
