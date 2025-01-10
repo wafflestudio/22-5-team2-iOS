@@ -15,6 +15,9 @@ struct EditingTagListView: View {
     @State private var searchText: String = ""
     @State private var randomColor: String = ""
     
+    // 상태 변수를 sheet(item:)에 맞게 수정
+    @State private var tagToUpdate: Tag? = nil
+    
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
             // Search Field
@@ -40,7 +43,16 @@ struct EditingTagListView: View {
                             onTagSelected(tag)
                         }
                         .contextMenu {
+                            Button {
+                                print("Update button tapped for tag: \(tag.name)")
+                                hideKeyboard()
+                                tagToUpdate = tag
+                            } label: {
+                                Label("Update", systemImage: "pencil")
+                            }
+                            
                             Button(role: .destructive) {
+                                print("Delete button tapped for tag: \(tag.name)")
                                 mainViewModel.deleteTag(tagId: tag.id)
                             } label: {
                                 Label("Delete", systemImage: "trash")
@@ -50,14 +62,12 @@ struct EditingTagListView: View {
                     
                     // "Create Tag" TagView
                     if canCreateTag() {
-                        // Generate a random color for consistency between display and creation
-                        
                         CreateTagView(
                             searchText: $searchText,
                             randomColor: $randomColor
                         )
                         .onTapGesture {
-                            // Ensure the entire HStack is tappable
+                            print("Create Tag tapped with name: \(searchText) and color: \(randomColor)")
                             mainViewModel.createTag(name: searchText, color: randomColor)
                             generateRandomHexColor()
                         }
@@ -79,6 +89,10 @@ struct EditingTagListView: View {
         .onAppear {
             generateRandomHexColor()
             print("Available Tags:", availableTags)
+        }
+        // sheet(item:)을 사용하여 tagToUpdate가 설정되면 시트를 표시
+        .sheet(item: $tagToUpdate) { tag in
+            UpdateTagView(mainViewModel: mainViewModel, tag: tag)
         }
     }
     
@@ -102,5 +116,10 @@ struct EditingTagListView: View {
         if let randomTagColor = Color.TagColor.allCases.randomElement() {
             randomColor = randomTagColor.rawValue
         }
+    }
+    
+    // Dismisses the keyboard.
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
