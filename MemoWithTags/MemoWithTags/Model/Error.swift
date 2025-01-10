@@ -36,8 +36,7 @@ enum BaseError: Int, Error {
 }
 
 enum LoginError: Error {
-    case userNotFound
-    case invalidPassword
+    case invalidCreditentials
     case networkError
     case unknown
     case tokenSaveError
@@ -45,8 +44,7 @@ enum LoginError: Error {
     
     func localizedDescription() -> String {
         switch self {
-        case .userNotFound: return "등록되지 않은 이메일입니다."
-        case .invalidPassword: return "비밀번호가 잘못되었습니다."
+        case .invalidCreditentials: return "이메일 또는 비밀번호가 잘못되었습니다."
         case .networkError: return "Network error"
         case .unknown: return "Unknown error"
         case .tokenSaveError: return "Token save error"
@@ -56,8 +54,7 @@ enum LoginError: Error {
     
     static func from(baseError: BaseError) -> LoginError {
         switch baseError {
-        case .NOT_FOUND: return .userNotFound
-        case .BAD_REQUEST: return .invalidPassword
+        case .UNAUTHORIZED: return .invalidCreditentials
         case .INTERNAL_SERVER_ERROR: return .networkError
         default: return .unknown
         }
