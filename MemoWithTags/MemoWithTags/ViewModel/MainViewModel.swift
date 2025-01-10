@@ -130,7 +130,6 @@ final class MainViewModel: ObservableObject {
             
             isLoading = true
             let result = await fetchTagUseCase.execute()
-            print("MainViewModel - fetched Tags:", result)
             switch result {
             case .success(let fetchedTags):
                 self.tags = fetchedTags
@@ -147,7 +146,6 @@ final class MainViewModel: ObservableObject {
             
             isLoading = true
             let result = await createTagUseCase.execute(name: name, color: color)
-            print("MainViewModel - Create Tag: ", result)
             switch result {
             case .success(let newTag):
                 self.tags.append(newTag)

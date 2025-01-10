@@ -49,9 +49,6 @@ struct EditingView: View {
                 )
             }
         }
-        .onAppear{
-            print("keyborad Height: ", keyboardResponder.currentHeight)
-        }
     }
     
     // Compute available tags by excluding selectedTags
@@ -62,7 +59,5 @@ struct EditingView: View {
     // Add a tag to selectedTags
     private func addTagToSelectedTags(_ tag: Tag) {
         selectedTags.append(tag)
-        print("addTagToSelectedTags - added :", tag)
-        print("as a result, selectedTags: ", selectedTags)
     }
 }

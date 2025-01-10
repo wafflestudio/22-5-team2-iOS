@@ -58,7 +58,6 @@ struct MainView: View {
                 }
                 if mainViewModel.tags.isEmpty {
                     mainViewModel.fetchTags()
-                    print("Tags:", mainViewModel.tags)
                 }
             }
         }
