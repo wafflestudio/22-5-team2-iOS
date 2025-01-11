@@ -49,7 +49,7 @@ struct SignupSuccessView: View {
                     //시작버튼
                     Button {
                         //action
-                        router.push(to: .main)
+                        router.push(to: .login)
                     } label: {
                         Text("시작하기")
                             .frame(maxWidth: .infinity)
