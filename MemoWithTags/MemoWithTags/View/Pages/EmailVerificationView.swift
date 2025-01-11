@@ -47,7 +47,7 @@ struct EmailVerificationView: View {
                             await viewModel.verify(email: email, code: code)
                             
                             if !viewModel.isLoading && viewModel.isVerified{
-                                router.push(to: .login)
+                                router.push(to: .signupSuccess)
                             }
                         }
                         
