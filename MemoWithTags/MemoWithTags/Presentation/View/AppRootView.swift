@@ -34,5 +34,12 @@ struct AppRootView: View {
                     }
                 }
         }
+        .alert(isPresented: container.$appState.showAlert) {
+            return Alert(
+                title: Text("Error"),
+                message: Text(container.appState.errorMessage),
+                dismissButton: .default(Text("확인"))
+            )
+        }
     }
 }

@@ -37,14 +37,14 @@ final class SignupViewModel: BaseViewModel, ObservableObject {
         let isPasswordSame = password == passwordRepeat
         
         if !isEmailValid {
-            appState.system.isShowingAlert = true
-            appState.system.errorMessage = RegisterError.invalidEmail.localizedDescription()
+            appState.showAlert = true
+            appState.errorMessage = RegisterError.invalidEmail.localizedDescription()
         } else if !isValidPassword {
-            appState.system.isShowingAlert = true
-            appState.system.errorMessage = RegisterError.invalidPassword.localizedDescription()
+            appState.showAlert = true
+            appState.errorMessage = RegisterError.invalidPassword.localizedDescription()
         } else if !isPasswordSame {
-            appState.system.isShowingAlert = true
-            appState.system.errorMessage = RegisterError.passwordNotMatch.localizedDescription()
+            appState.showAlert = true
+            appState.errorMessage = RegisterError.passwordNotMatch.localizedDescription()
         } else {
             let result = await useCases.signupUseCase.execute(email: email, password: password)
             
@@ -52,8 +52,8 @@ final class SignupViewModel: BaseViewModel, ObservableObject {
             case .success:
                 router.push(to: .emailVerification(email: email))
             case .failure(let error):
-                appState.system.isShowingAlert = true
-                appState.system.errorMessage = error.localizedDescription()
+                appState.showAlert = true
+                appState.errorMessage = error.localizedDescription()
             }
         }
     }

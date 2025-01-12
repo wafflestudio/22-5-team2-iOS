@@ -22,7 +22,7 @@ final class DefaultAuthRepository: AuthRepository {
         print("login")
         let response = await AF.request(AuthRouter.login(email: email, password: password)).serializingDecodable(AuthDto.self).response
         let dto = try handleErrorDecodable(response: response)
-        
+        print("accessToken: \(dto.accessToken)")
         return dto
     }
     

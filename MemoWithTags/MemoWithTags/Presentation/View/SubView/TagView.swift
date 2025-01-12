@@ -13,10 +13,10 @@ struct TagView: View {
     
     var body: some View {
         Text(tag.name)
-            .font(.system(size: 15, weight: .regular))
+            .font(.system(size: 13, weight: .regular))
             .foregroundColor(Color.tagTextColor)
-            .padding(.horizontal, 7)
-            .frame(height: 25)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
             .background(Color(hex: tag.color))
             .cornerRadius(4)
             .lineLimit(1)
@@ -24,12 +24,5 @@ struct TagView: View {
             .onTapGesture {
                 onTap?()
             }
-    }
-}
-
-struct TagView_Previews: PreviewProvider {
-    static var previews: some View {
-        TagView(tag: Tag(id: 1, name: "Example Tag", color: "#FF5733"))
-            .previewLayout(.sizeThatFits)
     }
 }

@@ -18,7 +18,7 @@ final class DefaultMemoRepository: MemoRepository {
             MemoRouter.fetchMemos(content: content, tagIds: tagIds, dateRange: dateRange, page: page),
             interceptor: tokenInterceptor
         ).serializingDecodable(MemoResponseDto.self).response
-        
+
         let dto = try handleErrorDecodable(response: response)
         
         return dto

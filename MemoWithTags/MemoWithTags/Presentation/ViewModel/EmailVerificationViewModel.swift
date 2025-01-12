@@ -28,8 +28,8 @@ final class EmailVerificationViewModel: BaseViewModel, ObservableObject {
         if code == "250110" {
             router.push(to: .signupSuccess)
         } else {
-            appState.system.isShowingAlert = true
-            appState.system.errorMessage = VerifyEmailError.notMatchCode.localizedDescription()
+            appState.showAlert = true
+            appState.errorMessage = VerifyEmailError.notMatchCode.localizedDescription()
         }
         
     }

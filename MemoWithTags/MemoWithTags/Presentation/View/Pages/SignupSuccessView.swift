@@ -92,6 +92,7 @@ struct SignupSuccessView: View {
 extension SignupSuccessView {
     final class ViewModel: BaseViewModel, ObservableObject {
         func start() {
+            router.reset()
             router.push(to: .login)
         }
     }

@@ -20,6 +20,7 @@ struct MainView: View {
                     .ignoresSafeArea()
                 
                 MemoListView(mainViewModel: viewModel)
+                
                 EditingView(mainViewModel: viewModel)
                     .environmentObject(keyboardResponder)
 
@@ -33,13 +34,17 @@ struct MainView: View {
                         Tag(text: "Tags", size: 14, color: Color(hex: "#E3E3E7")) {}
                     }
                 }
+                
+                
                 ToolbarItem(placement: .topBarTrailing) {
-                    HStack(spacing: 16) {
+                    HStack(spacing: 14) {
                         Image(systemName: "magnifyingglass")
+                            .font(.system(size: 15))
                             .onTapGesture {
                                 viewModel.router.push(to: .search)
                             }
                         Image(systemName: "list.bullet")
+                            .font(.system(size: 15))
                             .onTapGesture {
                                 viewModel.router.push(to: .settings)
                             }
