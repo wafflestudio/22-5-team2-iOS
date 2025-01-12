@@ -18,7 +18,7 @@ final class SettingsViewModel: BaseViewModel, ObservableObject {
             router.push(to: .root)
         case .failure(let error):
             appState.showAlert = true
-            appState.errorMessage = RegisterError.invalidEmail.localizedDescription()
+            appState.errorMessage = error.localizedDescription()
         }
     }
 }

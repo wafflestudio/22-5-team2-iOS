@@ -34,6 +34,8 @@ extension Router {
             }
         }
         
+        print(request)
+        
         return request
     }
 }

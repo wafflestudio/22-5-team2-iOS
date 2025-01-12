@@ -13,7 +13,7 @@ final class DefaultMemoRepository: MemoRepository {
     let tokenInterceptor = TokenInterceptor()
     
     func fetchMemos(content: String?, tagIds: [Int]?, dateRange: ClosedRange<Date>?, page: Int) async throws -> MemoResponseDto {
-        print("fetch memo")
+        print("fetch memosss")
         let response = await AF.request(
             MemoRouter.fetchMemos(content: content, tagIds: tagIds, dateRange: dateRange, page: page),
             interceptor: tokenInterceptor

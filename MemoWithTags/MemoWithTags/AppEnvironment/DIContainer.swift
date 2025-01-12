@@ -31,6 +31,7 @@ extension DIContainer {
         let forgotPasswordUseCase: ForgotPasswordUseCase
         let resetPasswordUseCase: ResetPasswordUseCase
         let socialLoginUseCase: SocialLoginUseCase
+        let getUserInfoUseCase: getUserInfoUseCase
         
         let createMemoUseCase: CreateMemoUseCase
         let updateMemoUseCase: UpdateMemoUseCase
@@ -71,6 +72,7 @@ extension DIContainer {
         let forgotPasswordUseCase = DefaultForgotPasswordUseCase(authRepository: repositories.authRepository)
         let resetPasswordUseCase = DefaultResetPasswordUseCase(authRepository: repositories.authRepository)
         let socialLoginUseCase: DefaultSocialLoginUseCase = DefaultSocialLoginUseCase(authRepository: repositories.authRepository)
+        let getUserInfoUseCase = DefaultGetUserInfoUseCase(authRepository: repositories.authRepository)
         
         let createMemoUseCase = DefaultCreateMemoUseCase(memoRepository: repositories.memoRepository)
         let updateMemoUseCase = DefaultUpdateMemoUseCase(memoRepository: repositories.memoRepository)
@@ -90,6 +92,7 @@ extension DIContainer {
             forgotPasswordUseCase: forgotPasswordUseCase,
             resetPasswordUseCase: resetPasswordUseCase,
             socialLoginUseCase: socialLoginUseCase,
+            getUserInfoUseCase: getUserInfoUseCase,
             createMemoUseCase: createMemoUseCase,
             updateMemoUseCase: updateMemoUseCase,
             deleteMemoUseCase: deleteMemoUseCase,

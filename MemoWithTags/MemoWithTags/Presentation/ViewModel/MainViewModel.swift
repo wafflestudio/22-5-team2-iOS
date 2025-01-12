@@ -17,21 +17,20 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     
     private func waitIfLoading() async {
         while isLoading {
-            try? await Task.sleep(nanoseconds: 1000_000_000) //1초 대기
+            try? await Task.sleep(nanoseconds: 100_000_000) //1초 대기
         }
     }
     
     func fetchMemos(content: String? = nil, tagIds: [Int]? = nil, dateRange: ClosedRange<Date>? = nil) {
         Task {
             isLoading = true
-            
-            await waitIfLoading() // 대기 후 실행
+
             guard currentMemoPage < totalMemoPages else { return }
-            
+        
             let nextPage = currentMemoPage + 1
-            
-            let result = await useCases.fetchMemoUseCase.execute(content: content, tagIds: tagIds, dateRange: dateRange, page: nextPage)
-            
+
+            let result = await useCases.fetchMemoUseCase.execute(content: content, tagIds: tagIds, dateRange: dateRange, page: 0)
+
             switch result {
             case .success(let paginatedMemos):
                 let updatedMemos = paginatedMemos.memos.map { memo -> Memo in
@@ -44,7 +43,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
                 self.totalMemoPages = paginatedMemos.totalPages
             case .failure(let error):
                 appState.showAlert = true
-                appState.errorMessage = RegisterError.invalidEmail.localizedDescription()
+                appState.errorMessage = error.localizedDescription()
             }
             
             isLoading = false
@@ -64,7 +63,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
                 self.memos.insert(newMemo, at: 0)
             case .failure(let error):
                 appState.showAlert = true
-                appState.errorMessage = RegisterError.invalidEmail.localizedDescription()
+                appState.errorMessage = error.localizedDescription()
             }
             
             isLoading = false
@@ -83,7 +82,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
                 }
             case .failure(let error):
                 appState.showAlert = true
-                appState.errorMessage = RegisterError.invalidEmail.localizedDescription()
+                appState.errorMessage = error.localizedDescription()
             }
             
             isLoading = false
@@ -100,7 +99,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
                 self.memos.removeAll { $0.id == memoId }
             case .failure(let error):
                 appState.showAlert = true
-                appState.errorMessage = RegisterError.invalidEmail.localizedDescription()
+                appState.errorMessage = error.localizedDescription()
             }
             
             isLoading = false
@@ -117,7 +116,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
                 self.tags = fetchedTags
             case .failure(let error):
                 appState.showAlert = true
-                appState.errorMessage = RegisterError.invalidEmail.localizedDescription()
+                appState.errorMessage = error.localizedDescription()
             }
             
             isLoading = false
@@ -134,7 +133,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
                 self.tags.append(tag)
             case .failure(let error):
                 appState.showAlert = true
-                appState.errorMessage = RegisterError.invalidEmail.localizedDescription()
+                appState.errorMessage = error.localizedDescription()
             }
             
             isLoading = false
@@ -153,7 +152,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
                 }
             case .failure(let error):
                 appState.showAlert = true
-                appState.errorMessage = RegisterError.invalidEmail.localizedDescription()
+                appState.errorMessage = error.localizedDescription()
             }
             
             isLoading = false
@@ -175,7 +174,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
                 }
             case .failure(let error):
                 appState.showAlert = true
-                appState.errorMessage = RegisterError.invalidEmail.localizedDescription()
+                appState.errorMessage = error.localizedDescription()
             }
             
             isLoading = false

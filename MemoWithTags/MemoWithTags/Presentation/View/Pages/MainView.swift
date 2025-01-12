@@ -19,7 +19,7 @@ struct MainView: View {
                 Color.backgroundGray
                     .ignoresSafeArea()
                 
-                MemoListView(mainViewModel: viewModel)
+//                MemoListView(mainViewModel: viewModel)
                 
                 EditingView(mainViewModel: viewModel)
                     .environmentObject(keyboardResponder)
@@ -54,9 +54,6 @@ struct MainView: View {
             .onAppear {
                 if viewModel.memos.isEmpty {
                     viewModel.fetchMemos()
-                }
-                if viewModel.tags.isEmpty {
-                    viewModel.fetchTags()
                 }
             }
         }
