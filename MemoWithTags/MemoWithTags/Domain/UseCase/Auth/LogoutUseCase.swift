@@ -9,7 +9,7 @@ protocol LogoutUseCase {
     func execute() async -> Result<Void, LogoutError>
 }
 
-class DefaultLogoutUseCase: LogoutUseCase {
+final class DefaultLogoutUseCase: LogoutUseCase {
     private let authRepository: AuthRepository
 
     init(authRepository: AuthRepository) {

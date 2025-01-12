@@ -9,9 +9,6 @@ import Foundation
 import Alamofire
 
 final class DefaultAuthRepository: AuthRepository {
-    ///singleton
-    static let shared = DefaultAuthRepository()
-    private init() {}
     
     let tokenInterceptor = TokenInterceptor()
     

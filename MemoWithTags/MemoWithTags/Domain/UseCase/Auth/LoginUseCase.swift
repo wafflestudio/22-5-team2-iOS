@@ -9,7 +9,7 @@ protocol LoginUseCase {
     func execute(email: String, password: String) async -> Result<Void, LoginError>
 }
 
-class DefaultLoginUseCase: LoginUseCase {
+final class DefaultLoginUseCase: LoginUseCase {
     private let authRepository: AuthRepository
 
     init(authRepository: AuthRepository) {

@@ -10,5 +10,9 @@ protocol SocialLoginUseCase {
 }
 
 final class DefaultSocialLoginUseCase: SocialLoginUseCase {
+    let authRepository: AuthRepository
     
+    init(authRepository: AuthRepository) {
+        self.authRepository = authRepository
+    }
 }

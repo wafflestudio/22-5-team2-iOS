@@ -19,6 +19,7 @@ enum Route: Hashable {
     case search
 }
 
+@MainActor
 final class NavigationRouter: ObservableObject {
     @Published var path = NavigationPath()
 

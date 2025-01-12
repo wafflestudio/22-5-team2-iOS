@@ -8,16 +8,7 @@
 import SwiftUI
 
 struct MainView: View {
-    @StateObject var mainViewModel = MainViewModel(
-        createMemoUseCase: DefaultCreateMemoUseCase(memoRepository: DefaultMemoRepository.shared),
-        fetchMemoUseCase: DefaultFetchMemoUseCase(memoRepository: DefaultMemoRepository.shared),
-        updateMemoUseCase: DefaultUpdateMemoUseCase(memoRepository: DefaultMemoRepository.shared),
-        deleteMemoUseCase: DefaultDeleteMemoUseCase(memoRepository: DefaultMemoRepository.shared),
-        createTagUseCase: DefaultCreateTagUseCase(tagRepository: DefaultTagRepository.shared),
-        fetchTagUseCase: DefaultFetchTagUseCase(tagRepository: DefaultTagRepository.shared),
-        updateTagUseCase: DefaultUpdateTagUseCase(tagRepository: DefaultTagRepository.shared),
-        deleteTagUseCase: DefaultDeleteTagUseCase(tagRepository: DefaultTagRepository.shared)
-    )
+    @ObservedObject var viewModel: MainViewModel
     
     @StateObject private var keyboardResponder = KeyboardResponder() // Add this line
     
@@ -28,40 +19,56 @@ struct MainView: View {
                 Color.backgroundGray
                     .ignoresSafeArea()
                 
-                MemoListView(mainViewModel: mainViewModel)
-                
-                EditingView(mainViewModel: mainViewModel)
+                MemoListView(mainViewModel: viewModel)
+                EditingView(mainViewModel: viewModel)
                     .environmentObject(keyboardResponder)
 
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Text("Memo with Tags")
-                        .font(.headline)
+                    HStack(spacing: 3) {
+                        Text("Memo with")
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundStyle(Color.titleTextBlack)
+                        Tag(text: "Tags", size: 14, color: Color(hex: "#E3E3E7")) {}
+                    }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: 16) {
-                        // SearchView로 이동하는 NavigationLink
-                        NavigationLink(destination: SearchView()) {
-                            Image(systemName: "magnifyingglass")
-                        }
-                        // SettingsView로 이동하는 NavigationLink
-                        NavigationLink(destination: SettingsView()) {
-                            Image(systemName: "list.bullet")
-                        }
+                        Image(systemName: "magnifyingglass")
+                            .onTapGesture {
+                                viewModel.router.push(to: .search)
+                            }
+                        Image(systemName: "list.bullet")
+                            .onTapGesture {
+                                viewModel.router.push(to: .settings)
+                            }
                     }
                 }
             }
             .onAppear {
-                if mainViewModel.memos.isEmpty {
-                    mainViewModel.fetchMemos()
+                if viewModel.memos.isEmpty {
+                    viewModel.fetchMemos()
                 }
-                if mainViewModel.tags.isEmpty {
-                    mainViewModel.fetchTags()
+                if viewModel.tags.isEmpty {
+                    viewModel.fetchTags()
                 }
             }
         }
         .navigationBarBackButtonHidden(true)
+    }
+    
+    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClink: @escaping () -> Void) -> some View {
+        Text(text)
+            .font(.system(size: size, weight: .regular))
+            .foregroundStyle(Color.tagTextColor)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(color)
+            .cornerRadius(4)
+            .onTapGesture {
+                onClink()
+            }
     }
 }
 

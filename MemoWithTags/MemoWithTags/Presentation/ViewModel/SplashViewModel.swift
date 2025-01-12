@@ -8,9 +8,8 @@
 import Foundation
 
 @MainActor
-final class SplashViewModel: ObservableObject {
-    
-    func checkLogin(router: NavigationRouter) {
+final class SplashViewModel: BaseViewModel, ObservableObject {
+    func checkLogin() {
         Task {
             try? await Task.sleep(nanoseconds: 1_000_000_000) // 일부러 1초 딜레이
             
@@ -21,7 +20,6 @@ final class SplashViewModel: ObservableObject {
                 router.push(to: .login)
                 return
             }
-            
             router.reset()
             router.push(to: .main)
         }

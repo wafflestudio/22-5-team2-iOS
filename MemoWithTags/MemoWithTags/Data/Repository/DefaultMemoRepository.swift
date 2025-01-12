@@ -9,9 +9,6 @@ import Foundation
 import Alamofire
 
 final class DefaultMemoRepository: MemoRepository {
-    /// Singleton
-    static let shared = DefaultMemoRepository()
-    private init() {}
     
     let tokenInterceptor = TokenInterceptor()
     

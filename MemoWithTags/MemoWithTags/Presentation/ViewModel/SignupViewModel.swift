@@ -8,17 +8,9 @@
 import Foundation
 
 @MainActor
-final class SignupViewModel: ObservableObject {
-    @Published var isLoading: Bool = false
-    @Published var isSignedUp: Bool = false
-    
+final class SignupViewModel: BaseViewModel, ObservableObject {
     @Published var satisfiedCount: Int = 0
     @Published var isValidPassword: Bool = false
-    
-    @Published var showAlert: Bool = false
-    @Published var errorMessage: String = ""
-    
-    private let signupUseCase = DefaultSignupUseCase(authRepository: DefaultAuthRepository.shared)
     
     ///정규식으로 비밀번호 형식 검사
     func checkPasswordValidity(password: String) {
@@ -41,37 +33,28 @@ final class SignupViewModel: ObservableObject {
     }
     
     func signup(email: String, password: String, passwordRepeat: String) async {
-        isLoading = true
-        
         let isEmailValid = checkEmailValidity(email: email)
         let isPasswordSame = password == passwordRepeat
         
         if !isEmailValid {
-            isSignedUp = false
-            showAlert = true
-            errorMessage = RegisterError.invalidEmail.localizedDescription()
+            appState.system.isShowingAlert = true
+            appState.system.errorMessage = RegisterError.invalidEmail.localizedDescription()
         } else if !isValidPassword {
-            isSignedUp = false
-            showAlert = true
-            errorMessage = RegisterError.invalidPassword.localizedDescription()
+            appState.system.isShowingAlert = true
+            appState.system.errorMessage = RegisterError.invalidPassword.localizedDescription()
         } else if !isPasswordSame {
-            isSignedUp = false
-            showAlert = true
-            errorMessage = RegisterError.passwordNotMatch.localizedDescription()
+            appState.system.isShowingAlert = true
+            appState.system.errorMessage = RegisterError.passwordNotMatch.localizedDescription()
         } else {
-            let result = await signupUseCase.execute(email: email, password: password)
-            isLoading = false
+            let result = await useCases.signupUseCase.execute(email: email, password: password)
             
             switch result {
             case .success:
-                isSignedUp = true
-                showAlert = false
+                router.push(to: .emailVerification(email: email))
             case .failure(let error):
-                isSignedUp = false
-                showAlert = true
-                errorMessage = error.localizedDescription()
+                appState.system.isShowingAlert = true
+                appState.system.errorMessage = error.localizedDescription()
             }
         }
-        isLoading = false
     }
 }

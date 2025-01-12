@@ -8,13 +8,10 @@
 import SwiftUI
 
 struct LoginView: View {
-    @EnvironmentObject private var router: NavigationRouter
-    @StateObject private var viewModel = LoginViewModel()
+    @ObservedObject var viewModel: LoginViewModel
     
     @State private var email: String = ""
     @State private var password: String = ""
-    
-
     
     var body: some View {
         
@@ -27,7 +24,7 @@ struct LoginView: View {
                     Text("Memo with")
                         .font(.system(size: 22, weight: .semibold))
                         .foregroundStyle(Color.titleTextBlack)
-                    Tag(text: "Tags", size: 19, color: .init(white: 0, opacity: 0.1)) {}
+                    Tag(text: "Tags", size: 19, color: Color(hex: "#E3E3E7")) {}
                 }
                 .padding(.vertical, 8)
                 .background(.clear)
@@ -75,15 +72,11 @@ struct LoginView: View {
                         .textInputAutocapitalization(.never)
                     }
                     
-                    
                     //로그인 버튼
                     Button {
                         //action
                         Task {
                             await viewModel.login(email: email, password: password)
-                            if !viewModel.isLoading && viewModel.isLoggedIn{
-                                router.push(to: .main)
-                            }
                         }
 
                     } label: {
@@ -100,8 +93,8 @@ struct LoginView: View {
                     .disabled(email.isEmpty || password.isEmpty)
                     
                     HStack(spacing: 8) {
-                        Tag(text: "이메일로 회원가입", size: 14, color: .init(hex: "#FFBDBD")) {
-                            router.push(to: .signup)
+                        Tag (text: "이메일로 회원가입", size: 14, color: .init(hex: "#FFBDBD")) {
+                            viewModel.router.push(to: .signup)
                         }
                         
                         Spacer()
@@ -122,13 +115,6 @@ struct LoginView: View {
             .background(.clear)
             .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
 
-        }
-        .alert(isPresented: $viewModel.showAlert) {
-            Alert(
-                title: Text("Error"),
-                message: Text(viewModel.errorMessage),
-                dismissButton: .default(Text("확인"))
-            )
         }
         .navigationBarBackButtonHidden()
     }

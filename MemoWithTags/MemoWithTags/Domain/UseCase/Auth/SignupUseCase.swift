@@ -9,7 +9,7 @@ protocol SignupUseCase {
     func execute(email: String, password: String) async -> Result<Void, RegisterError>
 }
 
-class DefaultSignupUseCase: SignupUseCase {
+final class DefaultSignupUseCase: SignupUseCase {
     private let authRepository: AuthRepository
 
     init(authRepository: AuthRepository) {

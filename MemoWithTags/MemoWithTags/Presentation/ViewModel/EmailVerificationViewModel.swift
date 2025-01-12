@@ -8,15 +8,7 @@
 import SwiftUI
 
 @MainActor
-final class EmailVerificationViewModel: ObservableObject {
-    @Published var isLoading: Bool = false
-    @Published var isVerified: Bool = false
-    
-    @Published var showAlert: Bool = false
-    @Published var errorMessage: String = ""
-    
-    private let emailVerificationUseCase = DefaultEmailVerificationUseCase(authRepository: DefaultAuthRepository.shared)
-    
+final class EmailVerificationViewModel: BaseViewModel, ObservableObject {
     func verify(email: String, code: String) async {
 //        isLoading = true
 //        
@@ -33,17 +25,12 @@ final class EmailVerificationViewModel: ObservableObject {
 //        }
 //        isLoading = false
         
-        isLoading = true
-        
         if code == "250110" {
-            isVerified = true
-            showAlert = false
+            router.push(to: .signupSuccess)
         } else {
-            isVerified = false
-            showAlert = true
-            errorMessage = "인증코드가 올바르지 않습니다."
+            appState.system.isShowingAlert = true
+            appState.system.errorMessage = VerifyEmailError.notMatchCode.localizedDescription()
         }
         
-        isLoading = false
     }
 }

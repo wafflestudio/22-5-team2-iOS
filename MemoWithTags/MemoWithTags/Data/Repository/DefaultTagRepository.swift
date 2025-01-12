@@ -9,9 +9,6 @@ import Foundation
 import Alamofire
 
 final class DefaultTagRepository: TagRepository {
-    ///singleton
-    static let shared = DefaultTagRepository()
-    private init() {}
     
     let tokenInterceptor = TokenInterceptor()
     

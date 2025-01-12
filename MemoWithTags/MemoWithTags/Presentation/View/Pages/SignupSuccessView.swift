@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SignupSuccessView: View {
-    @EnvironmentObject private var router: NavigationRouter
+    @ObservedObject var viewModel: ViewModel
     
     var body: some View {
         ZStack {
@@ -33,7 +33,7 @@ struct SignupSuccessView: View {
                                 Text("Memo with")
                                     .font(.system(size: 17, weight: .semibold))
                                     .foregroundStyle(Color.titleTextBlack)
-                                Tag(text: "Tags", size: 14, color: .init(white: 0, opacity: 0.1)) {}
+                                Tag(text: "Tags", size: 14, color: Color(hex: "#E3E3E7")) {}
                             }
                             Text("를 통해")
                                 .font(.system(size: 15, weight: .regular))
@@ -49,7 +49,7 @@ struct SignupSuccessView: View {
                     //시작버튼
                     Button {
                         //action
-                        router.push(to: .login)
+                        viewModel.start()
                     } label: {
                         Text("시작하기")
                             .frame(maxWidth: .infinity)
@@ -86,5 +86,13 @@ struct SignupSuccessView: View {
             .onTapGesture {
                 onClink()
             }
+    }
+}
+
+extension SignupSuccessView {
+    final class ViewModel: BaseViewModel, ObservableObject {
+        func start() {
+            router.push(to: .login)
+        }
     }
 }

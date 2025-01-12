@@ -9,12 +9,13 @@ import SwiftUI
 
 @main
 struct MemoWithTagsApp: App {
+    
+    @StateObject private var appState = AppState()
     @StateObject private var router = NavigationRouter()
     
     var body: some Scene {
         WindowGroup {
-            AppRootView()
-                .environmentObject(router)
+            AppRootView(container: .init(appState: appState, router: router))
         }
     }
 }

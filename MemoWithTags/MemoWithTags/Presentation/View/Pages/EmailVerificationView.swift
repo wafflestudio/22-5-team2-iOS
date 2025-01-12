@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct EmailVerificationView: View {
-    @EnvironmentObject private var router: NavigationRouter
-    @StateObject private var viewModel = EmailVerificationViewModel()
+    @ObservedObject var viewModel: EmailVerificationViewModel
     
     let email: String
     
@@ -45,10 +44,6 @@ struct EmailVerificationView: View {
                         //action
                         Task {
                             await viewModel.verify(email: email, code: code)
-                            
-                            if !viewModel.isLoading && viewModel.isVerified{
-                                router.push(to: .signupSuccess)
-                            }
                         }
                         
                     } label: {
@@ -66,7 +61,7 @@ struct EmailVerificationView: View {
                     
                     HStack(spacing: 8) {
                         Tag(text: "이전", size: 14, color: .init(hex: "#E3E3E7")) {
-                            router.pop()
+                            viewModel.router.pop()
                         }
                         
                         Spacer()
@@ -96,13 +91,6 @@ struct EmailVerificationView: View {
             .background(.clear)
             .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
 
-        }
-        .alert(isPresented: $viewModel.showAlert) {
-            Alert(
-                title: Text("Error"),
-                message: Text(viewModel.errorMessage),
-                dismissButton: .default(Text("확인"))
-            )
         }
         .navigationBarBackButtonHidden()
         

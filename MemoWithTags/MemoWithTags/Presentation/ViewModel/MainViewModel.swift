@@ -8,60 +8,30 @@
 import Foundation
 
 @MainActor
-final class MainViewModel: ObservableObject {
+final class MainViewModel: BaseViewModel, ObservableObject {
     @Published var memos: [Memo] = []
-    @Published var memoErrorMessage: String?
     @Published var tags: [Tag] = []
-    @Published var tagErrorMessage: String?
     @Published var isLoading: Bool = false
     @Published var currentMemoPage: Int = 0
     @Published var totalMemoPages: Int = 1
     
-    private let createMemoUseCase: CreateMemoUseCase
-    private let fetchMemoUseCase: FetchMemoUseCase
-    private let updateMemoUseCase: UpdateMemoUseCase
-    private let deleteMemoUseCase: DeleteMemoUseCase
-    
-    private let createTagUseCase: CreateTagUseCase
-    private let fetchTagUseCase: FetchTagUseCase
-    private let updateTagUseCase: UpdateTagUseCase
-    private let deleteTagUseCase: DeleteTagUseCase
-    
-    init(
-        createMemoUseCase: CreateMemoUseCase,
-        fetchMemoUseCase: FetchMemoUseCase,
-        updateMemoUseCase: UpdateMemoUseCase,
-        deleteMemoUseCase: DeleteMemoUseCase,
-        createTagUseCase: CreateTagUseCase,
-        fetchTagUseCase: FetchTagUseCase,
-        updateTagUseCase: UpdateTagUseCase,
-        deleteTagUseCase: DeleteTagUseCase
-    ) {
-        self.createMemoUseCase = createMemoUseCase
-        self.fetchMemoUseCase = fetchMemoUseCase
-        self.updateMemoUseCase = updateMemoUseCase
-        self.deleteMemoUseCase = deleteMemoUseCase
-        self.createTagUseCase = createTagUseCase
-        self.fetchTagUseCase = fetchTagUseCase
-        self.updateTagUseCase = updateTagUseCase
-        self.deleteTagUseCase = deleteTagUseCase
-    }
-    
     private func waitIfLoading() async {
         while isLoading {
-            try? await Task.sleep(nanoseconds: 100_000_000) // 0.1초 대기
+            try? await Task.sleep(nanoseconds: 1000_000_000) //1초 대기
         }
     }
     
     func fetchMemos(content: String? = nil, tagIds: [Int]? = nil, dateRange: ClosedRange<Date>? = nil) {
         Task {
+            isLoading = true
+            
             await waitIfLoading() // 대기 후 실행
             guard currentMemoPage < totalMemoPages else { return }
             
-            isLoading = true
             let nextPage = currentMemoPage + 1
             
-            let result = await fetchMemoUseCase.execute(content: content, tagIds: tagIds, dateRange: dateRange, page: nextPage)
+            let result = await useCases.fetchMemoUseCase.execute(content: content, tagIds: tagIds, dateRange: dateRange, page: nextPage)
+            
             switch result {
             case .success(let paginatedMemos):
                 let updatedMemos = paginatedMemos.memos.map { memo -> Memo in
@@ -73,146 +43,153 @@ final class MainViewModel: ObservableObject {
                 self.currentMemoPage = paginatedMemos.currentPage
                 self.totalMemoPages = paginatedMemos.totalPages
             case .failure(let error):
-                self.memoErrorMessage = error.localizedDescription
+                appState.system.isShowingAlert = true
+                appState.system.errorMessage = error.localizedDescription()
             }
-            self.isLoading = false
+            
+            isLoading = false
         }
     }
     
     func createMemo(content: String, tagIds: [Int]) {
         Task {
-            await waitIfLoading() // 대기 후 실행
-            
             isLoading = true
-            let result = await createMemoUseCase.execute(content: content, tagIds: tagIds)
+            
+            let result = await useCases.createMemoUseCase.execute(content: content, tagIds: tagIds)
             
             switch result {
-            case .success(let Memo):
-                var newMemo = Memo
+            case .success(let memo):
+                var newMemo = memo
                 newMemo.tags = getTags(from: newMemo.tagIds)
                 self.memos.insert(newMemo, at: 0)
             case .failure(let error):
-                self.memoErrorMessage = error.localizedDescription
+                appState.system.isShowingAlert = true
+                appState.system.errorMessage = error.localizedDescription()
             }
-            self.isLoading = false
+            
+            isLoading = false
         }
     }
     
     func updateMemo(memoId: Int, newContent: String, newTagIds: [Int]) {
         Task {
-            await waitIfLoading() // 대기 후 실행
-            
             isLoading = true
-            let result = await updateMemoUseCase.execute(memoId: memoId, content: newContent, tagIds: newTagIds)
+            
+            let result = await useCases.updateMemoUseCase.execute(memoId: memoId, content: newContent, tagIds: newTagIds)
             switch result {
-            case .success(let updatedMemo):
+            case .success(let memo):
                 if let index = self.memos.firstIndex(where: { $0.id == memoId }) {
-                    self.memos[index] = updatedMemo
+                    self.memos[index] = memo
                 }
             case .failure(let error):
-                self.memoErrorMessage = error.localizedDescription
+                appState.system.isShowingAlert = true
+                appState.system.errorMessage = error.localizedDescription()
             }
-            self.isLoading = false
+            
+            isLoading = false
         }
     }
     
     func deleteMemo(memoId: Int) {
         Task {
-            await waitIfLoading() // 대기 후 실행
-            
             isLoading = true
-            let result = await deleteMemoUseCase.execute(memoId: memoId)
+            
+            let result = await useCases.deleteMemoUseCase.execute(memoId: memoId)
             switch result {
             case .success:
                 self.memos.removeAll { $0.id == memoId }
             case .failure(let error):
-                self.memoErrorMessage = error.localizedDescription
+                appState.system.isShowingAlert = true
+                appState.system.errorMessage = error.localizedDescription()
             }
-            self.isLoading = false
+            
+            isLoading = false
         }
     }
     
     func fetchTags() {
         Task {
-            await waitIfLoading() // 대기 후 실행
-            
             isLoading = true
-            let result = await fetchTagUseCase.execute()
+            
+            let result = await useCases.fetchTagUseCase.execute()
             switch result {
             case .success(let fetchedTags):
                 self.tags = fetchedTags
             case .failure(let error):
-                self.tagErrorMessage = error.localizedDescription
+                appState.system.isShowingAlert = true
+                appState.system.errorMessage = error.localizedDescription()
             }
-            self.isLoading = false
+            
+            isLoading = false
         }
     }
     
     func createTag(name: String, color: String) {
         Task {
-            await waitIfLoading() // 대기 후 실행
-            
             isLoading = true
-            let result = await createTagUseCase.execute(name: name, color: color)
+            
+            let result = await useCases.createTagUseCase.execute(name: name, color: color)
             switch result {
-            case .success(let newTag):
-                self.tags.append(newTag)
+            case .success(let tag):
+                self.tags.append(tag)
             case .failure(let error):
-                self.tagErrorMessage = error.localizedDescription
+                appState.system.isShowingAlert = true
+                appState.system.errorMessage = error.localizedDescription()
             }
-            self.isLoading = false
+            
+            isLoading = false
         }
     }
     
     func updateTag(tagId: Int, newName: String, newColor: String) {
         Task {
-            await waitIfLoading() // 대기 후 실행
-            
             isLoading = true
-            let result = await updateTagUseCase.execute(tagId: tagId, name: newName, color: newColor)
+            
+            let result = await useCases.updateTagUseCase.execute(tagId: tagId, name: newName, color: newColor)
             switch result {
-            case .success(let updatedTag):
+            case .success(let tag):
                 if let index = self.tags.firstIndex(where: { $0.id == tagId }) {
-                    self.tags[index] = updatedTag
+                    self.tags[index] = tag
                 }
             case .failure(let error):
-                self.tagErrorMessage = error.localizedDescription
+                appState.system.isShowingAlert = true
+                appState.system.errorMessage = error.localizedDescription()
             }
-            self.isLoading = false
+            
+            isLoading = false
         }
     }
     
     func deleteTag(tagId: Int) {
         Task {
-            await waitIfLoading() // 대기 후 실행
-            
             isLoading = true
-            let result = await deleteTagUseCase.execute(tagId: tagId)
+            
+            let result = await useCases.deleteTagUseCase.execute(tagId: tagId)
             switch result {
             case .success:
                 // mainViewModel의 tag 삭제
                 self.tags.removeAll { $0.id == tagId }
                 // mainViewModel의 memo에 있는 tag 삭제
                 for index in memos.indices {
-                    memos[index].tags.removeAll { $0.id == tagId }
+                    self.memos[index].tags.removeAll { $0.id == tagId }
                 }
             case .failure(let error):
-                self.tagErrorMessage = error.localizedDescription
+                appState.system.isShowingAlert = true
+                appState.system.errorMessage = error.localizedDescription()
             }
-            self.isLoading = false
+            
+            isLoading = false
         }
     }
     
     func resetMemoState() {
         self.memos = []
-        self.memoErrorMessage = nil
         self.currentMemoPage = 0
         self.totalMemoPages = 1
     }
     
     func resetTagState() {
         self.tags = []
-        self.tagErrorMessage = nil
     }
     
     /// 주어진 tagIDs를 기반으로 Tag 객체들을 반환합니다.

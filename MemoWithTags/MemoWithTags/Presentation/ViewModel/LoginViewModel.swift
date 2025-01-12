@@ -8,15 +8,7 @@
 import Foundation
 
 @MainActor
-final class LoginViewModel: ObservableObject {
-    @Published var isLoading: Bool = false
-    @Published var isLoggedIn: Bool = false
-    
-    @Published var showAlert: Bool = false
-    @Published var errorMessage: String = ""
-    
-    private let loginUseCase = DefaultLoginUseCase(authRepository: DefaultAuthRepository.shared)
-    
+final class LoginViewModel: BaseViewModel, ObservableObject {
     ///정규식으로 이메일 형식 검사
     func checkEmailValidity(email: String) -> Bool {
         let emailRegex = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}$"
@@ -25,26 +17,20 @@ final class LoginViewModel: ObservableObject {
     }
     
     func login(email: String, password: String) async {
-        isLoading = true
-        
         if !checkEmailValidity(email: email) {
-            showAlert = true
-            errorMessage = LoginError.invalidEmail.localizedDescription()
+            appState.system.isShowingAlert = true
+            appState.system.errorMessage = LoginError.invalidEmail.localizedDescription()
             return
         }
         
-        let result = await loginUseCase.execute(email: email, password: password)
+        let result = await useCases.loginUseCase.execute(email: email, password: password)
 
         switch result {
         case .success:
-            isLoggedIn = true
-            showAlert = false
+            router.push(to: .main)
         case .failure(let error):
-            isLoggedIn = false
-            showAlert = true
-            errorMessage = error.localizedDescription()
+            appState.system.isShowingAlert = true
+            appState.system.errorMessage = error.localizedDescription()
         }
-        
-        isLoading = false
     }
 }

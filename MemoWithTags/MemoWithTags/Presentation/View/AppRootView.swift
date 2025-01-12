@@ -8,27 +8,27 @@
 import SwiftUI
 
 struct AppRootView: View {
-    @EnvironmentObject private var router: NavigationRouter
+    let container: DIContainer
     
     var body: some View {
-        NavigationStack(path: $router.path) {
-            SplashView()
+        NavigationStack(path: container.$router.path) {
+            SplashView(viewModel: .init(container: container))
                 .navigationDestination(for: Route.self) { route in
                     switch route {
                     case .root:
-                        SplashView()
+                        SplashView(viewModel: .init(container: container))
                     case .main:
-                        MainView()
+                        MainView(viewModel: .init(container: container))
                     case .login:
-                        LoginView()
+                        LoginView(viewModel: .init(container: container))
                     case .signup:
-                        SignupView()
+                        SignupView(viewModel: .init(container: container))
                     case .emailVerification(let email):
-                        EmailVerificationView(email: email)
+                        EmailVerificationView(viewModel: .init(container: container), email: email)
                     case .signupSuccess:
-                        SignupSuccessView()
+                        SignupSuccessView(viewModel: .init(container: container))
                     case .settings:
-                        SettingsView()
+                        SettingsView(viewModel: .init(container: container))
                     case .search:
                         SearchView()
                     }

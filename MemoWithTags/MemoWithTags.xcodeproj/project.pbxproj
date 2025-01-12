@@ -38,8 +38,12 @@
 		DA4018842D32E285008500E2 /* MemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA40187A2D32E285008500E2 /* MemoView.swift */; };
 		DA4018852D32E285008500E2 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA40187B2D32E285008500E2 /* TagView.swift */; };
 		DA4018862D32E285008500E2 /* UpdateTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA40187C2D32E285008500E2 /* UpdateTagView.swift */; };
+		DA53E5192D338A0700C7C9F2 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53E5182D3389FD00C7C9F2 /* DIContainer.swift */; };
+		DA53E51C2D33941400C7C9F2 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53E51B2D33941000C7C9F2 /* AppState.swift */; };
 		DA888AF52D2FA03B00525291 /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA888AF42D2FA01500525291 /* NavigationRouter.swift */; };
 		DA888AF72D2FA73300525291 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA888AF62D2FA72F00525291 /* SplashView.swift */; };
+		DA8F56282D34059700B8C23F /* SystemState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8F56272D34059100B8C23F /* SystemState.swift */; };
+		DA8F562A2D34152000B8C23F /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8F56292D34151B00B8C23F /* BaseViewModel.swift */; };
 		DABE95252D2F8CA900604FB7 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE95242D2F8CA300604FB7 /* SettingsViewModel.swift */; };
 		DABFE2542D28416000B314E2 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE21A2D28416000B314E2 /* Auth.swift */; };
 		DABFE2562D28416000B314E2 /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE21C2D28416000B314E2 /* Memo.swift */; };
@@ -112,8 +116,12 @@
 		DA40187A2D32E285008500E2 /* MemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoView.swift; sourceTree = "<group>"; };
 		DA40187B2D32E285008500E2 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		DA40187C2D32E285008500E2 /* UpdateTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateTagView.swift; sourceTree = "<group>"; };
+		DA53E5182D3389FD00C7C9F2 /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
+		DA53E51B2D33941000C7C9F2 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		DA888AF42D2FA01500525291 /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
 		DA888AF62D2FA72F00525291 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		DA8F56272D34059100B8C23F /* SystemState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemState.swift; sourceTree = "<group>"; };
+		DA8F56292D34151B00B8C23F /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		DA98BFF12D1D4B6B00F992AC /* MemoWithTags.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemoWithTags.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DABE95242D2F8CA300604FB7 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		DABFE21A2D28416000B314E2 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
@@ -173,7 +181,6 @@
 			isa = PBXGroup;
 			children = (
 				DA2F3ED62D312FC4006F156E /* KeyboardResponder.swift */,
-				DA888AF42D2FA01500525291 /* NavigationRouter.swift */,
 				DABFE2292D28416000B314E2 /* KeyChainManager.swift */,
 			);
 			path = Application;
@@ -203,8 +210,8 @@
 		DA4018542D32AA19008500E2 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				DABFE2452D28416000B314E2 /* View */,
 				DABFE24C2D28416000B314E2 /* ViewModel */,
+				DABFE2452D28416000B314E2 /* View */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -280,6 +287,25 @@
 				DA40187C2D32E285008500E2 /* UpdateTagView.swift */,
 			);
 			path = SubView;
+			sourceTree = "<group>";
+		};
+		DA53E51A2D3393EE00C7C9F2 /* AppEnvironment */ = {
+			isa = PBXGroup;
+			children = (
+				DA53E51D2D33944300C7C9F2 /* State */,
+				DA53E51B2D33941000C7C9F2 /* AppState.swift */,
+				DA888AF42D2FA01500525291 /* NavigationRouter.swift */,
+				DA53E5182D3389FD00C7C9F2 /* DIContainer.swift */,
+			);
+			path = AppEnvironment;
+			sourceTree = "<group>";
+		};
+		DA53E51D2D33944300C7C9F2 /* State */ = {
+			isa = PBXGroup;
+			children = (
+				DA8F56272D34059100B8C23F /* SystemState.swift */,
+			);
+			path = State;
 			sourceTree = "<group>";
 		};
 		DA98BFE82D1D4B6B00F992AC = {
@@ -381,8 +407,8 @@
 		DABFE2452D28416000B314E2 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				DA3C9E552D290D0E00F28D07 /* AppRootView.swift */,
 				DABFE2512D28416000B314E2 /* MemoWithTagsApp.swift */,
+				DA3C9E552D290D0E00F28D07 /* AppRootView.swift */,
 				DA40187D2D32E285008500E2 /* SubView */,
 				DABFE2432D28416000B314E2 /* Pages */,
 			);
@@ -392,11 +418,12 @@
 		DABFE24C2D28416000B314E2 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				DA8F56292D34151B00B8C23F /* BaseViewModel.swift */,
 				DA3C9E5A2D2931B700F28D07 /* SplashViewModel.swift */,
-				55E610BB2D2A5FA600E452A8 /* MainViewModel.swift */,
 				DABFE2462D28416000B314E2 /* LoginViewModel.swift */,
 				DABFE24A2D28416000B314E2 /* SignupViewModel.swift */,
 				DABFE2892D286BD200B314E2 /* EmailVerificationViewModel.swift */,
+				55E610BB2D2A5FA600E452A8 /* MainViewModel.swift */,
 				DABE95242D2F8CA300604FB7 /* SettingsViewModel.swift */,
 			);
 			path = ViewModel;
@@ -409,6 +436,7 @@
 				DA4018532D32AA11008500E2 /* Domain */,
 				DA4018542D32AA19008500E2 /* Presentation */,
 				DA3C9E572D291BBF00F28D07 /* Application */,
+				DA53E51A2D3393EE00C7C9F2 /* AppEnvironment */,
 				DABFE24F2D28416000B314E2 /* CustomColor.swift */,
 				DABFE24D2D28416000B314E2 /* Assets.xcassets */,
 				DA2DA6642D2AF00D000C0495 /* Info.plist */,
@@ -519,8 +547,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA4018642D32D3E5008500E2 /* TagDto.swift in Sources */,
+				DA53E5192D338A0700C7C9F2 /* DIContainer.swift in Sources */,
 				DABFE2542D28416000B314E2 /* Auth.swift in Sources */,
 				DA40185F2D32D336008500E2 /* UserDto.swift in Sources */,
+				DA8F56282D34059700B8C23F /* SystemState.swift in Sources */,
+				DA8F562A2D34152000B8C23F /* BaseViewModel.swift in Sources */,
 				DA4018712D32DD02008500E2 /* DefaultTagRepository.swift in Sources */,
 				DABFE2562D28416000B314E2 /* Memo.swift in Sources */,
 				DABFE2572D28416000B314E2 /* Tag.swift in Sources */,
@@ -568,6 +599,7 @@
 				DA4018852D32E285008500E2 /* TagView.swift in Sources */,
 				DA4018862D32E285008500E2 /* UpdateTagView.swift in Sources */,
 				DABFE26A2D28416000B314E2 /* DeleteMemoUseCase.swift in Sources */,
+				DA53E51C2D33941400C7C9F2 /* AppState.swift in Sources */,
 				DA40186B2D32DC2E008500E2 /* DefaultAuthRepository.swift in Sources */,
 				DA4018682D32D543008500E2 /* Error.swift in Sources */,
 				DABFE26B2D28416000B314E2 /* DeleteTagUseCase.swift in Sources */,
