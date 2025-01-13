@@ -9,17 +9,17 @@ import SwiftUI
 import Flow
 
 struct EditingMemoView: View {
-    @Binding var content: String
-    @Binding var selectedTags: [Tag]
-    @Binding var dynamicTextEditorHeight: CGFloat
+    @ObservedObject var viewModel: MainViewModel
     
-    var onConfirm: (String, [Int]) -> Void
+    @State var content: String = ""
+    @State var dynamicTextEditorHeight: CGFloat = 40
+    
+    @Binding var selectedTags: [Tag]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            // Editable Text Area and Confirm Button in HStack
-            HStack(alignment: .top, spacing: 8) {
-                // Editable Text Area
+            HStack(alignment: .center, spacing: 8) {
+                // Text 치는 곳
                 DynamicHeightTextEditor(
                     text: $content,
                     dynamicHeight: $dynamicTextEditorHeight,
@@ -28,52 +28,47 @@ struct EditingMemoView: View {
                 .frame(height: dynamicTextEditorHeight)
                 .background(Color.clear)
                 
-                // Confirm Button
+                // 메모 생성 버튼
                 Button(action: {
-                    // Trim whitespace and newlines
-                    let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
-                    
-                    // Validation: Ensure there's content
-                    guard !trimmedContent.isEmpty else {
-                        return
+                    Task {
+                        let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
+                        guard !trimmedContent.isEmpty else {
+                            return
+                        }
+                        let tagIds = selectedTags.map { $0.id }
+                        
+                        // Call the onConfirm closure with content and tag IDs
+                        await viewModel.createMemo(content: trimmedContent, tagIds: tagIds)
+                        
+                        // Reset the input fields
+                        content = ""
+                        selectedTags = []
+                        dynamicTextEditorHeight = 40
+                        hideKeyboard()
                     }
-                    
-                    // Extract tag IDs
-                    let tagIDs = selectedTags.map { $0.id }
-                    
-                    // Call the onConfirm closure with content and tag IDs
-                    onConfirm(trimmedContent, tagIDs)
-                    
-                    // Reset the input fields
-                    content = ""
-                    selectedTags = []
-                    
-                    dynamicTextEditorHeight = 40
-                    
-                    // Dismiss the keyboard
-                    hideKeyboard()
                 }) {
-                    Image(systemName: "arrow.up")
+                    Image(systemName: "highlighter")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 16, height: 16)
-                        .foregroundColor(.white)
-                        .frame(width: 32, height: 32)
-                        .background(Color.blue)
-                        .cornerRadius(16)
+                        .frame(width: 19, height: 21)
+                        .foregroundColor(.black)
                 }
             }
             
-            HFlow{
-                ForEach(selectedTags, id: \.id) { tag in
-                    TagView(tag: tag) {
-                        removeTagFromSelectedTags(tag)
+            // 메모에 추가한 태그 나타나는 곳
+            if !selectedTags.isEmpty {
+                HFlow{
+                    ForEach(selectedTags, id: \.id) { tag in
+                        TagView(tag: tag) {
+                            removeTagFromSelectedTags(tag)
+                        }
                     }
                 }
             }
+
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 13)
+        .padding(.horizontal, 17)
+        .padding(.vertical, 5)
         .background(Color.memoBackgroundWhite)
         .cornerRadius(14)
         .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 4)

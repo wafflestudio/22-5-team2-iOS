@@ -10,19 +10,30 @@ import SwiftUI
 struct MainView: View {
     @ObservedObject var viewModel: MainViewModel
     
-    @StateObject private var keyboardResponder = KeyboardResponder() // Add this line
+    @State private var selectedTags: [Tag] = []
     
     var body: some View {
         NavigationView {
             ZStack {
-                // 배경 색상 추가
                 Color.backgroundGray
                     .ignoresSafeArea()
                 
-//                MemoListView(mainViewModel: viewModel)
+                //메모 리스트
+                MemoListView(viewModel: viewModel)
                 
-                EditingView(mainViewModel: viewModel)
-                    .environmentObject(keyboardResponder)
+                VStack(spacing: 0) {
+                    Spacer()
+                    
+                    //메모 생성 창
+                    EditingMemoView(viewModel: viewModel, selectedTags: $selectedTags)
+                        .padding(.horizontal, 7)
+                        .padding(.bottom, 14)
+                    
+                    //태그 생성 창
+                    if viewModel.appState.keyboard.isKeyboardUp() {
+                        EditingTagListView(viewModel: viewModel, recommendedTags: recommendTags(), selectedTags: $selectedTags)
+                    }
+                }
 
             }
             .toolbar {
@@ -35,31 +46,35 @@ struct MainView: View {
                     }
                 }
                 
-                
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: 14) {
                         Image(systemName: "magnifyingglass")
                             .font(.system(size: 15))
                             .onTapGesture {
-                                viewModel.router.push(to: .search)
+                                viewModel.appState.navigation.push(to: .search)
                             }
                         Image(systemName: "list.bullet")
                             .font(.system(size: 15))
                             .onTapGesture {
-                                viewModel.router.push(to: .settings)
+                                viewModel.appState.navigation.push(to: .settings)
                             }
                     }
                 }
             }
             .onAppear {
-                if viewModel.memos.isEmpty {
-                    viewModel.fetchMemos()
+                Task {
+                    await viewModel.initMemo()
                 }
             }
         }
         .navigationBarBackButtonHidden(true)
     }
     
+    private func recommendTags() -> [Tag] {
+        viewModel.tags.filter { !selectedTags.contains($0) }
+    }
+    
+    // 앱 제목에 있는 태그용
     @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClink: @escaping () -> Void) -> some View {
         Text(text)
             .font(.system(size: size, weight: .regular))

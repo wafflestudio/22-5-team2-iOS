@@ -11,7 +11,6 @@ import Foundation
 protocol BaseViewModelProtocol: Sendable {
     var container: DIContainer { get set }
     var appState: AppState { get }
-    var router: NavigationRouter { get }
     var useCases: DIContainer.UseCases { get }
 }
 
@@ -24,10 +23,6 @@ class BaseViewModel: BaseViewModelProtocol {
 
     var appState: AppState {
         container.appState
-    }
-    
-    var router: NavigationRouter {
-        container.router
     }
     
     var useCases: DIContainer.UseCases {

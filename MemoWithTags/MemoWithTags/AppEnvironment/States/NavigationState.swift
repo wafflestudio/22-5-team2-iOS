@@ -20,7 +20,7 @@ enum Route: Hashable {
 }
 
 @MainActor
-final class NavigationRouter: ObservableObject {
+final class NavigationState: ObservableObject {
     @Published var path = NavigationPath()
 
     func push(to route: Route) {

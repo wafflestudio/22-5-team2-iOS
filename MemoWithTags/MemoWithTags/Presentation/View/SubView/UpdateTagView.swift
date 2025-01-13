@@ -50,8 +50,10 @@ struct UpdateTagView: View {
                     presentationMode.wrappedValue.dismiss()
                 },
                 trailing: Button("Save") {
-                    mainViewModel.updateTag(tagId: tag.id, newName: updatedName, newColor: selectedColor.rawValue)
-                    presentationMode.wrappedValue.dismiss()
+                    Task {
+                        await mainViewModel.updateTag(tagId: tag.id, newName: updatedName, newColor: selectedColor.rawValue)
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 }
                 .disabled(updatedName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             )

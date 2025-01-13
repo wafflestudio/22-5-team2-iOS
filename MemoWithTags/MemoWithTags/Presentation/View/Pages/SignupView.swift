@@ -128,7 +128,7 @@ struct SignupView: View {
                     
                     HStack(spacing: 8) {
                         Tag(text: "로그인", size: 14, color: .init(hex: "#E3E3E7")) {
-                            viewModel.router.pop()
+                            viewModel.appState.navigation.pop()
                         }
                         
                         Spacer()

@@ -14,11 +14,11 @@ final class SettingsViewModel: BaseViewModel, ObservableObject {
         
         switch result {
         case .success:
-            router.reset()
-            router.push(to: .root)
+            appState.navigation.reset()
+            appState.navigation.push(to: .root)
         case .failure(let error):
-            appState.showAlert = true
-            appState.errorMessage = error.localizedDescription()
+            appState.system.showAlert = true
+            appState.system.errorMessage = error.localizedDescription()
         }
     }
 }

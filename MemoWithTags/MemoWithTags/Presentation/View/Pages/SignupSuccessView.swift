@@ -90,10 +90,11 @@ struct SignupSuccessView: View {
 }
 
 extension SignupSuccessView {
+    @MainActor
     final class ViewModel: BaseViewModel, ObservableObject {
         func start() {
-            router.reset()
-            router.push(to: .login)
+            appState.navigation.reset()
+            appState.navigation.push(to: .login)
         }
     }
 }

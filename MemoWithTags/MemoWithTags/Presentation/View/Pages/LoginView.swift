@@ -94,7 +94,7 @@ struct LoginView: View {
                     
                     HStack(spacing: 8) {
                         Tag (text: "이메일로 회원가입", size: 14, color: .init(hex: "#FFBDBD")) {
-                            viewModel.router.push(to: .signup)
+                            viewModel.appState.navigation.push(to: .signup)
                         }
                         
                         Spacer()

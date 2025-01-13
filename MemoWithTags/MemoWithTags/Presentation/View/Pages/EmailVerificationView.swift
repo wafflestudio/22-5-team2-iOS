@@ -61,7 +61,7 @@ struct EmailVerificationView: View {
                     
                     HStack(spacing: 8) {
                         Tag(text: "이전", size: 14, color: .init(hex: "#E3E3E7")) {
-                            viewModel.router.pop()
+                            viewModel.appState.navigation.pop()
                         }
                         
                         Spacer()

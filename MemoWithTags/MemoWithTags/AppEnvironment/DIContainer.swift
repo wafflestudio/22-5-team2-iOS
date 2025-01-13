@@ -9,14 +9,12 @@ import Foundation
 import SwiftUI
 ///의존성 주입을 한번에 처리하는 컨테이너
 struct DIContainer {
-    @ObservedObject var appState: AppState
-    @ObservedObject var router: NavigationRouter
+    var appState: AppState
     let useCases: UseCases
     
-    init(appState: AppState, router: NavigationRouter) {
+    init(appState: AppState) {
         self.appState = appState
-        self.router = router
-        
+
         let repositories = DIContainer.configureRepositories()
         self.useCases = DIContainer.configureUseCases(repositories: repositories)
     }

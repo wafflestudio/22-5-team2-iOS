@@ -27,29 +27,33 @@ final class TokenInterceptor: RequestInterceptor {
     
     ///token refresh 구현
     func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-//        guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 else {
-//            completion(.doNotRetryWithError(error))
-//            return
-//        }
-//        
-//        guard request.retryCount < retryLimit else { return completion(.doNotRetryWithError(error)) }
-//        Task {
-//            do {
-//                let auth = try await DefaultAuthRepository.shared.refreshToken()
-//                let isAccessSaved = KeyChainManager.shared.saveAccessToken(token: auth.accessToken)
-//                let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: auth.refreshToken)
-//                
-//                if isAccessSaved && isRefreshSaved {
-//                    return completion(.retry)
-//                } else {
-//                    ///재로그인 요청 구현
-//                    return completion(.doNotRetry)
-//                }
-//            } catch {
-//                ///재로그인 요청 구현
-//                return completion(.doNotRetry)
-//            }
-//        }
+        guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 else {
+            completion(.doNotRetryWithError(error))
+            return
+        }
+        
+        guard request.retryCount < retryLimit else { return completion(.doNotRetryWithError(error)) }
+        Task {
+            do {
+                guard let refreshToken = KeyChainManager.shared.readRefreshToken() else {
+                    return completion(.doNotRetryWithError(error))
+                }
+                
+                let auth = try await DefaultAuthRepository().refreshToken(refreshToken: refreshToken)
+                let isAccessSaved = KeyChainManager.shared.saveAccessToken(token: auth.accessToken)
+                let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: auth.refreshToken)
+                
+                if isAccessSaved && isRefreshSaved {
+                    return completion(.retry)
+                } else {
+                    ///재로그인 요청 구현
+                    return completion(.doNotRetryWithError(error))
+                }
+            } catch(let _error) {
+                ///재로그인 요청 구현
+                return completion(.doNotRetryWithError(error))
+            }
+        }
     }
 }
 

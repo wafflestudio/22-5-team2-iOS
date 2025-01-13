@@ -25,11 +25,11 @@ final class EmailVerificationViewModel: BaseViewModel, ObservableObject {
 //        }
 //        isLoading = false
         
-        if code == "250110" {
-            router.push(to: .signupSuccess)
+        if code == "000000" {
+            appState.navigation.push(to: .signupSuccess)
         } else {
-            appState.showAlert = true
-            appState.errorMessage = VerifyEmailError.notMatchCode.localizedDescription()
+            appState.system.showAlert = true
+            appState.system.errorMessage = VerifyEmailError.notMatchCode.localizedDescription()
         }
         
     }

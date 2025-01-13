@@ -34,26 +34,27 @@ final class SignupViewModel: BaseViewModel, ObservableObject {
     
     func signup(email: String, password: String, passwordRepeat: String) async {
         let isEmailValid = checkEmailValidity(email: email)
+        checkPasswordValidity(password: password)
         let isPasswordSame = password == passwordRepeat
         
         if !isEmailValid {
-            appState.showAlert = true
-            appState.errorMessage = RegisterError.invalidEmail.localizedDescription()
+            appState.system.showAlert = true
+            appState.system.errorMessage = RegisterError.invalidEmail.localizedDescription()
         } else if !isValidPassword {
-            appState.showAlert = true
-            appState.errorMessage = RegisterError.invalidPassword.localizedDescription()
+            appState.system.showAlert = true
+            appState.system.errorMessage = RegisterError.invalidPassword.localizedDescription()
         } else if !isPasswordSame {
-            appState.showAlert = true
-            appState.errorMessage = RegisterError.passwordNotMatch.localizedDescription()
+            appState.system.showAlert = true
+            appState.system.errorMessage = RegisterError.passwordNotMatch.localizedDescription()
         } else {
             let result = await useCases.signupUseCase.execute(email: email, password: password)
             
             switch result {
             case .success:
-                router.push(to: .emailVerification(email: email))
+                appState.navigation.push(to: .emailVerification(email: email))
             case .failure(let error):
-                appState.showAlert = true
-                appState.errorMessage = error.localizedDescription()
+                appState.system.showAlert = true
+                appState.system.errorMessage = error.localizedDescription()
             }
         }
     }

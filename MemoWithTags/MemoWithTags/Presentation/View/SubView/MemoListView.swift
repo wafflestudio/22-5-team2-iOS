@@ -4,7 +4,7 @@
 import SwiftUI
 
 struct MemoListView: View {
-    @ObservedObject var mainViewModel: MainViewModel
+    @ObservedObject var viewModel: MainViewModel
     
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -13,7 +13,7 @@ struct MemoListView: View {
     }()
     
     private var reversedMemos: [Memo] {
-        return Array(mainViewModel.memos.reversed())
+        return Array(viewModel.memos.reversed())
     }
     
     var body: some View {
@@ -22,7 +22,7 @@ struct MemoListView: View {
                 LazyVStack(alignment: .leading, spacing: 12) {
                     ForEachIndexed(reversedMemos) { index, memo in
                         // 날짜 헤더 표시
-                        if shouldShowDateHeader(at: index) {
+                        if showDateHeader(at: index) {
                             Text(dateFormatter.string(from: memo.createdAt))
                                 .font(Font.custom("Pretendard Variable", size: 12).weight(.medium))
                                 .foregroundColor(Color(red: 0.63, green: 0.63, blue: 0.63))
@@ -34,21 +34,23 @@ struct MemoListView: View {
                             .id(memo.id)
                             .contextMenu {
                                 Button(role: .destructive) {
-                                    mainViewModel.deleteMemo(memoId: memo.id)
+                                    Task {
+                                        await viewModel.deleteMemo(memoId: memo.id)
+                                    }
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
                             }
                             .onAppear {
-                                if index == reversedMemos.count - 1 {
-                                    Task {
-                                        mainViewModel.fetchMemos()
-                                    }
-                                }
+//                                if index == reversedMemos.count - 1 {
+//                                    Task {
+//                                        viewModel.fetchMemos()
+//                                    }
+//                                }
                             }
                     }
                     
-                    if mainViewModel.isLoading {
+                    if viewModel.isLoading {
                         ProgressView()
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
@@ -68,7 +70,7 @@ struct MemoListView: View {
                         }
                     }
                 }
-                .onChange(of: mainViewModel.memos) { _, _ in
+                .onChange(of: viewModel.memos) { _, _ in
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         withAnimation {
                             proxy.scrollTo("bottomSpace", anchor: .bottom)
@@ -80,7 +82,7 @@ struct MemoListView: View {
     }
     
     // 날짜 헤더 표시 여부를 판단하는 함수 분리
-    private func shouldShowDateHeader(at index: Int) -> Bool {
+    private func showDateHeader(at index: Int) -> Bool {
         if index == 0 { return true }
         else { return isDifferentDay(current: reversedMemos[index], previous: reversedMemos[index - 1]) }
     }

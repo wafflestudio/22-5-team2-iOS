@@ -8,19 +8,20 @@
 import SwiftUI
 
 struct EditingTagListView: View {
-    var availableTags: [Tag] // Tags not selected in EditingMemoView
-    var onTagSelected: (Tag) -> Void // Callback when a tag is selected
+    @ObservedObject var viewModel: MainViewModel
     
-    @ObservedObject var mainViewModel: MainViewModel
     @State private var searchText: String = ""
     @State private var randomColor: String = ""
     
     // 상태 변수를 sheet(item:)에 맞게 수정
     @State private var tagToUpdate: Tag? = nil
     
+    var recommendedTags: [Tag]
+    @Binding var selectedTags: [Tag]
+    
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
-            // Search Field
+            // 태그 검색하는 필드
             TextField("태그 검색", text: $searchText)
                 .font(.custom("Pretendard", size: 16))
                 .foregroundColor(Color.searchBarPlaceholderGray)
@@ -35,12 +36,12 @@ struct EditingTagListView: View {
                 .foregroundColor(Color.dividerGray)
                 .frame(width: 0.3, height: 32)
             
-            // Scrollable Tag List
+            // 태그 추천해주는 스크롤 라인
             ScrollView(.horizontal) {
                 HStack(alignment: .center, spacing: 8) {
-                    ForEach(filteredTags(), id: \.id) { tag in
+                    ForEach(filterTags(), id: \.id) { tag in
                         TagView(tag: tag) {
-                            onTagSelected(tag)
+                            selectedTags.append(tag)
                         }
                         .contextMenu {
                             Button {
@@ -51,7 +52,10 @@ struct EditingTagListView: View {
                             }
                             
                             Button(role: .destructive) {
-                                mainViewModel.deleteTag(tagId: tag.id)
+                                Task {
+                                    await viewModel.deleteTag(tagId: tag.id)
+                                }
+
                             } label: {
                                 Label("Delete", systemImage: "trash")
                             }
@@ -65,8 +69,10 @@ struct EditingTagListView: View {
                             randomColor: $randomColor
                         )
                         .onTapGesture {
-                            mainViewModel.createTag(name: searchText, color: randomColor)
-                            generateRandomHexColor()
+                            Task {
+                                await viewModel.createTag(name: searchText, color: randomColor)
+                                generateRandomHexColor()
+                            }
                         }
                     }
                 }
@@ -88,23 +94,23 @@ struct EditingTagListView: View {
         }
         // sheet(item:)을 사용하여 tagToUpdate가 설정되면 시트를 표시
         .sheet(item: $tagToUpdate) { tag in
-            UpdateTagView(mainViewModel: mainViewModel, tag: tag)
+            UpdateTagView(mainViewModel: viewModel, tag: tag)
         }
     }
     
     // Function to filter tags based on search text
-    private func filteredTags() -> [Tag] {
+    private func filterTags() -> [Tag] {
         if searchText.isEmpty {
-            return availableTags
+            return recommendedTags
         } else {
-            return availableTags.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+            return recommendedTags.filter { $0.name.lowercased().contains(searchText.lowercased()) }
         }
     }
     
     // Determine if a new tag can be created
     private func canCreateTag() -> Bool {
         let trimmedText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        return !trimmedText.isEmpty && !availableTags.contains { $0.name.lowercased() == trimmedText.lowercased() }
+        return !trimmedText.isEmpty && !recommendedTags.contains { $0.name.lowercased() == trimmedText.lowercased() }
     }
     
     // Generate a random HEX color string from TagColor enum
@@ -118,4 +124,5 @@ struct EditingTagListView: View {
     private func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
+    
 }

@@ -20,6 +20,4 @@ struct Memo: Codable, Identifiable, Equatable  {
 struct PaginatedMemos {
     let memos: [Memo]
     let currentPage: Int
-    let totalPages: Int
-    let totalResults: Int
 }

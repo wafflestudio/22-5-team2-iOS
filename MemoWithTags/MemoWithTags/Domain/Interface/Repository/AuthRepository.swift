@@ -19,7 +19,7 @@ protocol AuthRepository: BaseRepository {
     ///이메일 인증하는 함수
     func verifyEmail(email: String, code: String) async throws -> AuthDto
     ///token refresh 함수
-    func refreshToken() async throws -> AuthDto
+    func refreshToken(refreshToken: String) async throws -> AuthDto
     ///유저 정보 가져오는 함수
     func getUserInfo() async throws -> UserDto
 }

@@ -18,8 +18,8 @@ final class LoginViewModel: BaseViewModel, ObservableObject {
     
     func login(email: String, password: String) async {
         if !checkEmailValidity(email: email) {
-            appState.showAlert = true
-            appState.errorMessage = LoginError.invalidEmail.localizedDescription()
+            appState.system.showAlert = true
+            appState.system.errorMessage = LoginError.invalidEmail.localizedDescription()
             return
         }
         
@@ -27,10 +27,10 @@ final class LoginViewModel: BaseViewModel, ObservableObject {
 
         switch result {
         case .success:
-            router.push(to: .main)
+            appState.navigation.push(to: .main)
         case .failure(let error):
-            appState.showAlert = true
-            appState.errorMessage = error.localizedDescription()
+            appState.system.showAlert = true
+            appState.system.errorMessage = error.localizedDescription()
         }
     }
 }

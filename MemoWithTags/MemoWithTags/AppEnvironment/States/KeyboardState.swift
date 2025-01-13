@@ -1,14 +1,15 @@
 //
-//  KeyboardResponder.swift
+//  KeyboardState.swift
 //  MemoWithTags
 //
-//  Created by Swimming Ryu on 1/9/25.
+//  Created by 최진모 on 1/13/25.
 //
 
 import SwiftUI
 import Combine
 
-final class KeyboardResponder: ObservableObject {
+@MainActor
+final class KeyboardState: ObservableObject {
     @Published var currentHeight: CGFloat = 0
     
     private var cancellableSet: Set<AnyCancellable> = []
@@ -47,5 +48,8 @@ final class KeyboardResponder: ObservableObject {
             .assign(to: \.currentHeight, on: self)
             .store(in: &cancellableSet)
     }
+    
+    func isKeyboardUp() -> Bool {
+        return currentHeight > 0
+    }
 }
-
