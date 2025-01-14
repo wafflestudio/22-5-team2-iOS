@@ -31,11 +31,12 @@ extension SplashView {
                 
                 guard let _ = KeyChainManager.shared.readAccessToken(),
                       let _ = KeyChainManager.shared.readRefreshToken() else {
-                    
+                    appState.user.isLoggedIn = false
                     appState.navigation.reset()
                     appState.navigation.push(to: .login)
                     return
                 }
+                appState.user.isLoggedIn = true
                 appState.navigation.reset()
                 appState.navigation.push(to: .main)
             }

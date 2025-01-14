@@ -27,6 +27,7 @@ final class LoginViewModel: BaseViewModel, ObservableObject {
 
         switch result {
         case .success:
+            appState.user.isLoggedIn = true
             appState.navigation.push(to: .main)
         case .failure(let error):
             appState.system.showAlert = true
