@@ -12,7 +12,6 @@ struct EditingMemoView: View {
     @ObservedObject var viewModel: MainViewModel
     
     @State var content: String = ""
-    @State var dynamicTextEditorHeight: CGFloat = 40
     
     @Binding var selectedTags: [Tag]
     
@@ -20,13 +19,18 @@ struct EditingMemoView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .center, spacing: 8) {
                 // Text 치는 곳
-                DynamicHeightTextEditor(
-                    text: $content,
-                    dynamicHeight: $dynamicTextEditorHeight,
-                    placeholder: "새로운 메모"
-                )
-                .frame(height: dynamicTextEditorHeight)
-                .background(Color.clear)
+                DynamicHeightTextEditor(text: $content)
+                
+                // 전체 화면 수정 버튼
+                Button(action: {
+                    // 지금 이 EditingMemoView가 전체 화면으로 커지면서 TextEditor가 전체 화면이 되어 수정이 가능해짐
+                }) {
+                    Image(systemName: "arrow.down.left.and.arrow.up.right")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 19, height: 21)
+                        .foregroundColor(.black)
+                }
                 
                 // 메모 생성 버튼
                 Button(action: {
@@ -43,7 +47,6 @@ struct EditingMemoView: View {
                         // Reset the input fields
                         content = ""
                         selectedTags = []
-                        dynamicTextEditorHeight = 40
                         hideKeyboard()
                     }
                 }) {

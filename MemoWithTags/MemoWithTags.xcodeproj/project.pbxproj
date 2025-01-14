@@ -307,7 +307,6 @@
 				DA7230A62D34CD540065C65A /* SystemState.swift */,
 				DA888AF42D2FA01500525291 /* NavigationState.swift */,
 				DA3DA5292D3650F3002C4839 /* UserState.swift */,
-				DA7230A82D34CD600065C65A /* KeyboardState.swift */,
 			);
 			path = States;
 			sourceTree = "<group>";

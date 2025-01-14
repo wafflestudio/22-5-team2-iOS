@@ -33,20 +33,21 @@ struct MemoListView: View {
                         MemoView(memo: memo)
                             .id(memo.id)
                             .contextMenu {
+                                Button {
+                                    // memolist에서 선택된 memo를 hide하고
+                                    // EditingMemoView에 선택된 memo를 표시해야 함
+                                } label: {
+                                    Label("메모 수정", systemImage: "pencil")
+                                }
+                                
                                 Button(role: .destructive) {
                                     Task {
                                         await viewModel.deleteMemo(memoId: memo.id)
                                     }
+
                                 } label: {
-                                    Label("Delete", systemImage: "trash")
+                                    Label("메모 삭제", systemImage: "trash")
                                 }
-                            }
-                            .onAppear {
-//                                if index == reversedMemos.count - 1 {
-//                                    Task {
-//                                        viewModel.fetchMemos()
-//                                    }
-//                                }
                             }
                     }
                     
