@@ -30,6 +30,7 @@ final class TokenInterceptor: RequestInterceptor {
             return
         }
         
+        guard request.retryCount < 2 else { return completion(.doNotRetryWithError(error)) }
         Task {
             do {
                 guard let refreshToken = KeyChainManager.shared.readRefreshToken() else {

@@ -6,21 +6,11 @@ import SwiftUI
 struct MemoListView: View {
     @ObservedObject var viewModel: MainViewModel
     
-    private let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 MM월 dd일"
-        return formatter
-    }()
-    
-    private var reversedMemos: [Memo] {
-        return Array(viewModel.memos.reversed())
-    }
-    
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 12) {
-                    ForEachIndexed(reversedMemos) { index, memo in
+                    ForEachIndexed(viewModel.memos) { index, memo in
                         // 날짜 헤더 표시
                         if showDateHeader(at: index) {
                             Text(dateFormatter.string(from: memo.createdAt))
@@ -42,11 +32,12 @@ struct MemoListView: View {
                                 }
                             }
                             .onAppear {
-//                                if index == reversedMemos.count - 1 {
-//                                    Task {
-//                                        viewModel.fetchMemos()
-//                                    }
-//                                }
+                                if index == viewModel.memos.count - 1 {
+                                    Task {
+                                        viewModel.mainCurrentPage += 1
+                                        await viewModel.fetchMemos()
+                                    }
+                                }
                             }
                     }
                     
@@ -62,29 +53,21 @@ struct MemoListView: View {
                 }
                 .padding(.horizontal, 12)
                 .frame(maxWidth: .infinity, alignment: .topLeading)
-                .onAppear {
-                    // Delay the scroll to ensure the view has rendered
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        withAnimation {
-                            proxy.scrollTo("bottomSpace", anchor: .bottom)
-                        }
-                    }
-                }
-                .onChange(of: viewModel.memos) { _, _ in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        withAnimation {
-                            proxy.scrollTo("bottomSpace", anchor: .bottom)
-                        }
-                    }
-                }
             }
         }
     }
     
+    
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 MM월 dd일"
+        return formatter
+    }()
+    
     // 날짜 헤더 표시 여부를 판단하는 함수 분리
     private func showDateHeader(at index: Int) -> Bool {
         if index == 0 { return true }
-        else { return isDifferentDay(current: reversedMemos[index], previous: reversedMemos[index - 1]) }
+        else { return isDifferentDay(current: viewModel.memos[index], previous: viewModel.memos[index - 1]) }
     }
     
     // 현재 메모와 이전 메모가 다른 날에 생성되었는지 확인

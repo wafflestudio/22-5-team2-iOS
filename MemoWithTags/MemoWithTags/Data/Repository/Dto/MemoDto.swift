@@ -30,8 +30,10 @@ struct MemoDto: Decodable {
 struct MemoResponseDto: Decodable {
     let page: Int
     let results: [MemoDto]
+    let totalPages: Int
+    let totalResults: Int
     
     func toPaginatedMemos() -> PaginatedMemos {
-        return .init(memos: results.map{$0.toMemo()}, currentPage: page)
+        return .init(memos: results.map{$0.toMemo()}, currentPage: page, totalPages: totalPages)
     }
 }
