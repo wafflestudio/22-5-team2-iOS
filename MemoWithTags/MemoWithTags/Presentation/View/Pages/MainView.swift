@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     @ObservedObject var viewModel: MainViewModel
+    @StateObject private var keyboard = KeyboardState()
     
     @State private var selectedTags: [Tag] = []
     
@@ -30,9 +31,11 @@ struct MainView: View {
                         .padding(.bottom, 14)
                     
                     //태그 생성 창
-                    if viewModel.appState.keyboard.isKeyboardUp() {
+                    if keyboard.currentHeight > 0 {
                         EditingTagListView(viewModel: viewModel, recommendedTags: recommendTags(), selectedTags: $selectedTags)
                     }
+                    
+
                 }
 
             }
