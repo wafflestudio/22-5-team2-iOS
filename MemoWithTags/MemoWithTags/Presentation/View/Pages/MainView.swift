@@ -9,7 +9,9 @@ import SwiftUI
 
 struct MainView: View {
     @ObservedObject var viewModel: MainViewModel
-    @StateObject private var keyboard = KeyboardState()
+    
+    // KeyboardManager는 여기에서만 쓰인다.
+    @StateObject private var keyboard = KeyboardManager()
     
     @State private var selectedTags: [Tag] = []
     
@@ -34,9 +36,9 @@ struct MainView: View {
                     if keyboard.currentHeight > 0 {
                         EditingTagListView(viewModel: viewModel, recommendedTags: recommendTags(), selectedTags: $selectedTags)
                     }
-           
+                    
                 }
-
+                
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -44,7 +46,8 @@ struct MainView: View {
                         Text("Memo with")
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundStyle(Color.titleTextBlack)
-                        Tag(text: "Tags", size: 14, color: Color(hex: "#E3E3E7")) {}
+                        
+                        DesignTagView(text: "Tags", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#E3E3E7", cornerRadius: 4) {}
                     }
                 }
                 
@@ -75,20 +78,4 @@ struct MainView: View {
     private func recommendTags() -> [Tag] {
         viewModel.tags.filter { !selectedTags.contains($0) }
     }
-    
-    // 앱 제목에 있는 태그용
-    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClink: @escaping () -> Void) -> some View {
-        Text(text)
-            .font(.system(size: size, weight: .regular))
-            .foregroundStyle(Color.tagTextColor)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .background(color)
-            .cornerRadius(4)
-            .onTapGesture {
-                onClink()
-            }
-    }
 }
-
-

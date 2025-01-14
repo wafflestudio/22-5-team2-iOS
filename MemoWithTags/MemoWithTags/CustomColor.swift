@@ -28,7 +28,6 @@ extension Color {
     
     static let highlightRed: Color = .init(hex: "#FFBDBD")
     
-    
     // HEX 값을 받아서 swiftUI Color로 바꾸는 로직
     init(hex: String) {
         // HEX 문자열에서 # 제거

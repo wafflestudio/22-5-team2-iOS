@@ -13,5 +13,4 @@ import Combine
 struct AppState {
     @ObservedObject var system: SystemState
     @ObservedObject var navigation: NavigationState
-    @ObservedObject var keyboard: KeyboardState
 }

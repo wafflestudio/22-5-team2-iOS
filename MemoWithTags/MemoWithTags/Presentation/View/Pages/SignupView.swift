@@ -127,9 +127,7 @@ struct SignupView: View {
                     .disabled(email.isEmpty || password.isEmpty || passwordRepeat.isEmpty)
                     
                     HStack(spacing: 8) {
-                        Tag(text: "로그인", size: 14, color: .init(hex: "#E3E3E7")) {
-                            viewModel.appState.navigation.pop()
-                        }
+                        DesignTagView(text: "로그인", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#F1F1F3", cornerRadius: 4) {}
                         
                         Spacer()
                         
@@ -160,20 +158,5 @@ struct SignupView: View {
         }
         .navigationBarBackButtonHidden()
     }
-    
-    
-    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClick: @escaping () -> Void) -> some View {
-        Text(text)
-            .font(.system(size: size, weight: .regular))
-            .foregroundStyle(Color.tagTextColor)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .background(color)
-            .cornerRadius(4)
-            .onTapGesture {
-                onClick()
-            }
-    }
-    
 }
 

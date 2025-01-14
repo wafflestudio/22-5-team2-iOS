@@ -24,7 +24,8 @@ struct LoginView: View {
                     Text("Memo with")
                         .font(.system(size: 22, weight: .semibold))
                         .foregroundStyle(Color.titleTextBlack)
-                    Tag(text: "Tags", size: 19, color: Color(hex: "#E3E3E7")) {}
+                    
+                    DesignTagView(text: "Tags", fontSize: 19, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#E3E3E7", cornerRadius: 4) {}
                 }
                 .padding(.vertical, 8)
                 .background(.clear)
@@ -93,15 +94,15 @@ struct LoginView: View {
                     .disabled(email.isEmpty || password.isEmpty)
                     
                     HStack(spacing: 8) {
-                        Tag (text: "이메일로 회원가입", size: 14, color: .init(hex: "#FFBDBD")) {
+                        DesignTagView(text: "이메일로 회원가입", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#FFBDBD", cornerRadius: 4) {
                             viewModel.appState.navigation.push(to: .signup)
                         }
                         
                         Spacer()
                         
-                        Tag(text: "이메일 찾기", size: 14, color: .init(hex: "#F1F1F3")) {}
+                        DesignTagView(text: "이메일 찾기", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#F1F1F3", cornerRadius: 4) {}
                         
-                        Tag(text: "비밀번호 찾기", size: 14, color: .init(hex: "#F1F1F3")) {}
+                        DesignTagView(text: "비밀번호 찾기", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#F1F1F3", cornerRadius: 4) {}
                     }
                     .padding(.top, 36)
                 }
@@ -118,18 +119,4 @@ struct LoginView: View {
         }
         .navigationBarBackButtonHidden()
     }
-    
-    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClick: @escaping () -> Void) -> some View {
-        Text(text)
-            .font(.system(size: size, weight: .regular))
-            .foregroundStyle(Color.tagTextColor)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .background(color)
-            .cornerRadius(4)
-            .onTapGesture {
-                onClick()
-            }
-    }
-    
 }
