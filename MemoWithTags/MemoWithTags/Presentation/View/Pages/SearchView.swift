@@ -10,7 +10,32 @@ import SwiftUI
 struct SearchView: View {
     @ObservedObject var viewModel: MainViewModel
     
+    @StateObject private var keyboard = KeyboardManager()
+    
+    @State private var selectedTags: [Tag] = []
+    @State private var searchText: String = ""
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            ZStack {
+                Color.backgroundGray
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
+                    Spacer()
+                }
+                
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    HStack {
+                        TextField("Search", text: $searchText)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .frame(width: 200) // 너비 조정
+                    }
+                }
+            }
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
