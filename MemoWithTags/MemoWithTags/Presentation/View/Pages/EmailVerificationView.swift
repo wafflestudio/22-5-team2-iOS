@@ -60,7 +60,7 @@ struct EmailVerificationView: View {
                     .disabled(code.count < 6)
                     
                     HStack(spacing: 8) {
-                        Tag(text: "이전", size: 14, color: .init(hex: "#E3E3E7")) {
+                        DesignTagView(text: "이전", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#E3E3E7", cornerRadius: 4) {
                             viewModel.appState.navigation.pop()
                         }
                         
@@ -94,19 +94,6 @@ struct EmailVerificationView: View {
         }
         .navigationBarBackButtonHidden()
         
-    }
-    
-    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClink: @escaping () -> Void) -> some View {
-        Text(text)
-            .font(.system(size: size, weight: .regular))
-            .foregroundStyle(Color.tagTextColor)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .background(color)
-            .cornerRadius(4)
-            .onTapGesture {
-                onClink()
-            }
     }
 }
 

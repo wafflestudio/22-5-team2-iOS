@@ -33,7 +33,8 @@ struct SignupSuccessView: View {
                                 Text("Memo with")
                                     .font(.system(size: 17, weight: .semibold))
                                     .foregroundStyle(Color.titleTextBlack)
-                                Tag(text: "Tags", size: 14, color: Color(hex: "#E3E3E7")) {}
+                                
+                                DesignTagView(text: "Tags", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#E3E3E7", cornerRadius: 4) {}
                             }
                             Text("를 통해")
                                 .font(.system(size: 15, weight: .regular))
@@ -73,19 +74,6 @@ struct SignupSuccessView: View {
 
         }
         .navigationBarBackButtonHidden()
-    }
-    
-    @ViewBuilder private func Tag(text: String, size: CGFloat, color: Color, onClink: @escaping () -> Void) -> some View {
-        Text(text)
-            .font(.system(size: size, weight: .regular))
-            .foregroundStyle(Color.tagTextColor)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 3)
-            .background(color)
-            .cornerRadius(4)
-            .onTapGesture {
-                onClink()
-            }
     }
 }
 

@@ -9,7 +9,7 @@
 import Foundation
 import Security
 
-class KeyChainManager {
+final class KeyChainManager {
     ///singleton
     static let shared = KeyChainManager()
     private init() {}
