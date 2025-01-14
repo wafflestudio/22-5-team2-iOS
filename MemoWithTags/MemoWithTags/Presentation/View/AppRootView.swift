@@ -15,7 +15,6 @@ struct AppRootView: View {
     @StateObject private var loginViewModel: LoginViewModel
     @StateObject private var signupViewModel: SignupViewModel
     @StateObject private var emailVerificationViewModel: EmailVerificationViewModel
-    @StateObject private var settingsViewModel: SettingsViewModel
     
     init(container: DIContainer) {
         self.container = container
@@ -24,7 +23,6 @@ struct AppRootView: View {
         _loginViewModel = StateObject(wrappedValue: LoginViewModel(container: container))
         _signupViewModel = StateObject(wrappedValue: SignupViewModel(container: container))
         _emailVerificationViewModel = StateObject(wrappedValue: EmailVerificationViewModel(container: container))
-        _settingsViewModel = StateObject(wrappedValue: SettingsViewModel(container: container))
     }
     
     var body: some View {
@@ -45,9 +43,9 @@ struct AppRootView: View {
                     case .signupSuccess:
                         SignupSuccessView(viewModel: .init(container: container))
                     case .settings:
-                        SettingsView(viewModel: settingsViewModel)
+                        SettingsView(viewModel: mainViewModel)
                     case .search:
-                        SearchView()
+                        SearchView(viewModel: mainViewModel)
                     }
                 }
         }

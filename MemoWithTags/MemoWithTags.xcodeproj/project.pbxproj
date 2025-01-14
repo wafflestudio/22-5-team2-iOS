@@ -18,6 +18,7 @@
 		DA2F3EDA2D313050006F156E /* Flow in Frameworks */ = {isa = PBXBuildFile; productRef = DA2F3ED92D313050006F156E /* Flow */; };
 		DA3C9E542D29072F00F28D07 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3C9E532D29072C00F28D07 /* MainView.swift */; };
 		DA3C9E562D290D1500F28D07 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3C9E552D290D0E00F28D07 /* AppRootView.swift */; };
+		DA3DA52A2D3650F9002C4839 /* UserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3DA5292D3650F3002C4839 /* UserState.swift */; };
 		DA40185A2D32C7FC008500E2 /* BaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4018592D32C7D3008500E2 /* BaseError.swift */; };
 		DA40185D2D32D161008500E2 /* AuthDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA40185C2D32D15B008500E2 /* AuthDto.swift */; };
 		DA40185F2D32D336008500E2 /* UserDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA40185E2D32D32F008500E2 /* UserDto.swift */; };
@@ -95,6 +96,7 @@
 		DA2DA6642D2AF00D000C0495 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA3C9E532D29072C00F28D07 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		DA3C9E552D290D0E00F28D07 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
+		DA3DA5292D3650F3002C4839 /* UserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserState.swift; sourceTree = "<group>"; };
 		DA4018592D32C7D3008500E2 /* BaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseError.swift; sourceTree = "<group>"; };
 		DA40185C2D32D15B008500E2 /* AuthDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthDto.swift; sourceTree = "<group>"; };
 		DA40185E2D32D32F008500E2 /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 			children = (
 				DA7230A62D34CD540065C65A /* SystemState.swift */,
 				DA888AF42D2FA01500525291 /* NavigationState.swift */,
+				DA3DA5292D3650F3002C4839 /* UserState.swift */,
 				DA7230A82D34CD600065C65A /* KeyboardState.swift */,
 			);
 			path = States;
@@ -561,6 +564,7 @@
 				DABFE25D2D28416000B314E2 /* BaseRepository.swift in Sources */,
 				DA40185D2D32D161008500E2 /* AuthDto.swift in Sources */,
 				55E610BE2D2A65B200E452A8 /* SearchView.swift in Sources */,
+				DA3DA52A2D3650F9002C4839 /* UserState.swift in Sources */,
 				DA888AF72D2FA73300525291 /* SplashView.swift in Sources */,
 				DABFE2842D284E7200B314E2 /* TagRouter.swift in Sources */,
 				55E610C02D2A65C400E452A8 /* SettingsView.swift in Sources */,

@@ -160,11 +160,12 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     }
     
     func initMemo() async {
-        resetTagState()
-        resetMemoState()
-        
-        await fetchTags()
-        await fetchMemos()
+        if tags.isEmpty {
+            await fetchTags()
+        }
+        if memos.isEmpty {
+            await fetchMemos()
+        }
     }
     
     func resetMemoState() {
@@ -173,6 +174,22 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     
     func resetTagState() {
         self.tags = []
+    }
+    
+    func logout() async {
+        let result = await useCases.logoutUseCase.execute()
+        
+        switch result {
+        case .success:
+            resetTagState()
+            resetMemoState()
+            appState.user.isLoggedIn = false
+            appState.navigation.reset()
+            appState.navigation.push(to: .root)
+        case .failure(let error):
+            appState.system.showAlert = true
+            appState.system.errorMessage = error.localizedDescription()
+        }
     }
     
     /// 주어진 tagIDs를 기반으로 Tag 객체들을 반환합니다.

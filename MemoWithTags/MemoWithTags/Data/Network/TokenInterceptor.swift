@@ -49,7 +49,7 @@ final class TokenInterceptor: RequestInterceptor {
                     ///재로그인 요청 구현
                     return completion(.doNotRetryWithError(error))
                 }
-            } catch(let _error) {
+            } catch(_) {
                 ///재로그인 요청 구현
                 return completion(.doNotRetryWithError(error))
             }

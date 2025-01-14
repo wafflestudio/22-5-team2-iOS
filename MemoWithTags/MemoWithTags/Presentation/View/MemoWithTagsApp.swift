@@ -10,14 +10,14 @@ import SwiftUI
 @main
 struct MemoWithTagsApp: App {
     
+    @StateObject private var userState = UserState()
     @StateObject private var systemState = SystemState()
-    @StateObject private var keyboardState = KeyboardState()
     @StateObject private var navigationState = NavigationState()
     
     var body: some Scene {
         WindowGroup {
             AppRootView(container: .init(
-                appState: AppState(system: systemState, navigation: navigationState, keyboard: keyboardState)
+                appState: AppState(user: userState, system: systemState, navigation: navigationState)
             ))
         }
     }
