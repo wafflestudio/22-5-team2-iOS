@@ -34,8 +34,7 @@ struct MainView: View {
                     if keyboard.currentHeight > 0 {
                         EditingTagListView(viewModel: viewModel, recommendedTags: recommendTags(), selectedTags: $selectedTags)
                     }
-                    
-
+           
                 }
 
             }
