@@ -22,9 +22,9 @@ struct EditingTagListView: View {
             TextField("태그 검색", text: $searchText)
                 .font(.custom("Pretendard", size: 16))
                 .foregroundColor(Color.searchBarPlaceholderGray)
+                .frame(maxWidth: 80)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .frame(width: 100)
                 .background(Color.searchBarBackgroundGray)
                 .cornerRadius(20)
             
@@ -45,7 +45,7 @@ struct EditingTagListView: View {
                                 hideKeyboard()
                                 tagToUpdate = tag
                             } label: {
-                                Label("Update", systemImage: "pencil")
+                                Label("수정", systemImage: "pencil")
                             }
                             
                             Button(role: .destructive) {
@@ -54,7 +54,7 @@ struct EditingTagListView: View {
                                 }
 
                             } label: {
-                                Label("Delete", systemImage: "trash")
+                                Label("삭제", systemImage: "trash")
                             }
                         }
                     }
@@ -73,19 +73,10 @@ struct EditingTagListView: View {
                         }
                     }
                 }
-                .padding(.horizontal, 8)
             }
-            .frame(height: 36) // Prevent ScrollView from expanding vertically
+            
+            // Spacer()
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 2)
-        .frame(maxWidth: .infinity, alignment: .topLeading)
-        .background(Color.backgroundGray)
-        .overlay(
-            Rectangle()
-                .inset(by: 0.2)
-                .stroke(Color(red: 0.6, green: 0.6, blue: 0.6), lineWidth: 0.4)
-        )
         .onAppear {
             generateRandomHexColor()
         }
