@@ -112,6 +112,14 @@ enum VerifyEmailError: Error {
         case .tokenSaveError: return "Token save error"
         }
     }
+    
+    static func from(baseError: BaseError) -> VerifyEmailError {
+        switch baseError {
+        case .UNAUTHORIZED: return .notMatchCode
+        case .INTERNAL_SERVER_ERROR: return .networkError
+        default: return .unknown
+        }
+    }
 }
 
 enum MemoError: Error {
