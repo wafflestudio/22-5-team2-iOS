@@ -395,12 +395,12 @@
 		DABFE2432D28416000B314E2 /* Pages */ = {
 			isa = PBXGroup;
 			children = (
-				DAE6341A2D37CE8A0098B9F0 /* ForgotPasswordView.swift */,
 				DA888AF62D2FA72F00525291 /* SplashView.swift */,
 				DABFE23E2D28416000B314E2 /* LoginView.swift */,
 				DA2DA6622D2A9487000C0495 /* SignupView.swift */,
 				DA0A4EB72D2B9EF8007E481D /* EmailVerificationView.swift */,
 				DA0A4EB92D2BC536007E481D /* SignupSuccessView.swift */,
+				DAE6341A2D37CE8A0098B9F0 /* ForgotPasswordView.swift */,
 				DA3C9E532D29072C00F28D07 /* MainView.swift */,
 				55E610BD2D2A65B200E452A8 /* SearchView.swift */,
 				55E610BF2D2A65C400E452A8 /* SettingsView.swift */,

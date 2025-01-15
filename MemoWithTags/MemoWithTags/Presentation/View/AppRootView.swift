@@ -42,6 +42,8 @@ struct AppRootView: View {
                         EmailVerificationView(viewModel: emailVerificationViewModel, email: email)
                     case .signupSuccess:
                         SignupSuccessView(viewModel: .init(container: container))
+                    case .forgotPassword:
+                        ForgotPasswordView(viewModel: .init(container: container))
                     case .settings:
                         SettingsView(viewModel: mainViewModel)
                     case .search:
