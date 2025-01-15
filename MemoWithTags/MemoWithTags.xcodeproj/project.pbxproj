@@ -83,6 +83,7 @@
 		DABFE2842D284E7200B314E2 /* TagRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2832D284E6800B314E2 /* TagRouter.swift */; };
 		DABFE2882D28634600B314E2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2872D28634400B314E2 /* User.swift */; };
 		DABFE28A2D286BDF00B314E2 /* EmailVerificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2892D286BD200B314E2 /* EmailVerificationViewModel.swift */; };
+		DAE6341B2D37CEB80098B9F0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE6341A2D37CE8A0098B9F0 /* ForgotPasswordView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -162,6 +163,7 @@
 		DABFE2832D284E6800B314E2 /* TagRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagRouter.swift; sourceTree = "<group>"; };
 		DABFE2872D28634400B314E2 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DABFE2892D286BD200B314E2 /* EmailVerificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVerificationViewModel.swift; sourceTree = "<group>"; };
+		DAE6341A2D37CE8A0098B9F0 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -398,6 +400,7 @@
 				DA2DA6622D2A9487000C0495 /* SignupView.swift */,
 				DA0A4EB72D2B9EF8007E481D /* EmailVerificationView.swift */,
 				DA0A4EB92D2BC536007E481D /* SignupSuccessView.swift */,
+				DAE6341A2D37CE8A0098B9F0 /* ForgotPasswordView.swift */,
 				DA3C9E532D29072C00F28D07 /* MainView.swift */,
 				55E610BD2D2A65B200E452A8 /* SearchView.swift */,
 				55E610BF2D2A65C400E452A8 /* SettingsView.swift */,
@@ -571,6 +574,7 @@
 				DABFE25E2D28416000B314E2 /* KeyChainManager.swift in Sources */,
 				DABFE25F2D28416000B314E2 /* MemoRepository.swift in Sources */,
 				DABFE2602D28416000B314E2 /* TagRepository.swift in Sources */,
+				DAE6341B2D37CEB80098B9F0 /* ForgotPasswordView.swift in Sources */,
 				DABFE2612D28416000B314E2 /* EmailVerificationUseCase.swift in Sources */,
 				DA4018612D32D35C008500E2 /* MemoDto.swift in Sources */,
 				DABFE2622D28416000B314E2 /* ForgotPasswordUseCase.swift in Sources */,

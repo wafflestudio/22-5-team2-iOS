@@ -100,9 +100,9 @@ struct LoginView: View {
                         
                         Spacer()
                         
-                        DesignTagView(text: "이메일 찾기", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#F1F1F3", cornerRadius: 4) {}
-                        
-                        DesignTagView(text: "비밀번호 찾기", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#F1F1F3", cornerRadius: 4) {}
+                        DesignTagView(text: "비밀번호 찾기", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#F1F1F3", cornerRadius: 4) {
+                            viewModel.appState.navigation.push(to: .forgotPassword)
+                        }
                     }
                     .padding(.top, 36)
                 }
