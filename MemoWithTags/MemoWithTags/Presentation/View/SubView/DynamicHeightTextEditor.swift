@@ -35,7 +35,6 @@ struct DynamicHeightTextEditor: View {
                         }
                 })
                 .font(.body)
-                .background(Color.clear) // TextEditor의 배경을 투명하게 설정
                 .disableAutocorrection(true)
             
             if text.isEmpty {

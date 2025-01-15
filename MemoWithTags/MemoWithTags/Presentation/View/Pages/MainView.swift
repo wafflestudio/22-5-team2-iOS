@@ -29,8 +29,6 @@ struct MainView: View {
                     
                     //메모 생성 창
                     EditingMemoView(viewModel: viewModel, selectedTags: $selectedTags)
-                        .padding(.horizontal, 7)
-                        .padding(.bottom, 14)
                     
                     //태그 생성 창
                     if keyboard.currentHeight > 0 {
