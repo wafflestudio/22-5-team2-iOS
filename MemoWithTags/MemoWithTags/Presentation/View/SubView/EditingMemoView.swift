@@ -14,8 +14,6 @@ struct EditingMemoView: View {
     @State var content: String = ""
     @State var dynamicTextEditorHeight: CGFloat = 40
     
-    @Binding var selectedTags: [Tag]
-    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .center, spacing: 8) {
@@ -35,14 +33,13 @@ struct EditingMemoView: View {
                         guard !trimmedContent.isEmpty else {
                             return
                         }
-                        let tagIds = selectedTags.map { $0.id }
+                        let tagIds = viewModel.selectedTags.map { $0.id }
                         
-                        // Call the onConfirm closure with content and tag IDs
                         await viewModel.createMemo(content: trimmedContent, tagIds: tagIds)
                         
                         // Reset the input fields
                         content = ""
-                        selectedTags = []
+                        viewModel.selectedTags = []
                         dynamicTextEditorHeight = 40
                         hideKeyboard()
                     }
@@ -56,9 +53,9 @@ struct EditingMemoView: View {
             }
             
             // 메모에 추가한 태그 나타나는 곳
-            if !selectedTags.isEmpty {
-                HFlow{
-                    ForEach(selectedTags, id: \.id) { tag in
+            if !viewModel.selectedTags.isEmpty {
+                HFlow {
+                    ForEach(viewModel.selectedTags, id: \.id) { tag in
                         TagView(tag: tag) {
                             removeTagFromSelectedTags(tag)
                         }
@@ -71,13 +68,14 @@ struct EditingMemoView: View {
         .padding(.vertical, 5)
         .background(Color.memoBackgroundWhite)
         .cornerRadius(14)
-        .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 4)
+        .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 1.5)
         .fixedSize(horizontal: false, vertical: true) // Constrain height dynamically
+
     }
     
     // Function to remove a tag from selectedTags
     private func removeTagFromSelectedTags(_ tag: Tag) {
-        selectedTags.removeAll { $0.id == tag.id }
+        viewModel.selectedTags.removeAll { $0.id == tag.id }
     }
     
     // Dismisses the keyboard.

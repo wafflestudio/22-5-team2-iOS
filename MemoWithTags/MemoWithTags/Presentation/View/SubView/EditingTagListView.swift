@@ -16,9 +16,6 @@ struct EditingTagListView: View {
     // 상태 변수를 sheet(item:)에 맞게 수정
     @State private var tagToUpdate: Tag? = nil
     
-    var recommendedTags: [Tag]
-    @Binding var selectedTags: [Tag]
-    
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
             // 태그 검색하는 필드
@@ -41,7 +38,7 @@ struct EditingTagListView: View {
                 HStack(alignment: .center, spacing: 8) {
                     ForEach(filterTags(), id: \.id) { tag in
                         TagView(tag: tag) {
-                            selectedTags.append(tag)
+                            viewModel.selectedTags.append(tag)
                         }
                         .contextMenu {
                             Button {
@@ -101,16 +98,16 @@ struct EditingTagListView: View {
     // Function to filter tags based on search text
     private func filterTags() -> [Tag] {
         if searchText.isEmpty {
-            return recommendedTags
+            return viewModel.recommendTags()
         } else {
-            return recommendedTags.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+            return viewModel.recommendTags().filter { $0.name.lowercased().contains(searchText.lowercased()) }
         }
     }
     
     // Determine if a new tag can be created
     private func canCreateTag() -> Bool {
         let trimmedText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        return !trimmedText.isEmpty && !recommendedTags.contains { $0.name.lowercased() == trimmedText.lowercased() }
+        return !trimmedText.isEmpty && !viewModel.recommendTags().contains { $0.name.lowercased() == trimmedText.lowercased() }
     }
     
     // Generate a random HEX color string from TagColor enum
