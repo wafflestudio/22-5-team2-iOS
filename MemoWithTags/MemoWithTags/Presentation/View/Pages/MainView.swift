@@ -18,11 +18,8 @@ struct MainView: View {
             //메모 리스트
             MemoListView(viewModel: viewModel)
             
-            VStack(spacing: 0) {
-                Spacer()
-                //메모 생성 창
-                EditingMemoView(viewModel: viewModel)
-            }
+            // 메모 생성 or 수정 창
+            EditingMemoView(viewModel: viewModel)
             
         }
         .onAppear {
