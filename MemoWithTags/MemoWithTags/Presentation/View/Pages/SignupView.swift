@@ -127,7 +127,9 @@ struct SignupView: View {
                     .disabled(email.isEmpty || password.isEmpty || passwordRepeat.isEmpty)
                     
                     HStack(spacing: 8) {
-                        DesignTagView(text: "로그인", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#F1F1F3", cornerRadius: 4) {}
+                        DesignTagView(text: "로그인", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#F1F1F3", cornerRadius: 4) {
+                            viewModel.appState.navigation.pop()
+                        }
                         
                         Spacer()
                         
