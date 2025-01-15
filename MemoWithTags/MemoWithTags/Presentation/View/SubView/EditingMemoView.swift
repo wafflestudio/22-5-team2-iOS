@@ -15,16 +15,69 @@ struct EditingMemoView: View {
     
     @State var isExpanded: Bool = false
     
+    @Namespace private var animationNamespace
+    
+    @FocusState private var isTextEditorFocused: Bool
+    
     var body: some View {
-        ZStack {
+        VStack {
+            ZStack {
+                // Conditionally display small or expanded view
+                if !isExpanded {
+                    smallView
+                        .matchedGeometryEffect(id: "memoContainer", in: animationNamespace)
+                } else {
+                    expandedView
+                        .matchedGeometryEffect(id: "memoContainer", in: animationNamespace)
+                }
+            }
+            .animation(.spring(), value: isExpanded)
+        }
+        .navigationBarHidden(isExpanded)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.isTextEditorFocused = true
+            }
+        }
+    }
+    
+    
+    private var smallView: some View {
+        VStack {
+            Spacer()
+            
             VStack(alignment: .leading, spacing: 8) {
+                
+                // Text Editor
+                DynamicHeightTextEditor(
+                    text: $content,
+                    maxHeight: 100
+                )
+                .matchedGeometryEffect(id: "textEditor", in: animationNamespace)
+                .focused($isTextEditorFocused)
+                
                 HStack(alignment: .center, spacing: 8) {
-                    // Text 치는 곳
-                    DynamicHeightTextEditor(text: $content)
+                    // Display selected tags
+                    HFlow {
+                        ForEach(viewModel.selectedTags, id: \.id) { tag in
+                            TagView(tag: tag) {
+                                removeTagFromSelectedTags(tag)
+                            }
+                            .matchedGeometryEffect(id: "tag_\(tag.id)", in: animationNamespace)
+                        }
+                    }
                     
-                    // 전체 화면 수정 버튼
+                    Spacer()
+                    
+                    // Expand Button
                     Button(action: {
-                        self.isExpanded.toggle()
+                        withAnimation {
+                            self.isExpanded.toggle()
+                            // shrink 하고 나서도 키보드가 안 내려가게
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                self.isTextEditorFocused = true
+                            }
+                        }
                     }) {
                         Image(systemName: "arrow.down.left.and.arrow.up.right")
                             .resizable()
@@ -33,24 +86,8 @@ struct EditingMemoView: View {
                             .foregroundColor(.black)
                     }
                     
-                    // 메모 생성 버튼
-                    Button(action: {
-                        Task {
-                            let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
-                            guard !trimmedContent.isEmpty else {
-                                return
-                            }
-                            let tagIds = viewModel.selectedTags.map { $0.id }
-                            
-                            // Call the onConfirm closure with content and tag IDs
-                            await viewModel.createMemo(content: trimmedContent, tagIds: tagIds)
-                            
-                            // Reset the input fields
-                            content = ""
-                            viewModel.selectedTags = []
-                            hideKeyboard()
-                        }
-                    }) {
+                    // Create Memo Button
+                    Button(action: createMemoAction) {
                         Image(systemName: "highlighter")
                             .resizable()
                             .scaledToFit()
@@ -58,21 +95,10 @@ struct EditingMemoView: View {
                             .foregroundColor(.black)
                     }
                 }
-                
-                // 메모에 추가한 태그 나타나는 곳
-                if !viewModel.selectedTags.isEmpty {
-                    HFlow{
-                        ForEach(viewModel.selectedTags, id: \.id) { tag in
-                            TagView(tag: tag) {
-                                removeTagFromSelectedTags(tag)
-                            }
-                        }
-                    }
-                }
-                
             }
             .padding(.horizontal, 17)
-            .padding(.vertical, 5)
+            .padding(.top, 5)
+            .padding(.bottom, 9)
             .background(Color.memoBackgroundWhite)
             .cornerRadius(14)
             .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 2)
@@ -80,70 +106,70 @@ struct EditingMemoView: View {
             .padding(.horizontal, 7)
             .padding(.bottom, 14)
         }
-        
-        // 확장된 뷰 (구조는 거의 똑같다)
-        if isExpanded {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack(alignment: .center, spacing: 8) {
-                    // Text 치는 곳
-                    DynamicHeightTextEditor(text: $content)
-                    
-                    // 전체 화면 수정 버튼
-                    Button(action: {
-                        self.isExpanded.toggle()
-                    }) {
-                        Image(systemName: "arrow.up.left.and.arrow.down.right")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 19, height: 21)
-                            .foregroundColor(.black)
-                    }
-                    
-                    // 메모 생성 버튼
-                    Button(action: {
-                        Task {
-                            let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
-                            guard !trimmedContent.isEmpty else {
-                                return
-                            }
-                            let tagIds = viewModel.selectedTags.map { $0.id }
-                            
-                            // Call the onConfirm closure with content and tag IDs
-                            await viewModel.createMemo(content: trimmedContent, tagIds: tagIds)
-                            
-                            // Reset the input fields
-                            content = ""
-                            viewModel.selectedTags = []
-                            hideKeyboard()
+    }
+    
+    
+    private var expandedView: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            
+            // Text Editor
+            DynamicHeightTextEditor(
+                text: $content,
+                maxHeight: 400
+            )
+            .matchedGeometryEffect(id: "textEditor", in: animationNamespace)
+            .focused($isTextEditorFocused)
+            
+            Spacer()
+            
+            HStack(alignment: .center, spacing: 8) {
+                // Display selected tags
+                HFlow {
+                    ForEach(viewModel.selectedTags, id: \.id) { tag in
+                        TagView(tag: tag) {
+                            removeTagFromSelectedTags(tag)
                         }
-                    }) {
-                        Image(systemName: "highlighter")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 19, height: 21)
-                            .foregroundColor(.black)
+                        .matchedGeometryEffect(id: "tag_\(tag.id)", in: animationNamespace)
                     }
-                    
-                    
-                    // 메모에 추가한 태그 나타나는 곳
-                    if !viewModel.selectedTags.isEmpty {
-                        HFlow{
-                            ForEach(viewModel.selectedTags, id: \.id) { tag in
-                                TagView(tag: tag) {
-                                    removeTagFromSelectedTags(tag)
-                                }
-                            }
-                        }
-                    }
-                    
                 }
-                .padding(.horizontal, 17)
-                .padding(.vertical, 5)
-                .background(Color.memoBackgroundWhite)
-                .transition(.move(edge: .bottom)) // 원하는 애니메이션으로 변경 가능
+                
+                Spacer()
+                
+                // Collapse Button
+                Button(action: {
+                    withAnimation {
+                        self.isExpanded.toggle()
+                        // expand 하고 나서도 키보드가 안 내려가게
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            self.isTextEditorFocused = true
+                        }
+                    }
+                }) {
+                    Image(systemName: "arrow.up.right.and.arrow.down.left")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 19, height: 21)
+                        .foregroundColor(.black)
+                }
+                
+                // Create Memo Button
+                Button(action: createMemoAction) {
+                    Image(systemName: "highlighter")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 19, height: 21)
+                        .foregroundColor(.black)
+                }
             }
         }
+        .padding(.horizontal, 17)
+        .padding(.top, 5)
+        .padding(.bottom, 9)
+        .background(Color.memoBackgroundWhite)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
+    
+    
     
     // Function to remove a tag from selectedTags
     private func removeTagFromSelectedTags(_ tag: Tag) {
@@ -153,5 +179,24 @@ struct EditingMemoView: View {
     // Dismisses the keyboard.
     private func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    
+    // Function to handle memo creation
+    private func createMemoAction() {
+        Task {
+            let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmedContent.isEmpty else {
+                return
+            }
+            let tagIds = viewModel.selectedTags.map { $0.id }
+            
+            // Call the onConfirm closure with content and tag IDs
+            await viewModel.createMemo(content: trimmedContent, tagIds: tagIds)
+            
+            // Reset the input fields
+            content = ""
+            viewModel.selectedTags = []
+            hideKeyboard()
+        }
     }
 }

@@ -9,10 +9,10 @@ import SwiftUI
 
 struct DynamicHeightTextEditor: View {
     @Binding var text: String
-    @State var dynamicHeight: CGFloat = 40
+    @State var dynamicHeight: CGFloat = 20
     let placeholder: String = "새로운 메모"
-    let minHeight: CGFloat = 40
-    let maxHeight: CGFloat = 200
+    let minHeight: CGFloat = 20
+    let maxHeight: CGFloat
 
     var body: some View {
         ZStack(alignment: .topLeading) {

@@ -18,11 +18,8 @@ struct MainView: View {
             //메모 리스트
             MemoListView(viewModel: viewModel)
             
-            VStack(spacing: 0) {
-                Spacer()
-                //메모 생성 창
-                EditingMemoView(viewModel: viewModel)
-            }
+            // 메모 생성 or 수정 창
+            EditingMemoView(viewModel: viewModel)
             
         }
         .onAppear {
@@ -31,7 +28,7 @@ struct MainView: View {
             }
         }
         .toolbar {
-            //로고
+            // 로고
             ToolbarItem(placement: .topBarLeading) {
                 HStack(spacing: 3) {
                     Text("Memo with")
@@ -42,7 +39,7 @@ struct MainView: View {
                 }
             }
             
-            //서치, 설정 창 버튼
+            // 서치, 설정 창 버튼
             ToolbarItem(placement: .topBarTrailing) {
                 HStack(spacing: 14) {
                     Image(systemName: "magnifyingglass")
@@ -58,7 +55,7 @@ struct MainView: View {
                 }
             }
             
-            //태그 생성 창
+            // 키보드 바로 위 태그 리스트 창
             ToolbarItem(placement: .keyboard) {
                 EditingTagListView(viewModel: viewModel)
             }
