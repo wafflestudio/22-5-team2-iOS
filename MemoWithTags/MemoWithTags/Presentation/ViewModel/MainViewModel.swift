@@ -9,21 +9,41 @@ import Foundation
 
 @MainActor
 final class MainViewModel: BaseViewModel, ObservableObject {
+    //main 쪽
     @Published var memos: [Memo] = []
     @Published var tags: [Tag] = []
-    @Published var isLoading: Bool = false
-    @Published var currentMemoPage: Int = 0
+    @Published var mainCurrentPage: Int = 1
+    @Published var mainTotalPages: Int = 1
+    @Published var selectedTags: [Tag] = [] //메모 생성할때 추가한 태그들 보관
     
-    private func waitIfLoading() async {
-        while isLoading {
-            try? await Task.sleep(nanoseconds: 100_000_000) //1초 대기
-        }
-    }
+    //search 쪽
+    @Published var searchText: String = ""
+    @Published var selectedSearchTags: [Tag] = [] //메모 검색할때 추가한 태그들 보관
+    @Published var searchedMemos: [Memo] = []
+    @Published var searchedTags: [Tag] = []
+    @Published var searchCurrentPage: Int = 1
+    @Published var searchTotalPages: Int = 1
+    
+    @Published var isLoading: Bool = false
     
     func fetchMemos(content: String? = nil, tagIds: [Int]? = nil, dateRange: ClosedRange<Date>? = nil) async {
         isLoading = true
-
-        let result = await useCases.fetchMemoUseCase.execute(content: content, tagIds: tagIds, dateRange: dateRange, page: 1)
+        
+        var result: Result<PaginatedMemos, MemoError>
+        
+        if content == nil && tagIds == nil && dateRange == nil {
+            guard mainCurrentPage <= mainTotalPages else {
+                isLoading = false
+                return
+            }
+            result = await useCases.fetchMemoUseCase.execute(content: content, tagIds: tagIds, dateRange: dateRange, page: mainCurrentPage)
+        } else {
+            guard searchCurrentPage <= searchTotalPages else {
+                isLoading = false
+                return
+            }
+            result = await useCases.fetchMemoUseCase.execute(content: content, tagIds: tagIds, dateRange: dateRange, page: searchCurrentPage)
+        }
 
         switch result {
         case .success(let paginatedMemos):
@@ -32,8 +52,15 @@ final class MainViewModel: BaseViewModel, ObservableObject {
                 updatedMemo.tags = getTags(from: updatedMemo.tagIds)
                 return updatedMemo
             }
-            self.memos.append(contentsOf: updatedMemos)
-            self.currentMemoPage = paginatedMemos.currentPage
+            
+            if content == nil && tagIds == nil && dateRange == nil {
+                self.memos.append(contentsOf: updatedMemos)
+                self.mainTotalPages = paginatedMemos.totalPages
+            } else {
+                self.searchedMemos.append(contentsOf: updatedMemos)
+                self.searchTotalPages = paginatedMemos.totalPages
+            }
+
         case .failure(let error):
             appState.system.showAlert = true
             appState.system.errorMessage = error.localizedDescription()
@@ -159,6 +186,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         isLoading = false
     }
     
+    ///main view에서 onApear때 쓰는 함수
     func initMemo() async {
         if tags.isEmpty {
             await fetchTags()
@@ -168,21 +196,13 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         }
     }
     
-    func resetMemoState() {
-        self.memos = []
-    }
-    
-    func resetTagState() {
-        self.tags = []
-    }
-    
+    ///settings view에서 로그아웃하는 함수
     func logout() async {
         let result = await useCases.logoutUseCase.execute()
         
         switch result {
         case .success:
-            resetTagState()
-            resetMemoState()
+            clearVM()
             appState.user.isLoggedIn = false
             appState.navigation.reset()
             appState.navigation.push(to: .root)
@@ -192,9 +212,29 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         }
     }
     
-    /// 주어진 tagIDs를 기반으로 Tag 객체들을 반환합니다.
+    ///태그 추천 해주는 함수
+    func recommendTags() -> [Tag] {
+        tags.filter { !selectedTags.contains($0) }
+    }
+    
+    /// tag id --> tag 맵핑하는 함수
     private func getTags(from tagIDs: [Int]) -> [Tag] {
         return tags.filter { tagIDs.contains($0.id) }
+    }
+    
+    private func clearVM() {
+        memos = []
+        tags = []
+        selectedTags = []
+        mainCurrentPage = 1
+        mainTotalPages = 1
+        
+        searchText = ""
+        searchedMemos = []
+        searchedTags = []
+        selectedSearchTags = []
+        searchCurrentPage = 1
+        searchTotalPages = 1
     }
 }
 

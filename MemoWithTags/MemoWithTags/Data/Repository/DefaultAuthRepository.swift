@@ -46,16 +46,6 @@ final class DefaultAuthRepository: AuthRepository {
         try handleError(response: response)
     }
     
-    func refreshToken(refreshToken: String) async throws -> AuthDto {
-        print("refresh token")
-        let response = await AF
-            .request(AuthRouter.refreshToken(token: refreshToken), interceptor: tokenInterceptor).serializingDecodable(AuthDto.self).response
-        
-        let dto = try handleErrorDecodable(response: response)
-        
-        return dto
-    }
-    
     func getUserInfo() async throws -> UserDto {
         print("get user info")
         let response = await AF

@@ -12,8 +12,7 @@ struct EditingMemoView: View {
     @ObservedObject var viewModel: MainViewModel
     
     @State var content: String = ""
-    @Binding var selectedTags: [Tag]
-    
+
     @State var isExpanded: Bool = false
     
     var body: some View {
@@ -61,13 +60,22 @@ struct EditingMemoView: View {
                 }
                 
                 // 메모에 추가한 태그 나타나는 곳
-                if !selectedTags.isEmpty {
+                if !viewModel.selectedTags.isEmpty {
                     HFlow{
-                        ForEach(selectedTags, id: \.id) { tag in
+                        ForEach(viewModel.selectedTags, id: \.id) { tag in
                             TagView(tag: tag) {
                                 removeTagFromSelectedTags(tag)
                             }
                         }
+                        let tagIds = viewModel.selectedTags.map { $0.id }
+                        
+                        await viewModel.createMemo(content: trimmedContent, tagIds: tagIds)
+                        
+                        // Reset the input fields
+                        content = ""
+                        viewModel.selectedTags = []
+                        dynamicTextEditorHeight = 40
+                        hideKeyboard()
                     }
                 }
                 
@@ -116,24 +124,25 @@ struct EditingMemoView: View {
                             content = ""
                             selectedTags = []
                             hideKeyboard()
-                        }
-                    }) {
-                        Image(systemName: "highlighter")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 19, height: 21)
-                            .foregroundColor(.black)
-                    }
-                }
-                
+
+                          
                 // 메모에 추가한 태그 나타나는 곳
-                if !selectedTags.isEmpty {
+                if !viewModel.selectedTags.isEmpty {
                     HFlow{
-                        ForEach(selectedTags, id: \.id) { tag in
+                        ForEach(viewModel.selectedTags, id: \.id) { tag in
                             TagView(tag: tag) {
                                 removeTagFromSelectedTags(tag)
                             }
                         }
+                        let tagIds = viewModel.selectedTags.map { $0.id }
+                        
+                        await viewModel.createMemo(content: trimmedContent, tagIds: tagIds)
+                        
+                        // Reset the input fields
+                        content = ""
+                        viewModel.selectedTags = []
+                        dynamicTextEditorHeight = 40
+                        hideKeyboard()
                     }
                 }
                 
@@ -147,7 +156,7 @@ struct EditingMemoView: View {
     
     // Function to remove a tag from selectedTags
     private func removeTagFromSelectedTags(_ tag: Tag) {
-        selectedTags.removeAll { $0.id == tag.id }
+        viewModel.selectedTags.removeAll { $0.id == tag.id }
     }
     
     // Dismisses the keyboard.

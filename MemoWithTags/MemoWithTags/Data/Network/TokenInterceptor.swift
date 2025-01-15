@@ -23,8 +23,6 @@ final class TokenInterceptor: RequestInterceptor {
         completion(.success(urlRequest))
     }
     
-    private let retryLimit = 2
-    
     ///token refresh 구현
     func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
         guard let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 else {
@@ -32,16 +30,18 @@ final class TokenInterceptor: RequestInterceptor {
             return
         }
         
-        guard request.retryCount < retryLimit else { return completion(.doNotRetryWithError(error)) }
+        guard request.retryCount < 2 else { return completion(.doNotRetryWithError(error)) }
         Task {
             do {
                 guard let refreshToken = KeyChainManager.shared.readRefreshToken() else {
                     return completion(.doNotRetryWithError(error))
                 }
-                
-                let auth = try await DefaultAuthRepository().refreshToken(refreshToken: refreshToken)
-                let isAccessSaved = KeyChainManager.shared.saveAccessToken(token: auth.accessToken)
-                let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: auth.refreshToken)
+                print("refresh token")
+                let authDto = try await AF
+                    .request(AuthRouter.refreshToken(token: refreshToken)).serializingDecodable(AuthDto.self).value
+            
+                let isAccessSaved = KeyChainManager.shared.saveAccessToken(token: authDto.accessToken)
+                let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: authDto.refreshToken)
                 
                 if isAccessSaved && isRefreshSaved {
                     return completion(.retry)
@@ -49,7 +49,7 @@ final class TokenInterceptor: RequestInterceptor {
                     ///재로그인 요청 구현
                     return completion(.doNotRetryWithError(error))
                 }
-            } catch(_) {
+            } catch {
                 ///재로그인 요청 구현
                 return completion(.doNotRetryWithError(error))
             }
