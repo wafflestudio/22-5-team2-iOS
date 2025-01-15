@@ -22,8 +22,6 @@ struct MainView: View {
                 Spacer()
                 //메모 생성 창
                 EditingMemoView(viewModel: viewModel)
-                    .padding(.horizontal, 7)
-                    .padding(.bottom, 14)
             }
             
         }

@@ -9,18 +9,13 @@ import SwiftUI
 
 struct DynamicHeightTextEditor: View {
     @Binding var text: String
-    @Binding var dynamicHeight: CGFloat
-    var placeholder: String
-    var minHeight: CGFloat = 40
-    var maxHeight: CGFloat = 200 // Optional: Set a maximum height if desired
+    @State var dynamicHeight: CGFloat = 40
+    let placeholder: String = "새로운 메모"
+    let minHeight: CGFloat = 40
+    let maxHeight: CGFloat = 200
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            if text.isEmpty {
-                Text(placeholder)
-                    .foregroundColor(Color.gray.opacity(0.6))
-                    .padding(8)
-            }
             TextEditor(text: $text)
                 .frame(minHeight: minHeight, maxHeight: maxHeight)
                 .background(GeometryReader { geometry in
@@ -41,7 +36,16 @@ struct DynamicHeightTextEditor: View {
                 })
                 .font(.body)
                 .disableAutocorrection(true)
+            
+            if text.isEmpty {
+                Text(placeholder)
+                    .foregroundColor(Color.gray.opacity(0.6))
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 12)
+                    .allowsHitTesting(false) // 플레이스홀더가 터치 이벤트를 차단하지 않도록 설정
+            }
         }
+        .frame(height: dynamicHeight)
     }
 
     private func updateHeight(from size: CGSize) {
