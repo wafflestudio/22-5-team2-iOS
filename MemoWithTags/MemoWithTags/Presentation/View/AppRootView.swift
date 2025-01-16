@@ -15,6 +15,8 @@ struct AppRootView: View {
     @StateObject private var loginViewModel: LoginViewModel
     @StateObject private var signupViewModel: SignupViewModel
     @StateObject private var emailVerificationViewModel: EmailVerificationViewModel
+    @StateObject private var resetPasswordViewModel: ResetPasswordViewModel
+    
     
     init(container: DIContainer) {
         self.container = container
@@ -23,6 +25,7 @@ struct AppRootView: View {
         _loginViewModel = StateObject(wrappedValue: LoginViewModel(container: container))
         _signupViewModel = StateObject(wrappedValue: SignupViewModel(container: container))
         _emailVerificationViewModel = StateObject(wrappedValue: EmailVerificationViewModel(container: container))
+        _resetPasswordViewModel = StateObject(wrappedValue: ResetPasswordViewModel(container: container))
     }
     
     var body: some View {
@@ -44,6 +47,12 @@ struct AppRootView: View {
                         SignupSuccessView(viewModel: .init(container: container))
                     case .forgotPassword:
                         ForgotPasswordView(viewModel: .init(container: container))
+                    case .forgotPasswordEmailVerification(let email):
+                        ForgotPasswordEmailVerificationView(viewModel: .init(container: container), email: email)
+                    case .resetPassword(let email, let code):
+                        ResetPasswordView(viewModel: resetPasswordViewModel, email: email, code: code)
+                    case .resetPasswordSuccess:
+                        ResetPasswordSuccessView(viewModel: .init(container: container))
                     case .settings:
                         SettingsView(viewModel: mainViewModel)
                     case .search:

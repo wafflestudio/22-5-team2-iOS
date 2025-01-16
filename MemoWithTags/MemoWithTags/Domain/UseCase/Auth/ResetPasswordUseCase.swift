@@ -6,7 +6,7 @@
 //
 
 protocol ResetPasswordUseCase {
-    func execute(email: String, newPassword: String) async -> Result<Void, ResetPasswordError>
+    func execute(email: String, code: String, newPassword: String) async -> Result<Void, ResetPasswordError>
 }
 
 final class DefaultResetPasswordUseCase: ResetPasswordUseCase {
@@ -16,13 +16,13 @@ final class DefaultResetPasswordUseCase: ResetPasswordUseCase {
         self.authRepository = authRepository
     }
     
-    func execute(email:String, newPassword: String) async -> Result<Void, ResetPasswordError> {
+    func execute(email:String, code: String, newPassword: String) async -> Result<Void, ResetPasswordError> {
         do {
-            try await authRepository.resetPassword(email: email, newPassword: newPassword)
+            try await authRepository.resetPassword(email: email, code: code, newPassword: newPassword)
             return .success(())
         } catch {
             ///error 맵핑 구현
-            return .failure(.unknown)
+            return .failure(.from(baseError: error as! BaseError))
         }
     }
 }

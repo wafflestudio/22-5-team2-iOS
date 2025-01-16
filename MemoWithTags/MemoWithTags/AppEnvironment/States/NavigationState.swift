@@ -13,9 +13,12 @@ enum Route: Hashable {
     case main
     case login
     case signup
-    case forgotPassword
     case emailVerification(email: String)
     case signupSuccess
+    case forgotPassword
+    case forgotPasswordEmailVerification(email: String)
+    case resetPassword(email: String, code: String)
+    case resetPasswordSuccess
     case settings
     case search
 }

@@ -19,13 +19,5 @@ final class EmailVerificationViewModel: BaseViewModel, ObservableObject {
             appState.system.showAlert = true
             appState.system.errorMessage = error.localizedDescription()
         }
-        
-//        if code == "000000" {
-//            appState.navigation.push(to: .signupSuccess)
-//        } else {
-//            appState.system.showAlert = true
-//            appState.system.errorMessage = VerifyEmailError.notMatchCode.localizedDescription()
-//        }
-        
     }
 }

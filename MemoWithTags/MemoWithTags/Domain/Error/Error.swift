@@ -71,29 +71,51 @@ enum RegisterError: Error {
 }
 
 enum ForgotPasswordError: Error {
-    case notMatchCode
     case UserNotFound
     case networkError
     case unknown
+    case invalidEmail
     
     func localizedDescription() -> String {
         switch self {
-        case .notMatchCode: return "인증 코드가 올바르지 않습니다."
         case .UserNotFound: return "사용자를 찾을 수 없습니다."
         case .networkError: return "Network error"
         case .unknown: return "Unknown error"
+        case .invalidEmail: return "이메일 형식이 잘못되었습니다."
+        }
+    }
+    
+    static func from(baseError: BaseError) -> ForgotPasswordError {
+        switch baseError {
+        case .UNAUTHORIZED: return .UserNotFound
+        case .INTERNAL_SERVER_ERROR: return .networkError
+        default: return .unknown
         }
     }
 }
 
 enum ResetPasswordError: Error {
+    case notMatchCode
     case networkError
     case unknown
+    case invalidPassword
+    case passwordNotMatch
     
     func localizedDescription() -> String {
         switch self {
+        case .notMatchCode: return "인증코드가 올바르지 않습니다."
         case .networkError: return "Network error"
         case .unknown: return "Unknown error"
+        case .invalidPassword: return "비밀번호 형식이 잘못되었습니다."
+        case .passwordNotMatch: return "비밀번호가 일치하지 않습니다."
+        }
+    }
+    
+    static func from(baseError: BaseError) -> ResetPasswordError {
+        switch baseError {
+        case .UNAUTHORIZED: return .notMatchCode
+        case .INTERNAL_SERVER_ERROR: return .networkError
+        default: return .unknown
         }
     }
 }
