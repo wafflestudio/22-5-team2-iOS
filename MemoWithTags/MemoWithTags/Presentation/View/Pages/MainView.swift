@@ -17,7 +17,8 @@ struct MainView: View {
             
             //메모 리스트
             MemoListView(viewModel: viewModel)
-            
+                .border(.blue, width: 2)
+
             // 메모 생성 or 수정 창
             EditingMemoView(viewModel: viewModel)
             
@@ -55,6 +56,7 @@ struct MainView: View {
                 }
             }
             
+
             // 키보드 바로 위 태그 리스트 창
             ToolbarItem(placement: .keyboard) {
                 EditingTagListView(viewModel: viewModel)

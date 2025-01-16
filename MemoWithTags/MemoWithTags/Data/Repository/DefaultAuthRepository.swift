@@ -26,12 +26,10 @@ final class DefaultAuthRepository: AuthRepository {
         return dto
     }
     
-    func verifyEmail(email: String, code: String) async throws -> AuthDto {
+    func verifyEmail(email: String, code: String) async throws {
         print("verify email")
-        let response = await AF.request(AuthRouter.verifyEmail(email: email, code: code)).serializingDecodable(AuthDto.self).response
-        let dto = try handleErrorDecodable(response: response)
-        
-        return dto
+        let response = await AF.request(AuthRouter.verifyEmail(email: email, code: code)).serializingData().response
+        try handleError(response: response)
     }
     
     func forgotPassword(email: String) async throws {

@@ -20,16 +20,68 @@ struct SearchView: View {
                 .ignoresSafeArea()
             
             VStack(alignment: .leading, spacing: 0) {
-                //상단 창
-                HStack(spacing: 10) {
-                    //뒤로가기 버튼
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 18))
-                        .onTapGesture {
-                            viewModel.appState.navigation.pop()
-                        }
+                
+                Spacer()
+                
+                // 검색 결과 보여주는 스크롤 뷰
+                ScrollView {
                     
-                    //검색 창
+                    VStack(alignment: .leading, spacing: 12) {
+                        
+                        GeometryReader { geometry in
+                            ProgressView()
+                                .frame(maxWidth: .infinity)
+                                .opacity(viewModel.isLoading ? 1 : 0)
+                                .onChange(of: geometry.frame(in: .named("scroll")).minY) { _, value in
+                                    Task {
+                                        if value > 0 && !viewModel.searchedMemos.isEmpty{
+                                            await viewModel.searchMemos(content: submitText)
+                                        }
+                                    }
+                                }
+                        }
+                        
+                        ForEachIndexed(viewModel.searchedMemos.reversed()) { index, memo in
+                            MemoView(memo: memo)
+                                .id(memo.id)
+                                .contextMenu {
+                                    Button {
+                                        // memolist에서 선택된 memo를 hide하고
+                                        // EditingMemoView에 선택된 memo를 표시해야 함
+                                    } label: {
+                                        Label("메모 수정", systemImage: "pencil")
+                                    }
+                                    
+                                    Button(role: .destructive) {
+                                        Task {
+                                            await viewModel.deleteMemo(memoId: memo.id)
+                                        }
+
+                                    } label: {
+                                        Label("메모 삭제", systemImage: "trash")
+                                    }
+                                }
+                        }
+                    }
+                    
+                    //검색된 태그들
+                    HFlow {
+                        ForEach(viewModel.searchedTags, id: \.id) { tag in
+                            TagView(tag: tag) {
+                                //검색된 태그 클릭했을 때 액션
+                            }
+                        }
+                        Spacer()
+                    }
+                    
+                }
+                .padding(.horizontal, 12)
+                .frame(maxWidth: .infinity)
+                .border(.blue, width: 2)
+                .coordinateSpace(name: "scroll")
+                .defaultScrollAnchor(.bottom)
+                
+                HStack {
                     TextField("단어와 태그로 메모 검색", text: $viewModel.searchText)
                         .padding(.horizontal, 14)
                         .padding(.vertical, 8)
@@ -41,10 +93,11 @@ struct SearchView: View {
                             Task {
                                 submitText = viewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines)
                                 if !submitText.isEmpty {
-                                    viewModel.searchCurrentPage = 1
+                                    viewModel.searchCurrentPage = 0
                                     viewModel.searchTotalPages = 1
                                     viewModel.searchedMemos = []
-                                    await viewModel.fetchMemos(content: submitText)
+                                    viewModel.searchedTags = []
+                                    await viewModel.searchMemos(content: submitText)
                                     viewModel.searchedTags = viewModel.tags.filter { $0.name.lowercased().contains(submitText.lowercased()) }
                                 }
                             }
@@ -54,94 +107,21 @@ struct SearchView: View {
                         }
                 }
                 .padding(.horizontal, 16)
-                .padding(.top, 4)
-                .padding(.bottom, 14)
+                .padding(.vertical, 8)
                 
-                // 검색 결과 보여주는 스크롤 뷰
-                ScrollView {
-                    //검색 내용 없을 때 기본 뷰
-                    if viewModel.searchedTags.isEmpty && viewModel.searchedMemos.isEmpty {
-                        
-                        HFlow {
-                            ForEach(viewModel.tags, id: \.id) { tag in
-                                TagView(tag: tag) {
-                                    
-                                }
-                            }
-                            ForEach(viewModel.memos, id: \.id) { memo in
-                                shortMemo(memo: memo)
-                            }
-                        }
-                        
-                    } else { //검색 내용 있을 때
-                        //검색된 태그들
-                        HFlow {
-                            ForEach(viewModel.searchedTags, id: \.id) { tag in
-                                TagView(tag: tag) {
-                                    
-                                }
-                            }
-                            Spacer()
-                        }
-                        
-                        //검색된 메모들
-                        LazyVStack(alignment: .leading, spacing: 12) {
-                            ForEachIndexed(viewModel.searchedMemos) { index, memo in
-                                MemoView(memo: memo, viewModel: viewModel)
-                                    .contextMenu {
-                                        Button(role: .destructive) {
-                                            Task {
-                                                await viewModel.deleteMemo(memoId: memo.id)
-                                            }
-                                        } label: {
-                                            Label("Delete", systemImage: "trash")
-                                        }
-                                    }
-                                    .onAppear {
-                                        if index == viewModel.searchedMemos.count - 1 {
-                                            Task {
-                                                viewModel.searchCurrentPage += 1
-                                                await viewModel.fetchMemos(content: submitText)
-                                            }
-                                        }
-                                    }
-                            }
-                            
-                            if viewModel.isLoading {
-                                ProgressView()
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                            }
-                            
-                            // 100픽셀 높이의 빈 공간 추가
-                            Color.clear
-                                .frame(height: 100)
-                                .id("bottomSpace")
-                        }
-                        
-                    }
-                    
-                }
-                .padding(.horizontal, 16)
-                
-                Spacer()
             }
 
         }
         .navigationBarBackButtonHidden()
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 18))
+                    .onTapGesture {
+                        viewModel.appState.navigation.pop()
+                    }
+            }
         }
     }
-    
-    @ViewBuilder func shortMemo(memo: Memo) -> some View {
-        Text(memo.content)
-            .font(.system(size: 16, weight: .regular))
-            .foregroundColor(Color.titleTextBlack)
-            .padding(.horizontal, 14)
-            .padding(.vertical, 6)
-            .background(Color.white)
-            .cornerRadius(14)
-            .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
-            .lineLimit(1)
-            .truncationMode(.tail)
-    }
+
 }

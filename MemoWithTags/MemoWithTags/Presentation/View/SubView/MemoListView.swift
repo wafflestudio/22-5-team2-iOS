@@ -6,83 +6,54 @@ import SwiftUI
 struct MemoListView: View {
     @ObservedObject var viewModel: MainViewModel
     
+    @State private var stopFetching: Bool = false
+    
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 12) {
-                    ForEachIndexed(viewModel.memos) { index, memo in
-                        // 날짜 헤더 표시
-                        if showDateHeader(at: index) {
-                            Text(dateFormatter.string(from: memo.createdAt))
-                                .font(Font.custom("Pretendard Variable", size: 12).weight(.medium))
-                                .foregroundColor(Color(red: 0.63, green: 0.63, blue: 0.63))
-                                .frame(maxWidth: .infinity, alignment: .center)
+        
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 12) {
+                
+                GeometryReader { geometry in
+                    ProgressView()
+                        .frame(maxWidth: .infinity)
+                        .opacity(viewModel.isLoading ? 1 : 0)
+                        .onChange(of: geometry.frame(in: .named("scroll")).minY) { _, value in
+                            Task {
+                                if value >  0 && !viewModel.memos.isEmpty && !stopFetching {
+                                    await viewModel.fetchMemos()
+                                }
+                            }
                         }
-                        
-                        // MemoView with unique id and context menu
-                        MemoView(memo: memo, viewModel: viewModel)
-                            .id(memo.id)
-                            .contextMenu {
-                                Button() {
-                                    // memo.lock.toggle()
-                                } label: {
-                                    Label("잠그기", systemImage: "lock")
-                                    // 메모가 이미 잠긴 상태면 Label("잠금 해제하기", systemImage: "lock.open")
-                                }
-                                
-                                Button(role: .destructive) {
-                                    Task {
-                                        await viewModel.deleteMemo(memoId: memo.id)
-                                    }
-
-                                } label: {
-                                    Label("삭제하기", systemImage: "trash")
-                                }
-                            }
-                            .onAppear {
-                                if index == viewModel.memos.count - 1 {
-                                    Task {
-                                        viewModel.mainCurrentPage += 1
-                                        await viewModel.fetchMemos()
-                                    }
-                                }
-                            }
-                    }
-                    
-                    if viewModel.isLoading {
-                        ProgressView()
-                            .frame(maxWidth: .infinity, alignment: .center)
-                    }
-                    
-                    // 100픽셀 높이의 빈 공간 추가
-                    Color.clear
-                        .frame(height: 100)
-                        .id("bottomSpace")
                 }
-                .padding(.horizontal, 12)
-                .frame(maxWidth: .infinity, alignment: .topLeading)
+                
+                ForEachIndexed(viewModel.memos.reversed()) { index, memo in
+                    // MemoView with unique id and context menu
+                    MemoView(memo: memo)
+                        .id(memo.id)
+                        .scrollTargetLayout()
+                        .contextMenu {
+                            Button {
+                                // memolist에서 선택된 memo를 hide하고
+                                // EditingMemoView에 선택된 memo를 표시해야 함
+                            } label: {
+                                Label("메모 수정", systemImage: "pencil")
+                            }
+                            
+                            Button(role: .destructive) {
+                                Task {
+                                    await viewModel.deleteMemo(memoId: memo.id)
+                                }
+
+                            } label: {
+                                Label("메모 삭제", systemImage: "trash")
+                            }
+                        }
+                }
             }
+            .padding(.horizontal, 12)
         }
-    }
-    
-    
-    private let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy년 MM월 dd일"
-        return formatter
-    }()
-    
-    // 날짜 헤더 표시 여부를 판단하는 함수 분리
-    private func showDateHeader(at index: Int) -> Bool {
-        if index == 0 { return true }
-        else { return isDifferentDay(current: viewModel.memos[index], previous: viewModel.memos[index - 1]) }
-    }
-    
-    // 현재 메모와 이전 메모가 다른 날에 생성되었는지 확인
-    private func isDifferentDay(current: Memo, previous: Memo) -> Bool {
-        let currentDay = Calendar.current.startOfDay(for: current.createdAt)
-        let previousDay = Calendar.current.startOfDay(for: previous.createdAt)
-        return currentDay != previousDay
+        .defaultScrollAnchor(.bottom)
+        .coordinateSpace(name: "scroll")
     }
 }
 

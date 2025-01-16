@@ -12,7 +12,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     //main 쪽
     @Published var memos: [Memo] = []
     @Published var tags: [Tag] = []
-    @Published var mainCurrentPage: Int = 1
+    @Published var mainCurrentPage: Int = 0
     @Published var mainTotalPages: Int = 1
     
     // main에서 create 또는 update하는 변수들
@@ -26,30 +26,29 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     @Published var selectedSearchTags: [Tag] = [] //메모 검색할때 추가한 태그들 보관
     @Published var searchedMemos: [Memo] = []
     @Published var searchedTags: [Tag] = []
-    @Published var searchCurrentPage: Int = 1
+    @Published var searchCurrentPage: Int = 0
     @Published var searchTotalPages: Int = 1
     
     @Published var isLoading: Bool = false
     
-    func fetchMemos(content: String? = nil, tagIds: [Int]? = nil, dateRange: ClosedRange<Date>? = nil) async {
-        isLoading = true
-        
-        var result: Result<PaginatedMemos, MemoError>
-        
-        if content == nil && tagIds == nil && dateRange == nil {
-            guard mainCurrentPage <= mainTotalPages else {
-                isLoading = false
-                return
-            }
-            result = await useCases.fetchMemoUseCase.execute(content: content, tagIds: tagIds, dateRange: dateRange, page: mainCurrentPage)
-        } else {
-            guard searchCurrentPage <= searchTotalPages else {
-                isLoading = false
-                return
-            }
-            result = await useCases.fetchMemoUseCase.execute(content: content, tagIds: tagIds, dateRange: dateRange, page: searchCurrentPage)
+    func fetchMemos() async {
+        guard !isLoading else {
+            return
         }
-
+        
+        isLoading = true
+        mainCurrentPage += 1
+        
+        guard mainCurrentPage <= mainTotalPages else {
+            isLoading = false
+            mainCurrentPage -= 1
+            return
+        }
+        
+        try? await Task.sleep(nanoseconds: 1_000_000_000) // 일부러 1초 딜레이
+        
+        let result = await useCases.fetchMemoUseCase.execute(content: nil, tagIds: nil, dateRange: nil, page: mainCurrentPage)
+        
         switch result {
         case .success(let paginatedMemos):
             let updatedMemos = paginatedMemos.memos.map { memo -> Memo in
@@ -58,13 +57,45 @@ final class MainViewModel: BaseViewModel, ObservableObject {
                 return updatedMemo
             }
             
-            if content == nil && tagIds == nil && dateRange == nil {
-                self.memos.append(contentsOf: updatedMemos)
-                self.mainTotalPages = paginatedMemos.totalPages
-            } else {
-                self.searchedMemos.append(contentsOf: updatedMemos)
-                self.searchTotalPages = paginatedMemos.totalPages
+            self.memos.append(contentsOf: updatedMemos)
+            self.mainTotalPages = paginatedMemos.totalPages
+
+        case .failure(let error):
+            appState.system.showAlert = true
+            appState.system.errorMessage = error.localizedDescription()
+        }
+        
+        isLoading = false
+    }
+    
+    func searchMemos(content: String? = nil, tagIds: [Int]? = nil, dateRange: ClosedRange<Date>? = nil) async {
+        guard !isLoading else {
+            return
+        }
+        
+        isLoading = true
+        searchCurrentPage += 1
+        
+        guard searchCurrentPage <= searchTotalPages else {
+            isLoading = false
+            searchCurrentPage -= 1
+            return
+        }
+        
+        try? await Task.sleep(nanoseconds: 1_000_000_000) // 일부러 1초 딜레이
+        
+        let result = await useCases.fetchMemoUseCase.execute(content: content, tagIds: tagIds, dateRange: dateRange, page: searchCurrentPage)
+        
+        switch result {
+        case .success(let paginatedMemos):
+            let updatedMemos = paginatedMemos.memos.map { memo -> Memo in
+                var updatedMemo = memo
+                updatedMemo.tags = getTags(from: updatedMemo.tagIds)
+                return updatedMemo
             }
+            
+            self.searchedMemos.append(contentsOf: updatedMemos)
+            self.searchTotalPages = paginatedMemos.totalPages
 
         case .failure(let error):
             appState.system.showAlert = true

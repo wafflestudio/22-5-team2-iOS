@@ -18,20 +18,10 @@ final class DefaultEmailVerificationUseCase: EmailVerificationUseCase {
 
     func execute(email: String, code: String) async -> Result<Void, VerifyEmailError> {
         do {
-            let dto = try await authRepository.verifyEmail(email: email, code: code)
-            let auth = dto.toAuth()
-            
-            let isAccessSaved = KeyChainManager.shared.saveAccessToken(token: auth.accessToken)
-            let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: auth.refreshToken)
-            
-            if isAccessSaved && isRefreshSaved {
-                return .success(())
-            } else {
-                return .failure(.tokenSaveError)
-            }
-
+            try await authRepository.verifyEmail(email: email, code: code)
+            return .success(())
         } catch {
-            return .failure(.notMatchCode)
+            return .failure(.from(baseError: error as! BaseError))
         }
     }
 }
