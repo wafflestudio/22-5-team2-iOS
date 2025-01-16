@@ -159,6 +159,10 @@ struct SignupView: View {
             .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
         }
         .navigationBarBackButtonHidden()
+        .onAppear {
+            viewModel.isValidPassword = false
+            viewModel.satisfiedCount = 0
+        }
     }
 }
 

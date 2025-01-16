@@ -38,9 +38,9 @@ final class DefaultAuthRepository: AuthRepository {
         try handleError(response: response)
     }
     
-    func resetPassword(email:String, newPassword: String) async throws {
+    func resetPassword(email:String, code: String, newPassword: String) async throws {
         print("reset password")
-        let response = await AF.request(AuthRouter.resetPassword(email: email, newPassword: newPassword)).serializingData().response
+        let response = await AF.request(AuthRouter.resetPassword(email: email, code: code, newPassword: newPassword)).serializingData().response
         try handleError(response: response)
     }
     
