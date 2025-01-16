@@ -14,7 +14,7 @@ struct EditingTagListView: View {
     @State private var randomColor: String = ""
     
     // 상태 변수를 sheet(item:)에 맞게 수정
-    @State private var tagToUpdate: Tag? = nil
+    @State private var updatingTag: Tag? = nil
     
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
@@ -38,12 +38,12 @@ struct EditingTagListView: View {
                 HStack(alignment: .center, spacing: 8) {
                     ForEach(filterTags(), id: \.id) { tag in
                         TagView(tag: tag) {
-                            viewModel.selectedTags.append(tag)
+                            viewModel.creatingOrUpdatingMemoSelectedTags.append(tag)
                         }
                         .contextMenu {
                             Button {
                                 hideKeyboard()
-                                tagToUpdate = tag
+                                updatingTag = tag
                             } label: {
                                 Label("수정", systemImage: "pencil")
                             }
@@ -68,6 +68,7 @@ struct EditingTagListView: View {
                         .onTapGesture {
                             Task {
                                 await viewModel.createTag(name: searchText, color: randomColor)
+                                searchText = ""
                                 generateRandomHexColor()
                             }
                         }
@@ -81,8 +82,8 @@ struct EditingTagListView: View {
             generateRandomHexColor()
         }
         // sheet(item:)을 사용하여 tagToUpdate가 설정되면 시트를 표시
-        .sheet(item: $tagToUpdate) { tag in
-            UpdateTagView(mainViewModel: viewModel, tag: tag)
+        .sheet(item: $updatingTag) { tag in
+            UpdateTagView(viewModel: viewModel, tag: tag)
         }
     }
     
@@ -98,7 +99,7 @@ struct EditingTagListView: View {
     // Determine if a new tag can be created
     private func canCreateTag() -> Bool {
         let trimmedText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        return !trimmedText.isEmpty && !viewModel.recommendTags().contains { $0.name.lowercased() == trimmedText.lowercased() }
+        return !trimmedText.isEmpty && !viewModel.tags.contains { $0.name.lowercased() == trimmedText.lowercased() }
     }
     
     // Generate a random HEX color string from TagColor enum

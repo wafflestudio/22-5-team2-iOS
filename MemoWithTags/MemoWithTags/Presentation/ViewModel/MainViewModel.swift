@@ -15,11 +15,11 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     @Published var mainCurrentPage: Int = 1
     @Published var mainTotalPages: Int = 1
     
-    @Published var isCreating: Bool = true // true이면 새로운 메모를 생성하고 있는 것이고, false이면 기존 메모를 수정하고 있는 것이다.
-    @Published var workingMemo: Memo? = nil // 현재 생성하거나 수정하고 있는 메모
-    
-    // 이거 없애고 workingMemo로 합치기
-    @Published var selectedTags: [Tag] = [] // 메모 생성 & 수정할 때 붙은 태그들 보관
+    // main에서 create 또는 update하는 변수들
+    @Published var isUpdating: Bool = false
+    @Published var updatingMemoId: Int?
+    @Published var creatingOrUpdatingMemoContent: String = ""
+    @Published var creatingOrUpdatingMemoSelectedTags: [Tag] = []
     
     //search 쪽
     @Published var searchText: String = ""
@@ -81,9 +81,9 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         
         switch result {
         case .success(let memo):
-            var newMemo = memo
-            newMemo.tags = getTags(from: newMemo.tagIds)
-            self.memos.insert(newMemo, at: 0)
+            var memoWithFilledTags = memo
+            memoWithFilledTags.tags = getTags(from: memoWithFilledTags.tagIds)
+            self.memos.insert(memoWithFilledTags, at: 0)
         case .failure(let error):
             appState.system.showAlert = true
             appState.system.errorMessage = error.localizedDescription()
@@ -98,8 +98,10 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         let result = await useCases.updateMemoUseCase.execute(memoId: memoId, content: newContent, tagIds: newTagIds)
         switch result {
         case .success(let memo):
+            var memoWithFilledTags = memo
+            memoWithFilledTags.tags = getTags(from: memoWithFilledTags.tagIds)
             if let index = self.memos.firstIndex(where: { $0.id == memoId }) {
-                self.memos[index] = memo
+                self.memos[index] = memoWithFilledTags
             }
         case .failure(let error):
             appState.system.showAlert = true
@@ -146,6 +148,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         switch result {
         case .success(let tag):
             self.tags.append(tag)
+            self.creatingOrUpdatingMemoSelectedTags.append(tag)
         case .failure(let error):
             appState.system.showAlert = true
             appState.system.errorMessage = error.localizedDescription()
@@ -160,8 +163,15 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         let result = await useCases.updateTagUseCase.execute(tagId: tagId, name: newName, color: newColor)
         switch result {
         case .success(let tag):
+            // MainViewModel의 tag 변경
             if let index = self.tags.firstIndex(where: { $0.id == tagId }) {
                 self.tags[index] = tag
+            }
+            // MainViewModel의 memo에 있는 tag 변경
+            for index in memos.indices {
+                if let tagIndex = memos[index].tags.firstIndex(where: { $0.id == tagId }) {
+                    memos[index].tags[tagIndex] = tag
+                }
             }
         case .failure(let error):
             appState.system.showAlert = true
@@ -177,9 +187,9 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         let result = await useCases.deleteTagUseCase.execute(tagId: tagId)
         switch result {
         case .success:
-            // mainViewModel의 tag 삭제
+            // MainViewModel의 tag 삭제
             self.tags.removeAll { $0.id == tagId }
-            // mainViewModel의 memo에 있는 tag 삭제
+            // MainViewModel의 memo에 있는 tag 삭제
             for index in memos.indices {
                 self.memos[index].tags.removeAll { $0.id == tagId }
             }
@@ -219,7 +229,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     
     ///태그 추천 해주는 함수
     func recommendTags() -> [Tag] {
-        tags.filter { !selectedTags.contains($0) }
+        tags.filter { !creatingOrUpdatingMemoSelectedTags.contains($0) }
     }
     
     /// tag id --> tag 맵핑하는 함수
@@ -230,7 +240,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     private func clearVM() {
         memos = []
         tags = []
-        selectedTags = []
+        creatingOrUpdatingMemoSelectedTags = []
         mainCurrentPage = 1
         mainTotalPages = 1
         

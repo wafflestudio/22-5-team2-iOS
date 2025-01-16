@@ -16,7 +16,15 @@ struct CreateTagView: View {
             Text("Create")
                 .font(.custom("Pretendard", size: 16))
             
-            TagView(tag: Tag(id: -1, name: searchText, color: randomColor)) {}
+            Text(searchText)
+                .font(.system(size: 15, weight: .regular))
+                .foregroundColor(Color.tagTextColor)
+                .padding(.horizontal, 7)
+                .padding(.vertical, 1)
+                .background(Color(hex: randomColor))
+                .cornerRadius(4)
+                .lineLimit(1)
+                .truncationMode(.tail)
         }
     }
 }

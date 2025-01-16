@@ -23,11 +23,11 @@ struct MemoListView: View {
                         MemoView(memo: memo, viewModel: viewModel)
                             .id(memo.id)
                             .contextMenu {
-                                Button {
-                                    // memolist에서 선택된 memo를 hide하고
-                                    // EditingMemoView에 선택된 memo를 표시해야 함
+                                Button() {
+                                    // memo.lock.toggle()
                                 } label: {
-                                    Label("메모 수정", systemImage: "pencil")
+                                    Label("잠그기", systemImage: "lock")
+                                    // 메모가 이미 잠긴 상태면 Label("잠금 해제하기", systemImage: "lock.open")
                                 }
                                 
                                 Button(role: .destructive) {
@@ -36,7 +36,7 @@ struct MemoListView: View {
                                     }
 
                                 } label: {
-                                    Label("메모 삭제", systemImage: "trash")
+                                    Label("삭제하기", systemImage: "trash")
                                 }
                             }
                             .onAppear {
