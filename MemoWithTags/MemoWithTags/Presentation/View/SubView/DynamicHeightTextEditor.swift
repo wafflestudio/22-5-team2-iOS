@@ -9,10 +9,12 @@ import SwiftUI
 
 struct DynamicHeightTextEditor: View {
     @Binding var text: String
-    @State var dynamicHeight: CGFloat = 20
     let placeholder: String = "새로운 메모"
+    
+    @State var dynamicHeight: CGFloat = 20
     let minHeight: CGFloat = 20
     let maxHeight: CGFloat
+    let singleLineHeight: CGFloat = 20 // font size 16이 line height 20을 차지할 것이라 가정.
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -27,10 +29,10 @@ struct DynamicHeightTextEditor: View {
                             // Calculate new height based on content
                             let newHeight = text.heightWithConstrainedWidth(
                                 width: geometry.size.width,
-                                font: UIFont.systemFont(ofSize: 17)
+                                font: UIFont(name: "Pretendard", size: 16) ?? UIFont.systemFont(ofSize: 16)
                             )
                             DispatchQueue.main.async {
-                                dynamicHeight = min(max(newHeight + 20, minHeight), maxHeight)
+                                dynamicHeight = min(max(newHeight + singleLineHeight, minHeight), maxHeight)
                             }
                         }
                 })
@@ -39,9 +41,10 @@ struct DynamicHeightTextEditor: View {
             
             if text.isEmpty {
                 Text(placeholder)
+                    .font(Font.custom("Pretendard", size: 16))
                     .foregroundColor(Color.gray.opacity(0.6))
                     .padding(.horizontal, 6)
-                    .padding(.vertical, 12)
+                    .padding(.vertical, 10)
                     .allowsHitTesting(false) // 플레이스홀더가 터치 이벤트를 차단하지 않도록 설정
             }
         }
@@ -51,14 +54,14 @@ struct DynamicHeightTextEditor: View {
     private func updateHeight(from size: CGSize) {
         let calculatedHeight = text.heightWithConstrainedWidth(
             width: size.width,
-            font: UIFont.systemFont(ofSize: 17)
+            font: UIFont(name: "Pretendard", size: 16) ?? UIFont.systemFont(ofSize: 16)
         )
-        dynamicHeight = min(max(calculatedHeight + 20, minHeight), maxHeight)
+        dynamicHeight = min(max(calculatedHeight + singleLineHeight, minHeight), maxHeight)
     }
 }
 
 extension String {
-    /// Calculates the height required for the given string with constrained width and font.
+    // Calculates the height required for the given string with constrained width and font.
     func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
         let adjustedWidth = max(width - 16, 1) // Ensure width is at least 1 to prevent invalid constraints
         let constraintRect = CGSize(width: adjustedWidth, height: .greatestFiniteMagnitude) // Adjust for padding

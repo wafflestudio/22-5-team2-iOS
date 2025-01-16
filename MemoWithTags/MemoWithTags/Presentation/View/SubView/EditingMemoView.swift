@@ -11,8 +11,6 @@ import Flow
 struct EditingMemoView: View {
     @ObservedObject var viewModel: MainViewModel
     
-    @State var content: String = ""
-    
     @State var isExpanded: Bool = false
     
     @Namespace private var animationNamespace
@@ -34,11 +32,6 @@ struct EditingMemoView: View {
             .animation(.spring(), value: isExpanded)
         }
         .navigationBarHidden(isExpanded)
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.isTextEditorFocused = true
-            }
-        }
     }
     
     
@@ -50,7 +43,7 @@ struct EditingMemoView: View {
                 
                 // Text Editor
                 DynamicHeightTextEditor(
-                    text: $content,
+                    text: $viewModel.creatingOrUpdatingMemoContent,
                     maxHeight: 100
                 )
                 .matchedGeometryEffect(id: "textEditor", in: animationNamespace)
@@ -59,7 +52,7 @@ struct EditingMemoView: View {
                 HStack(alignment: .center, spacing: 8) {
                     // Display selected tags
                     HFlow {
-                        ForEach(viewModel.selectedTags, id: \.id) { tag in
+                        ForEach(viewModel.creatingOrUpdatingMemoSelectedTags, id: \.id) { tag in
                             TagView(tag: tag) {
                                 removeTagFromSelectedTags(tag)
                             }
@@ -86,8 +79,8 @@ struct EditingMemoView: View {
                             .foregroundColor(.black)
                     }
                     
-                    // Create Memo Button
-                    Button(action: createMemoAction) {
+                    // Create or Update
+                    Button(action: (viewModel.isUpdating ? updateMemoAction: createMemoAction)) {
                         Image(systemName: "highlighter")
                             .resizable()
                             .scaledToFit()
@@ -96,9 +89,9 @@ struct EditingMemoView: View {
                     }
                 }
             }
-            .padding(.horizontal, 17)
-            .padding(.top, 5)
-            .padding(.bottom, 9)
+            .padding(.horizontal, 14)
+            .padding(.top, 9)
+            .padding(.bottom, 13)
             .background(Color.memoBackgroundWhite)
             .cornerRadius(14)
             .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 2)
@@ -114,7 +107,7 @@ struct EditingMemoView: View {
             
             // Text Editor
             DynamicHeightTextEditor(
-                text: $content,
+                text: $viewModel.creatingOrUpdatingMemoContent,
                 maxHeight: 400
             )
             .matchedGeometryEffect(id: "textEditor", in: animationNamespace)
@@ -125,7 +118,7 @@ struct EditingMemoView: View {
             HStack(alignment: .center, spacing: 8) {
                 // Display selected tags
                 HFlow {
-                    ForEach(viewModel.selectedTags, id: \.id) { tag in
+                    ForEach(viewModel.creatingOrUpdatingMemoSelectedTags, id: \.id) { tag in
                         TagView(tag: tag) {
                             removeTagFromSelectedTags(tag)
                         }
@@ -152,8 +145,8 @@ struct EditingMemoView: View {
                         .foregroundColor(.black)
                 }
                 
-                // Create Memo Button
-                Button(action: createMemoAction) {
+                // Create or Update
+                Button(action: (viewModel.isUpdating ? updateMemoAction: createMemoAction)) {
                     Image(systemName: "highlighter")
                         .resizable()
                         .scaledToFit()
@@ -162,33 +155,29 @@ struct EditingMemoView: View {
                 }
             }
         }
-        .padding(.horizontal, 17)
-        .padding(.top, 5)
-        .padding(.bottom, 9)
+        .padding(.horizontal, 14)
+        .padding(.top, 9)
+        .padding(.bottom, 13)
         .background(Color.memoBackgroundWhite)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    
-    
-    // Function to remove a tag from selectedTags
     private func removeTagFromSelectedTags(_ tag: Tag) {
-        viewModel.selectedTags.removeAll { $0.id == tag.id }
+        viewModel.creatingOrUpdatingMemoSelectedTags.removeAll { $0.id == tag.id }
     }
     
-    // Dismisses the keyboard.
     private func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
-    // Function to handle memo creation
     private func createMemoAction() {
         Task {
-            let trimmedContent = content.trimmingCharacters(in: .whitespacesAndNewlines)
+            let trimmedContent = viewModel.creatingOrUpdatingMemoContent.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !trimmedContent.isEmpty else {
                 return
             }
-            let tagIds = viewModel.selectedTags.map { $0.id }
+            
+            let tagIds = viewModel.creatingOrUpdatingMemoSelectedTags.map { $0.id }
             
             // Call the onConfirm closure with content and tag IDs
             
@@ -199,8 +188,29 @@ struct EditingMemoView: View {
             await viewModel.fetchMemos()
             
             // Reset the input fields
-            content = ""
-            viewModel.selectedTags = []
+            viewModel.creatingOrUpdatingMemoContent = ""
+            viewModel.creatingOrUpdatingMemoSelectedTags = []
+            hideKeyboard()
+        }
+    }
+    
+    private func updateMemoAction() {
+        Task {
+            let trimmedContent = viewModel.creatingOrUpdatingMemoContent.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmedContent.isEmpty else {
+                return
+            }
+            
+            let tagIds = viewModel.creatingOrUpdatingMemoSelectedTags.map { $0.id }
+            
+            // Call the onConfirm closure with content and tag IDs
+            await viewModel.updateMemo(memoId: viewModel.updatingMemoId!, newContent: trimmedContent, newTagIds: tagIds)
+            
+            // Reset the input fields
+            viewModel.isUpdating = false
+            viewModel.updatingMemoId = nil
+            viewModel.creatingOrUpdatingMemoContent = ""
+            viewModel.creatingOrUpdatingMemoSelectedTags = []
             hideKeyboard()
         }
     }
