@@ -14,7 +14,12 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     @Published var tags: [Tag] = []
     @Published var mainCurrentPage: Int = 1
     @Published var mainTotalPages: Int = 1
-    @Published var selectedTags: [Tag] = [] //메모 생성할때 추가한 태그들 보관
+    
+    @Published var isCreating: Bool = true // true이면 새로운 메모를 생성하고 있는 것이고, false이면 기존 메모를 수정하고 있는 것이다.
+    @Published var workingMemo: Memo? = nil // 현재 생성하거나 수정하고 있는 메모
+    
+    // 이거 없애고 workingMemo로 합치기
+    @Published var selectedTags: [Tag] = [] // 메모 생성 & 수정할 때 붙은 태그들 보관
     
     //search 쪽
     @Published var searchText: String = ""

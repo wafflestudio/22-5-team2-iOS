@@ -87,7 +87,7 @@ struct SearchView: View {
                         //검색된 메모들
                         LazyVStack(alignment: .leading, spacing: 12) {
                             ForEachIndexed(viewModel.searchedMemos) { index, memo in
-                                MemoView(memo: memo)
+                                MemoView(memo: memo, viewModel: viewModel)
                                     .contextMenu {
                                         Button(role: .destructive) {
                                             Task {

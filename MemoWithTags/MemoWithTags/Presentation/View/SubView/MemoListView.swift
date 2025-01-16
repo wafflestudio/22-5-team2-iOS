@@ -20,7 +20,7 @@ struct MemoListView: View {
                         }
                         
                         // MemoView with unique id and context menu
-                        MemoView(memo: memo)
+                        MemoView(memo: memo, viewModel: viewModel)
                             .id(memo.id)
                             .contextMenu {
                                 Button {
