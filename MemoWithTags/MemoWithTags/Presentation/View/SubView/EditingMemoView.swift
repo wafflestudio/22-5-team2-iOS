@@ -191,7 +191,12 @@ struct EditingMemoView: View {
             let tagIds = viewModel.selectedTags.map { $0.id }
             
             // Call the onConfirm closure with content and tag IDs
+            
             await viewModel.createMemo(content: trimmedContent, tagIds: tagIds)
+            
+            viewModel.memos = []
+            viewModel.mainCurrentPage = 0
+            await viewModel.fetchMemos()
             
             // Reset the input fields
             content = ""

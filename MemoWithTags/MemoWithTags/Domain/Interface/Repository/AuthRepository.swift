@@ -17,7 +17,7 @@ protocol AuthRepository: BaseRepository {
     ///비밀번호 재설정하는 함수
     func resetPassword(email: String, newPassword: String) async throws
     ///이메일 인증하는 함수
-    func verifyEmail(email: String, code: String) async throws -> AuthDto
+    func verifyEmail(email: String, code: String) async throws
     ///유저 정보 가져오는 함수
     func getUserInfo() async throws -> UserDto
 }

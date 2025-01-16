@@ -15,7 +15,6 @@ final class DefaultTagRepository: TagRepository {
     func fetchTags() async throws -> [TagDto] {
         print("fetch tag")
         let response = await AF.request(TagRouter.fetchTags, interceptor: tokenInterceptor).serializingDecodable([TagDto].self).response
-        print(response)
         let dto = try handleErrorDecodable(response: response)
     
         return dto

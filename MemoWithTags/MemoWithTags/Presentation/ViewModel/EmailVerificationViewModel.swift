@@ -10,27 +10,22 @@ import SwiftUI
 @MainActor
 final class EmailVerificationViewModel: BaseViewModel, ObservableObject {
     func verify(email: String, code: String) async {
-//        isLoading = true
-//        
-//        let result = await emailVerificationUseCase.execute(email: email, code: code)
-//
-//        switch result {
-//        case .success:
-//            isVerified = true
-//            showAlert = false
-//        case .failure(let error):
-//            isVerified = false
-//            showAlert = true
-//            errorMessage = error.localizedDescription()
-//        }
-//        isLoading = false
-        
-        if code == "000000" {
+        let result = await useCases.emailVerificationUseCase.execute(email: email, code: code)
+
+        switch result {
+        case .success:
             appState.navigation.push(to: .signupSuccess)
-        } else {
+        case .failure(let error):
             appState.system.showAlert = true
-            appState.system.errorMessage = VerifyEmailError.notMatchCode.localizedDescription()
+            appState.system.errorMessage = error.localizedDescription()
         }
+        
+//        if code == "000000" {
+//            appState.navigation.push(to: .signupSuccess)
+//        } else {
+//            appState.system.showAlert = true
+//            appState.system.errorMessage = VerifyEmailError.notMatchCode.localizedDescription()
+//        }
         
     }
 }
