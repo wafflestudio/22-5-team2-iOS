@@ -19,7 +19,7 @@ struct UpdateTagView: View {
         self.viewModel = viewModel
         self.tag = tag
         updatedName = tag.name
-        selectedColor = Color.TagColor(rawValue: tag.color) ?? .color1
+        selectedColor = tag.color
     }
 
     var body: some View {
@@ -51,7 +51,7 @@ struct UpdateTagView: View {
                 },
                 trailing: Button("저장") {
                     Task {
-                        await viewModel.updateTag(tagId: tag.id, newName: updatedName, newColor: selectedColor.rawValue)
+                        await viewModel.updateTag(tagId: tag.id, name: updatedName, color: selectedColor)
                         presentationMode.wrappedValue.dismiss()
                     }
                 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 @MainActor
 final class MainViewModel: BaseViewModel, ObservableObject {
@@ -171,7 +172,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         isLoading = false
     }
     
-    func createTag(name: String, color: String) async {
+    func createTag(name: String, color: Color.TagColor) async {
         isLoading = true
         
         let result = await useCases.createTagUseCase.execute(name: name, color: color)
@@ -187,10 +188,10 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         isLoading = false
     }
     
-    func updateTag(tagId: Int, newName: String, newColor: String) async {
+    func updateTag(tagId: Int, name: String, color: Color.TagColor) async {
         isLoading = true
         
-        let result = await useCases.updateTagUseCase.execute(tagId: tagId, name: newName, color: newColor)
+        let result = await useCases.updateTagUseCase.execute(tagId: tagId, name: name, color: color)
         switch result {
         case .success(let tag):
             // MainViewModel의 tag 변경

@@ -11,7 +11,7 @@ struct EditingTagListView: View {
     @ObservedObject var viewModel: MainViewModel
     
     @State private var searchText: String = ""
-    @State private var randomColor: String = ""
+    @State private var randomColor: Color.TagColor = Color.TagColor.allCases.randomElement()!
     
     // 상태 변수를 sheet(item:)에 맞게 수정
     @State private var updatingTag: Tag? = nil
@@ -109,9 +109,7 @@ struct EditingTagListView: View {
     
     // Generate a random HEX color string from TagColor enum
     private func generateRandomHexColor() {
-        if let randomTagColor = Color.TagColor.allCases.randomElement() {
-            randomColor = randomTagColor.rawValue
-        }
+        self.randomColor = Color.TagColor.allCases.randomElement()!
     }
     
     // Dismisses the keyboard.

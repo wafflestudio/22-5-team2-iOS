@@ -17,7 +17,7 @@ struct TagView: View {
             .foregroundColor(Color.tagTextColor)
             .padding(.horizontal, 7)
             .padding(.vertical, 1)
-            .background(Color(hex: tag.color))
+            .background(tag.color.color)
             .cornerRadius(4)
             .lineLimit(1)
             .truncationMode(.tail)

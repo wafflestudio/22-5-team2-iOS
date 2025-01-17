@@ -9,8 +9,8 @@ import Alamofire
 
 protocol TagRepository: BaseRepository {
     func fetchTags() async throws -> [TagDto]
-    func createTag(name: String, color: String) async throws -> TagDto
+    func createTag(name: String, colorHex: String) async throws -> TagDto
     func deleteTag(tagId: Int) async throws
-    func updateTag(tagId: Int, name: String, color: String) async throws -> TagDto
+    func updateTag(tagId: Int, name: String, colorHex: String) async throws -> TagDto
 }
 
