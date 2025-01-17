@@ -38,7 +38,7 @@ struct EditingTagListView: View {
                 HStack(alignment: .center, spacing: 8) {
                     ForEach(filterTags(), id: \.id) { tag in
                         TagView(tag: tag) {
-                            viewModel.creatingOrUpdatingMemoSelectedTags.append(tag)
+                            appendTagToSelectedTags(tag)
                         }
                         .contextMenu {
                             Button {
@@ -85,6 +85,11 @@ struct EditingTagListView: View {
         .sheet(item: $updatingTag) { tag in
             UpdateTagView(viewModel: viewModel, tag: tag)
         }
+    }
+    
+    
+    private func appendTagToSelectedTags(_ tag: Tag) {
+        viewModel.editingMemoSelectedTags.append(tag)
     }
     
     // Function to filter tags based on search text

@@ -53,7 +53,7 @@ struct MemoView: View {
             // Tags
             HFlow{
                 ForEach(memo.tags, id: \.id) { tag in
-                    TagView(tag: tag)
+                    TagView(tag: tag) // contect menu로, magnfuing glass 아이콘에 "이 태그로 검색하기"를 선택할 수 있다. 꾹 누르면 searchPage로 navigate되고, viewModel.searchBarSelectedTags에 그 tag가 추가된다.
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -82,8 +82,8 @@ struct MemoView: View {
             if !canExpand || isExpanded {
                 viewModel.isUpdating = true
                 viewModel.updatingMemoId = memo.id
-                viewModel.creatingOrUpdatingMemoContent = memo.content
-                viewModel.creatingOrUpdatingMemoSelectedTags = memo.tags
+                viewModel.editingMemoContent = memo.content
+                viewModel.editingMemoSelectedTags = memo.tags
             } else {
                 withAnimation(.spring) {
                     isExpanded.toggle()

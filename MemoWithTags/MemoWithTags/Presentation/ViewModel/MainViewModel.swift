@@ -9,21 +9,20 @@ import Foundation
 
 @MainActor
 final class MainViewModel: BaseViewModel, ObservableObject {
-    //main 쪽
+    //mainPage 변수들
     @Published var memos: [Memo] = []
     @Published var tags: [Tag] = []
     @Published var mainCurrentPage: Int = 0
     @Published var mainTotalPages: Int = 1
-    
-    // main에서 create 또는 update하는 변수들
+    // main에서 edit하는 변수들. edit을 create 또는 update으로 정의한다.
     @Published var isUpdating: Bool = false
     @Published var updatingMemoId: Int?
-    @Published var creatingOrUpdatingMemoContent: String = ""
-    @Published var creatingOrUpdatingMemoSelectedTags: [Tag] = []
+    @Published var editingMemoContent: String = ""
+    @Published var editingMemoSelectedTags: [Tag] = []
     
-    //search 쪽
-    @Published var searchText: String = ""
-    @Published var selectedSearchTags: [Tag] = [] //메모 검색할때 추가한 태그들 보관
+    //searchPage 변수들
+    @Published var searchBarText: String = ""
+    @Published var searchBarSelectedTags: [Tag] = [] //메모 검색할때 추가한 태그들 보관
     @Published var searchedMemos: [Memo] = []
     @Published var searchedTags: [Tag] = []
     @Published var searchCurrentPage: Int = 0
@@ -179,7 +178,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         switch result {
         case .success(let tag):
             self.tags.append(tag)
-            self.creatingOrUpdatingMemoSelectedTags.append(tag)
+            self.editingMemoSelectedTags.append(tag)
         case .failure(let error):
             appState.system.showAlert = true
             appState.system.errorMessage = error.localizedDescription()
@@ -260,7 +259,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     
     ///태그 추천 해주는 함수
     func recommendTags() -> [Tag] {
-        tags.filter { !creatingOrUpdatingMemoSelectedTags.contains($0) }
+        tags.filter { !editingMemoSelectedTags.contains($0) }
     }
     
     /// tag id --> tag 맵핑하는 함수
@@ -271,15 +270,15 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     private func clearVM() {
         memos = []
         tags = []
-        creatingOrUpdatingMemoSelectedTags = []
-        mainCurrentPage = 1
+        editingMemoSelectedTags = []
+        mainCurrentPage = 0
         mainTotalPages = 1
         
-        searchText = ""
+        searchBarText = ""
+        searchBarSelectedTags = []
         searchedMemos = []
         searchedTags = []
-        selectedSearchTags = []
-        searchCurrentPage = 1
+        searchCurrentPage = 0
         searchTotalPages = 1
     }
 }
