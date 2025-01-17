@@ -20,6 +20,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     @Published var updatingMemoId: Int?
     @Published var editingMemoContent: String = ""
     @Published var editingMemoSelectedTags: [Tag] = []
+    @Published var updatingMemoIsLocked: Bool?
     
     //searchPage 변수들
     @Published var searchBarText: String = ""
@@ -105,10 +106,10 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         isLoading = false
     }
     
-    func createMemo(content: String, tagIds: [Int]) async {
+    func createMemo(content: String, tagIds: [Int], locked: Bool) async {
         isLoading = true
         
-        let result = await useCases.createMemoUseCase.execute(content: content, tagIds: tagIds)
+        let result = await useCases.createMemoUseCase.execute(content: content, tagIds: tagIds, locked: locked)
         
         switch result {
         case .success(let memo):
@@ -123,10 +124,10 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         isLoading = false
     }
     
-    func updateMemo(memoId: Int, newContent: String, newTagIds: [Int]) async {
+    func updateMemo(memoId: Int, content: String, tagIds: [Int], locked: Bool) async {
         isLoading = true
         
-        let result = await useCases.updateMemoUseCase.execute(memoId: memoId, content: newContent, tagIds: newTagIds)
+        let result = await useCases.updateMemoUseCase.execute(memoId: memoId, content: content, tagIds: tagIds, locked: locked)
         switch result {
         case .success(let memo):
             var memoWithFilledTags = memo

@@ -11,6 +11,7 @@ struct MemoDto: Decodable {
     let id: Int
     let content: String
     let tagIds: [Int]
+    let locked: Bool
     let createdAt: String
     let updatedAt: String
 
@@ -21,6 +22,7 @@ struct MemoDto: Decodable {
             content: content,
             tagIds: tagIds,
             tags: [],
+            locked: locked,
             createdAt: dateFormatter.date(from: createdAt) ?? Date(),
             updatedAt: dateFormatter.date(from: updatedAt) ?? Date()
         )

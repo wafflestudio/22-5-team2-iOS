@@ -11,6 +11,7 @@ struct Memo: Codable, Identifiable, Equatable  {
     var content: String
     var tagIds: [Int]
     var tags: [Tag]
+    var locked: Bool
     var createdAt: Date
     var updatedAt: Date
 }

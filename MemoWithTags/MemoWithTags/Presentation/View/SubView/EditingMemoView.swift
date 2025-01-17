@@ -181,7 +181,7 @@ struct EditingMemoView: View {
             
             // Call the onConfirm closure with content and tag IDs
             
-            await viewModel.createMemo(content: trimmedContent, tagIds: tagIds)
+            await viewModel.createMemo(content: trimmedContent, tagIds: tagIds, locked: false)
             
             viewModel.memos = []
             viewModel.mainCurrentPage = 0
@@ -204,13 +204,14 @@ struct EditingMemoView: View {
             let tagIds = viewModel.editingMemoSelectedTags.map { $0.id }
             
             // Call the onConfirm closure with content and tag IDs
-            await viewModel.updateMemo(memoId: viewModel.updatingMemoId!, newContent: trimmedContent, newTagIds: tagIds)
+            await viewModel.updateMemo(memoId: viewModel.updatingMemoId!, content: trimmedContent, tagIds: tagIds, locked: viewModel.updatingMemoIsLocked!)
             
             // Reset the input fields
             viewModel.isUpdating = false
             viewModel.updatingMemoId = nil
             viewModel.editingMemoContent = ""
             viewModel.editingMemoSelectedTags = []
+            viewModel.updatingMemoIsLocked = nil
             hideKeyboard()
         }
     }

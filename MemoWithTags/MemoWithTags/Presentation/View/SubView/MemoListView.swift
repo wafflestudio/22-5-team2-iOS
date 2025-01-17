@@ -37,6 +37,21 @@ struct MemoListView: View {
                                 Label("비슷한 메모 검색하기", systemImage: "text.magnifyingglass")
                             }
                             
+                            Button {
+                                Task {
+                                    let authenticated = await AuthenticationManager.shared.authenticateUser(reason: "메모를 잠그거나 잠금 해제하려면 인증이 필요합니다.")
+                                    if authenticated {
+                                        await viewModel.updateMemo(memoId: memo.id, content: memo.content, tagIds: memo.tagIds, locked: !memo.locked)
+                                    }
+                                }
+                            } label: {
+                                if memo.locked {
+                                    Label("잠금 해제하기", systemImage: "lock.open")
+                                } else {
+                                    Label("매모 잠그기", systemImage: "lock")
+                                }
+                            }
+                            
                             Button(role: .destructive) {
                                 Task {
                                     await viewModel.deleteMemo(memoId: memo.id)
