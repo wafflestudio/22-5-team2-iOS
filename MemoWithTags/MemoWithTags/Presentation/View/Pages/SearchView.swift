@@ -25,9 +25,7 @@ struct SearchView: View {
                 
                 // 검색 결과 보여주는 스크롤 뷰
                 ScrollView {
-                    
                     VStack(alignment: .leading, spacing: 12) {
-                        
                         GeometryReader { geometry in
                             ProgressView()
                                 .frame(maxWidth: .infinity)
@@ -42,14 +40,13 @@ struct SearchView: View {
                         }
                         
                         ForEachIndexed(viewModel.searchedMemos.reversed()) { index, memo in
-                            MemoView(memo: memo)
+                            MemoView(memo: memo, viewModel: viewModel)
                                 .id(memo.id)
                                 .contextMenu {
                                     Button {
-                                        // memolist에서 선택된 memo를 hide하고
-                                        // EditingMemoView에 선택된 memo를 표시해야 함
+                                        // 이 텍스트 내용이 그대로 검색창으로 넘어가서 검색이 실행되어야 한다.
                                     } label: {
-                                        Label("메모 수정", systemImage: "pencil")
+                                        Label("비슷한 메모 검색하기", systemImage: "text.magnifyingglass")
                                     }
                                     
                                     Button(role: .destructive) {
@@ -58,22 +55,11 @@ struct SearchView: View {
                                         }
 
                                     } label: {
-                                        Label("메모 삭제", systemImage: "trash")
+                                        Label("삭제하기", systemImage: "trash")
                                     }
                                 }
                         }
                     }
-                    
-                    //검색된 태그들
-                    HFlow {
-                        ForEach(viewModel.searchedTags, id: \.id) { tag in
-                            TagView(tag: tag) {
-                                //검색된 태그 클릭했을 때 액션
-                            }
-                        }
-                        Spacer()
-                    }
-                    
                 }
                 .padding(.horizontal, 12)
                 .frame(maxWidth: .infinity)
@@ -82,23 +68,27 @@ struct SearchView: View {
                 .defaultScrollAnchor(.bottom)
                 
                 HStack {
-                    TextField("단어와 태그로 메모 검색", text: $viewModel.searchText)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 8)
-                        .font(.system(size: 15, weight: .regular))
-                        .frame(maxWidth: .infinity)
-                        .background(Color.searchBarBackgroundGray)
-                        .clipShape(RoundedRectangle(cornerRadius: 30))
+                    // 검색창에 있는 메모들
+                    ForEach(viewModel.searchBarSelectedTags, id: \.id) { tag in
+                        TagView(tag: tag) {
+                            removeTagFromSelectedTags(tag)
+                        }
+                    }
+                    
+                    TextField("텍스트와 태그로 메모 검색", text: $viewModel.searchBarText)
                         .onSubmit {
                             Task {
-                                submitText = viewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-                                if !submitText.isEmpty {
+                                submitText = viewModel.searchBarText.trimmingCharacters(in: .whitespacesAndNewlines)
+                                if !submitText.isEmpty || !viewModel.searchBarSelectedTags.isEmpty {
                                     viewModel.searchCurrentPage = 0
                                     viewModel.searchTotalPages = 1
                                     viewModel.searchedMemos = []
                                     viewModel.searchedTags = []
-                                    await viewModel.searchMemos(content: submitText)
-                                    viewModel.searchedTags = viewModel.tags.filter { $0.name.lowercased().contains(submitText.lowercased()) }
+                                    let selectedTagIds = viewModel.searchBarSelectedTags.map { $0.id }
+                                    await viewModel.searchMemos(content: submitText, tagIds: selectedTagIds) // 여기에 viewModel.searchBarSelectedTags의 id를 넣어줘.
+                                    viewModel.searchedTags = viewModel.tags.filter { tag in
+                                        tag.name.lowercased().contains(submitText.lowercased()) && !selectedTagIds.contains(tag.id)
+                                    }
                                 }
                             }
                         }
@@ -106,8 +96,26 @@ struct SearchView: View {
                             UITextField.appearance().clearButtonMode = .whileEditing
                         }
                 }
+                // searchBar 내부 layout 결정
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .font(.system(size: 15, weight: .regular))
+                .frame(maxWidth: .infinity)
+                .background(Color.searchBarBackgroundGray)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                // SearchBar 외부 padding 결정
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
+                
+                // 검색된 태그들
+                HFlow {
+                    ForEach(viewModel.searchedTags, id: \.id) { tag in
+                        TagView(tag: tag) {
+                            appendTagToSelectedTags(tag)
+                        }
+                    }
+                }
+                .padding(.horizontal, 16)
                 
             }
 
@@ -122,6 +130,14 @@ struct SearchView: View {
                     }
             }
         }
+    }
+    
+    private func removeTagFromSelectedTags(_ tag: Tag) {
+        viewModel.searchBarSelectedTags.removeAll { $0.id == tag.id }
+    }
+    
+    private func appendTagToSelectedTags(_ tag: Tag) {
+        viewModel.searchBarSelectedTags.append(tag)
     }
 
 }

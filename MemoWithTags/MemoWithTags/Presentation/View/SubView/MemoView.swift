@@ -82,8 +82,8 @@ struct MemoView: View {
             if !canExpand || isExpanded {
                 viewModel.isUpdating = true
                 viewModel.updatingMemoId = memo.id
-                viewModel.creatingOrUpdatingMemoContent = memo.content
-                viewModel.creatingOrUpdatingMemoSelectedTags = memo.tags
+                viewModel.editingMemoContent = memo.content
+                viewModel.editingMemoSelectedTags = memo.tags
             } else {
                 withAnimation(.spring) {
                     isExpanded.toggle()

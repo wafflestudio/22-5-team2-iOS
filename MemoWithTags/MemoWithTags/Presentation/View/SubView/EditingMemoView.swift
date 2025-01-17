@@ -43,7 +43,7 @@ struct EditingMemoView: View {
                 
                 // Text Editor
                 DynamicHeightTextEditor(
-                    text: $viewModel.creatingOrUpdatingMemoContent,
+                    text: $viewModel.editingMemoContent,
                     maxHeight: 100
                 )
                 .matchedGeometryEffect(id: "textEditor", in: animationNamespace)
@@ -52,7 +52,7 @@ struct EditingMemoView: View {
                 HStack(alignment: .center, spacing: 8) {
                     // Display selected tags
                     HFlow {
-                        ForEach(viewModel.creatingOrUpdatingMemoSelectedTags, id: \.id) { tag in
+                        ForEach(viewModel.editingMemoSelectedTags, id: \.id) { tag in
                             TagView(tag: tag) {
                                 removeTagFromSelectedTags(tag)
                             }
@@ -107,7 +107,7 @@ struct EditingMemoView: View {
             
             // Text Editor
             DynamicHeightTextEditor(
-                text: $viewModel.creatingOrUpdatingMemoContent,
+                text: $viewModel.editingMemoContent,
                 maxHeight: 400
             )
             .matchedGeometryEffect(id: "textEditor", in: animationNamespace)
@@ -118,7 +118,7 @@ struct EditingMemoView: View {
             HStack(alignment: .center, spacing: 8) {
                 // Display selected tags
                 HFlow {
-                    ForEach(viewModel.creatingOrUpdatingMemoSelectedTags, id: \.id) { tag in
+                    ForEach(viewModel.editingMemoSelectedTags, id: \.id) { tag in
                         TagView(tag: tag) {
                             removeTagFromSelectedTags(tag)
                         }
@@ -163,7 +163,7 @@ struct EditingMemoView: View {
     }
     
     private func removeTagFromSelectedTags(_ tag: Tag) {
-        viewModel.creatingOrUpdatingMemoSelectedTags.removeAll { $0.id == tag.id }
+        viewModel.editingMemoSelectedTags.removeAll { $0.id == tag.id }
     }
     
     private func hideKeyboard() {
@@ -172,12 +172,12 @@ struct EditingMemoView: View {
     
     private func createMemoAction() {
         Task {
-            let trimmedContent = viewModel.creatingOrUpdatingMemoContent.trimmingCharacters(in: .whitespacesAndNewlines)
+            let trimmedContent = viewModel.editingMemoContent.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !trimmedContent.isEmpty else {
                 return
             }
             
-            let tagIds = viewModel.creatingOrUpdatingMemoSelectedTags.map { $0.id }
+            let tagIds = viewModel.editingMemoSelectedTags.map { $0.id }
             
             // Call the onConfirm closure with content and tag IDs
             
@@ -188,20 +188,20 @@ struct EditingMemoView: View {
             await viewModel.fetchMemos()
             
             // Reset the input fields
-            viewModel.creatingOrUpdatingMemoContent = ""
-            viewModel.creatingOrUpdatingMemoSelectedTags = []
+            viewModel.editingMemoContent = ""
+            viewModel.editingMemoSelectedTags = []
             hideKeyboard()
         }
     }
     
     private func updateMemoAction() {
         Task {
-            let trimmedContent = viewModel.creatingOrUpdatingMemoContent.trimmingCharacters(in: .whitespacesAndNewlines)
+            let trimmedContent = viewModel.editingMemoContent.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !trimmedContent.isEmpty else {
                 return
             }
             
-            let tagIds = viewModel.creatingOrUpdatingMemoSelectedTags.map { $0.id }
+            let tagIds = viewModel.editingMemoSelectedTags.map { $0.id }
             
             // Call the onConfirm closure with content and tag IDs
             await viewModel.updateMemo(memoId: viewModel.updatingMemoId!, newContent: trimmedContent, newTagIds: tagIds)
@@ -209,8 +209,8 @@ struct EditingMemoView: View {
             // Reset the input fields
             viewModel.isUpdating = false
             viewModel.updatingMemoId = nil
-            viewModel.creatingOrUpdatingMemoContent = ""
-            viewModel.creatingOrUpdatingMemoSelectedTags = []
+            viewModel.editingMemoContent = ""
+            viewModel.editingMemoSelectedTags = []
             hideKeyboard()
         }
     }

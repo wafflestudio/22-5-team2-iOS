@@ -27,16 +27,14 @@ struct MemoListView: View {
                 }
                 
                 ForEachIndexed(viewModel.memos.reversed()) { index, memo in
-                    // MemoView with unique id and context menu
-                    MemoView(memo: memo)
+                    MemoView(memo: memo, viewModel: viewModel)
                         .id(memo.id)
                         .scrollTargetLayout()
                         .contextMenu {
                             Button {
-                                // memolist에서 선택된 memo를 hide하고
-                                // EditingMemoView에 선택된 memo를 표시해야 함
+                                // 이 텍스트 내용이 그대로 검색창으로 넘어가서 검색이 실행되어야 한다.
                             } label: {
-                                Label("메모 수정", systemImage: "pencil")
+                                Label("비슷한 메모 검색하기", systemImage: "text.magnifyingglass")
                             }
                             
                             Button(role: .destructive) {
@@ -45,7 +43,7 @@ struct MemoListView: View {
                                 }
 
                             } label: {
-                                Label("메모 삭제", systemImage: "trash")
+                                Label("삭제하기", systemImage: "trash")
                             }
                         }
                 }
