@@ -49,7 +49,8 @@ enum MemoRouter: Router {
             if let content = content {
                 params["content"] = content
             }
-            if let tagIds = tagIds {
+            // tagIds가 빈 리스트여도 params에서 제거한다.
+            if let tagIds = tagIds, !tagIds.isEmpty {
                 params["tagIds"] = tagIds.map { String($0) }.joined(separator: ",")
             }
             if let dateRange = dateRange {
