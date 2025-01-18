@@ -251,7 +251,8 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         
         switch result {
         case .success:
-            clearVM()
+            clearMain()
+            clearSearch()
             appState.user.isLoggedIn = false
             appState.navigation.reset()
             appState.navigation.push(to: .root)
@@ -271,13 +272,15 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         return tags.filter { tagIDs.contains($0.id) }
     }
     
-    private func clearVM() {
+    func clearMain() {
         memos = []
         tags = []
         editingMemoSelectedTags = []
         mainCurrentPage = 0
         mainTotalPages = 1
-        
+    }
+    
+    func clearSearch() {
         searchBarText = ""
         searchBarSelectedTags = []
         searchedMemos = []
