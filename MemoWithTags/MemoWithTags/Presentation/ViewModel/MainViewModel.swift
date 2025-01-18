@@ -46,7 +46,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
             return
         }
         
-        try? await Task.sleep(nanoseconds: 1_000_000_000) // 일부러 1초 딜레이
+        // try? await Task.sleep(nanoseconds: 1_000_000_000) // 일부러 1초 딜레이
         
         let result = await useCases.fetchMemoUseCase.execute(content: nil, tagIds: nil, dateRange: nil, page: mainCurrentPage)
         
@@ -152,6 +152,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         switch result {
         case .success:
             self.memos.removeAll { $0.id == memoId }
+            self.searchedMemos.removeAll { $0.id == memoId }
         case .failure(let error):
             appState.system.showAlert = true
             appState.system.errorMessage = error.localizedDescription()
@@ -197,14 +198,24 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         let result = await useCases.updateTagUseCase.execute(tagId: tagId, name: name, color: color)
         switch result {
         case .success(let tag):
-            // MainViewModel의 tag 변경
+            // Main과 Search의 tag 변경
             if let index = self.tags.firstIndex(where: { $0.id == tagId }) {
                 self.tags[index] = tag
             }
-            // MainViewModel의 memo에 있는 tag 변경
+            if let index = self.searchedTags.firstIndex(where: { $0.id == tagId }) {
+                self.searchedTags[index] = tag
+            }
+            
+            // Main과 Search의 tag 변경
             for index in memos.indices {
                 if let tagIndex = memos[index].tags.firstIndex(where: { $0.id == tagId }) {
                     memos[index].tags[tagIndex] = tag
+                }
+            }
+            // Main과 Search의 memo에 있는 tag 변경
+            for index in searchedMemos.indices {
+                if let tagIndex = searchedMemos[index].tags.firstIndex(where: { $0.id == tagId }) {
+                    searchedMemos[index].tags[tagIndex] = tag
                 }
             }
         case .failure(let error):
@@ -221,11 +232,16 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         let result = await useCases.deleteTagUseCase.execute(tagId: tagId)
         switch result {
         case .success:
-            // MainViewModel의 tag 삭제
+            // Main과 Search의 tag 삭제
             self.tags.removeAll { $0.id == tagId }
-            // MainViewModel의 memo에 있는 tag 삭제
+            self.searchedTags.removeAll { $0.id == tagId }
+            
+            // Main과 Search의 memo에 있는 tag 삭제
             for index in memos.indices {
                 self.memos[index].tags.removeAll { $0.id == tagId }
+            }
+            for index in searchedMemos.indices {
+                self.searchedMemos[index].tags.removeAll { $0.id == tagId }
             }
         case .failure(let error):
             appState.system.showAlert = true
