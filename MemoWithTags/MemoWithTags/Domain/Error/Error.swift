@@ -161,7 +161,7 @@ enum MemoError: Error {
         case .nonExistingMemo: return "NO MEMO"
         case .serverError: return "Spring 화이팅!!!"
         case .invalidOrder: return "WRONG ORDER!!!"
-        case .unknown: return "WTF"
+        case .unknown: return "memo WTF"
         }
     }
     
@@ -192,7 +192,7 @@ enum TagError: Error {
         case .wrongUser: return "EXISTING TAG, WRONG USER"
         case .nonExistingMemo: return "NO TAG"
         case .serverError: return "Spring 화이팅!!"
-        case .unknown: return "WTF"
+        case .unknown: return "tag WTF"
         }
     }
     

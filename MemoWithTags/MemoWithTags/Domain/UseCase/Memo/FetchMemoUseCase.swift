@@ -30,4 +30,3 @@ class DefaultFetchMemoUseCase: FetchMemoUseCase {
         }
     }
 }
-

@@ -61,8 +61,8 @@ struct MemoView: View {
         .onAppear {
             currentlyLocked = memo.locked
         }
-        .onChange(of: memo.locked) { newValue in
-            currentlyLocked = newValue
+        .onChange(of: memo.locked) {
+            currentlyLocked = memo.locked
         }
         .onTapGesture {
             if currentlyLocked {

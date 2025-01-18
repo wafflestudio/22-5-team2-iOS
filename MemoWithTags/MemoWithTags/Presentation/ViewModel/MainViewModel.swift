@@ -69,6 +69,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         isLoading = false
     }
     
+    // 검색을 할 때나, 검색된 결과로 pagenation을 할 때 모두 사용된다.
     func searchMemos(content: String? = nil, tagIds: [Int]? = nil, dateRange: ClosedRange<Date>? = nil) async {
         guard !isLoading else {
             return
@@ -83,9 +84,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
             return
         }
         
-        try? await Task.sleep(nanoseconds: 1_000_000_000) // 일부러 1초 딜레이
-        
-        let result = await useCases.fetchMemoUseCase.execute(content: content, tagIds: tagIds, dateRange: dateRange, page: searchCurrentPage)
+        let result = await useCases.fetchMemoUseCase.execute(content: content, tagIds: tagIds, dateRange: dateRange, page: self.searchCurrentPage)
         
         switch result {
         case .success(let paginatedMemos):
@@ -99,8 +98,11 @@ final class MainViewModel: BaseViewModel, ObservableObject {
             self.searchTotalPages = paginatedMemos.totalPages
 
         case .failure(let error):
-            appState.system.showAlert = true
-            appState.system.errorMessage = error.localizedDescription()
+            // SearchView에서 wait이 끝나고 searchMemo가 실행되는 와중에 새로운 Task가 생성되어서 Task가 사라지면 MemoError.unknown이 뜬다. 이것은 정상적인 결과이기 때문에 무시한다.
+            if (error != MemoError.unknown) {
+                appState.system.showAlert = true
+                appState.system.errorMessage = error.localizedDescription()
+            }
         }
         
         isLoading = false
