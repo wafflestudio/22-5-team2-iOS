@@ -37,25 +37,8 @@ struct EditingTagListView: View {
             ScrollView(.horizontal) {
                 HStack(alignment: .center, spacing: 8) {
                     ForEach(filterTags(), id: \.id) { tag in
-                        TagView(tag: tag) {
+                        TagView(viewModel: viewModel, tag: tag) {
                             appendTagToSelectedTags(tag)
-                        }
-                        .contextMenu {
-                            Button {
-                                hideKeyboard()
-                                updatingTag = tag
-                            } label: {
-                                Label("수정", systemImage: "pencil")
-                            }
-                            
-                            Button(role: .destructive) {
-                                Task {
-                                    await viewModel.deleteTag(tagId: tag.id)
-                                }
-
-                            } label: {
-                                Label("삭제", systemImage: "trash")
-                            }
                         }
                     }
                     
@@ -80,10 +63,6 @@ struct EditingTagListView: View {
         }
         .onAppear {
             generateRandomHexColor()
-        }
-        // sheet(item:)을 사용하여 tagToUpdate가 설정되면 시트를 표시
-        .sheet(item: $updatingTag) { tag in
-            UpdateTagView(viewModel: viewModel, tag: tag)
         }
     }
     

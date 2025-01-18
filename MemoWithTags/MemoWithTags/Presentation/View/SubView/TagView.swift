@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct TagView: View {
+    @ObservedObject var viewModel: MainViewModel
+    @State private var isUpdating: Bool = false
     var tag: Tag
     var onTap: (() -> Void)?
     
@@ -23,6 +25,37 @@ struct TagView: View {
             .truncationMode(.tail)
             .onTapGesture {
                 onTap?()
+            }
+            .contextMenu {
+                Button(action: {
+                    viewModel.clearSearch()
+                    viewModel.searchBarSelectedTags.append(tag)
+                    // 현재 뷰가 search가 아닌 경우에만 searchPage로 이동
+                    if viewModel.appState.navigation.current != .search {
+                        viewModel.appState.navigation.push(to: .search)
+                    }
+                }) {
+                    Label("이 태그로 검색하기", systemImage: "magnifyingglass")
+                }
+                
+                Button {
+                    isUpdating = true
+                } label: {
+                    Label("수정", systemImage: "pencil")
+                }
+                
+                Button(role: .destructive) {
+                    Task {
+                        await viewModel.deleteTag(tagId: tag.id)
+                    }
+                } label: {
+                    Label("삭제", systemImage: "trash")
+                }
+            }
+            .sheet(isPresented: $isUpdating, onDismiss: {
+                isUpdating = false
+            }) {
+                UpdateTagView(viewModel: viewModel, tag: tag)
             }
     }
 }

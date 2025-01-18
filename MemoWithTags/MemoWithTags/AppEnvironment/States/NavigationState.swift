@@ -26,16 +26,29 @@ enum Route: Hashable {
 @MainActor
 final class NavigationState: ObservableObject {
     @Published var path = NavigationPath()
-
+    // path는 push, pop, count 기능만 지원한다
+    // 따라서 현재 Page가 어떤 Page인지 알기 위해 explicit한 stack이 필요하다.
+    var explicitStack: [Route] = []
+    
+    // 현재 활성화된 Route를 반환하는 계산 프로퍼티
+    var current: Route {
+        return explicitStack.last ?? .root
+    }
+    
     func push(to route: Route) {
         path.append(route)
+        explicitStack.append(route)
     }
-        
+    
     func pop() {
-        path.removeLast()
+        if !path.isEmpty {
+            path.removeLast()
+        }
+        explicitStack.removeLast()
     }
     
     func reset() {
         path.removeLast(path.count)
+        explicitStack.removeLast(explicitStack.count)
     }
 }

@@ -20,7 +20,6 @@ struct MemoView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 8) {
             // Memo Content
-            // Memo가 lock이면 반투명 막을 위에 ZStack을 씌우고, faceID를 통과해야 반투명 막을 제거해주기
             Text(memo.content)
                 .background(calculateTruncation())
                 .font(Font.custom("Pretendard", size: 16))
@@ -33,7 +32,7 @@ struct MemoView: View {
             // Tags
             HFlow{
                 ForEach(memo.tags, id: \.id) { tag in
-                    TagView(tag: tag) // contect menu로, magnfuing glass 아이콘에 "이 태그로 검색하기"를 선택할 수 있다. 꾹 누르면 searchPage로 navigate되고, viewModel.searchBarSelectedTags에 그 tag가 추가된다.
+                    TagView(viewModel: viewModel, tag: tag)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -74,16 +73,52 @@ struct MemoView: View {
                         }
                     }
                 }
-            } else if !canExpand || isExpanded {
+            } else if canExpand && !isExpanded {
+                withAnimation(.spring) {
+                    isExpanded.toggle()
+                }
+            } else {
                 viewModel.isUpdating = true
                 viewModel.updatingMemoId = memo.id
                 viewModel.editingMemoContent = memo.content
                 viewModel.editingMemoSelectedTags = memo.tags
                 viewModel.updatingMemoIsLocked = memo.locked
-            } else {
-                withAnimation(.spring) {
-                    isExpanded.toggle()
+            }
+        }
+        .contextMenu {
+            Button {
+                viewModel.clearSearch()
+                viewModel.searchBarText = memo.content
+                // 현재 뷰가 search가 아닌 경우에만 searchPage로 이동
+                if viewModel.appState.navigation.current != .search {
+                    viewModel.appState.navigation.push(to: .search)
                 }
+            } label: {
+                Label("이 메모 내용으로 검색하기", systemImage: "text.magnifyingglass")
+            }
+            
+            Button {
+                Task {
+                    let authenticated = await AuthenticationManager.shared.authenticateUser(reason: "메모를 잠그거나 잠금 해제하려면 인증이 필요합니다.")
+                    if authenticated {
+                        await viewModel.updateMemo(memoId: memo.id, content: memo.content, tagIds: memo.tagIds, locked: !memo.locked)
+                    }
+                }
+            } label: {
+                if memo.locked {
+                    Label("잠금 해제하기", systemImage: "lock.open")
+                } else {
+                    Label("매모 잠그기", systemImage: "lock")
+                }
+            }
+            
+            Button(role: .destructive) {
+                Task {
+                    await viewModel.deleteMemo(memoId: memo.id)
+                }
+
+            } label: {
+                Label("삭제하기", systemImage: "trash")
             }
         }
     }

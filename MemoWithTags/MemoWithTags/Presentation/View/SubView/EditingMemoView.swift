@@ -53,7 +53,7 @@ struct EditingMemoView: View {
                     // Display selected tags
                     HFlow {
                         ForEach(viewModel.editingMemoSelectedTags, id: \.id) { tag in
-                            TagView(tag: tag) {
+                            TagView(viewModel: viewModel, tag: tag) {
                                 removeTagFromSelectedTags(tag)
                             }
                             .matchedGeometryEffect(id: "tag_\(tag.id)", in: animationNamespace)
@@ -119,7 +119,7 @@ struct EditingMemoView: View {
                 // Display selected tags
                 HFlow {
                     ForEach(viewModel.editingMemoSelectedTags, id: \.id) { tag in
-                        TagView(tag: tag) {
+                        TagView(viewModel: viewModel, tag: tag) {
                             removeTagFromSelectedTags(tag)
                         }
                         .matchedGeometryEffect(id: "tag_\(tag.id)", in: animationNamespace)

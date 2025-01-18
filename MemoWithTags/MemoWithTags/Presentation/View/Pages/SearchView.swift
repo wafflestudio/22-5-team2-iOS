@@ -41,21 +41,6 @@ struct SearchView: View {
                         ForEachIndexed(viewModel.searchedMemos.reversed()) { index, memo in
                             MemoView(memo: memo, viewModel: viewModel)
                                 .id(memo.id)
-                                .contextMenu {
-                                    Button {
-                                        viewModel.searchBarText = memo.content
-                                    } label: {
-                                        Label("비슷한 메모 검색하기", systemImage: "text.magnifyingglass")
-                                    }
-                                    
-                                    Button(role: .destructive) {
-                                        Task {
-                                            await viewModel.deleteMemo(memoId: memo.id)
-                                        }
-                                    } label: {
-                                        Label("삭제하기", systemImage: "trash")
-                                    }
-                                }
                         }
                     }
                 }
@@ -66,7 +51,7 @@ struct SearchView: View {
                 
                 HStack {
                     ForEach(viewModel.searchBarSelectedTags, id: \.id) { tag in
-                        TagView(tag: tag) {
+                        TagView(viewModel: viewModel, tag: tag) {
                             removeTagFromSelectedTags(tag)
                         }
                     }
@@ -102,7 +87,7 @@ struct SearchView: View {
                 // Display searched tags
                 HFlow {
                     ForEach(viewModel.searchedTags, id: \.id) { tag in
-                        TagView(tag: tag) {
+                        TagView(viewModel: viewModel, tag: tag) {
                             appendTagToSelectedTags(tag)
                         }
                     }
