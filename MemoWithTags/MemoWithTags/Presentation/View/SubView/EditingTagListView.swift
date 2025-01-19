@@ -90,10 +90,4 @@ struct EditingTagListView: View {
     private func generateRandomHexColor() {
         self.randomColor = Color.TagColor.allCases.randomElement()!
     }
-    
-    // Dismisses the keyboard.
-    private func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-    
 }

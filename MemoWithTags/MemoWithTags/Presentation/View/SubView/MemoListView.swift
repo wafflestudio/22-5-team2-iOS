@@ -9,10 +9,8 @@ struct MemoListView: View {
     @State private var stopFetching: Bool = false
     
     var body: some View {
-        
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 12) {
-                
                 GeometryReader { geometry in
                     ProgressView()
                         .frame(maxWidth: .infinity)

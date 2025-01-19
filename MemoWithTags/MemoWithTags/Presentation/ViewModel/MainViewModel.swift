@@ -15,7 +15,8 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     @Published var tags: [Tag] = []
     @Published var mainCurrentPage: Int = 0
     @Published var mainTotalPages: Int = 1
-    // main에서 edit하는 변수들. edit을 create 또는 update으로 정의한다.
+    // main에서 edit과 관련된 변수들. edit을 create 또는 update으로 정의한다.
+    @Published var editingMemoViewIsExpanded: Bool = false
     @Published var isUpdating: Bool = false
     @Published var updatingMemoId: Int?
     @Published var editingMemoContent: String = ""
@@ -281,6 +282,10 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     ///태그 추천 해주는 함수
     func recommendTags() -> [Tag] {
         tags.filter { !editingMemoSelectedTags.contains($0) }
+    }
+    
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
     /// tag id --> tag 맵핑하는 함수

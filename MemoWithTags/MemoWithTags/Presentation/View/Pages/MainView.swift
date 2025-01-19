@@ -15,13 +15,15 @@ struct MainView: View {
             Color.backgroundGray
                 .ignoresSafeArea()
             
-            //메모 리스트
-            MemoListView(viewModel: viewModel)
-                .border(.blue, width: 2)
+            VStack {
+                // 메모 리스트
+                if !viewModel.editingMemoViewIsExpanded {
+                    MemoListView(viewModel: viewModel)
+                }
 
-            // 메모 생성 or 수정 창
-            EditingMemoView(viewModel: viewModel)
-            
+                // 메모 생성 or 수정 창
+                EditingMemoView(viewModel: viewModel)
+            }
         }
         .onAppear {
             Task {
