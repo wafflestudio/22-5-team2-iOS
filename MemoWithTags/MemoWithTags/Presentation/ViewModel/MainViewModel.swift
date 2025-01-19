@@ -31,9 +31,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     @Published var isLoading: Bool = false
     
     func fetchMemos() async {
-        guard !isLoading else {
-            return
-        }
+        guard !isLoading else { return }
         
         isLoading = true
         mainCurrentPage += 1
@@ -68,9 +66,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     }
     
     func searchMemos(content: String? = nil, tagIds: [Int]? = nil, dateRange: ClosedRange<Date>? = nil) async {
-        guard !isLoading else {
-            return
-        }
+        guard !isLoading else { return }
         
         isLoading = true
         searchCurrentPage += 1
@@ -243,15 +239,20 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     
     ///settings view에서 유저정보 가져오는 함수
     func getUserInfo() async {
+        isLoading = true
+        
         let result = await useCases.getUserInfoUseCase.execute()
         
         switch result {
         case .success(let user):
-            appState.user.current = user
+            appState.user.userName = user.nickname
+            appState.user.userEmail = user.email
         case .failure(let error):
             appState.system.showAlert = true
             appState.system.errorMessage = error.localizedDescription()
         }
+        
+        isLoading = false
     }
     
     ///settings view에서 로그아웃하는 함수
@@ -262,7 +263,6 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         case .success:
             clearVM()
             appState.user.isLoggedIn = false
-            appState.user.current = nil
             appState.navigation.reset()
             appState.navigation.push(to: .root)
         case .failure(let error):
