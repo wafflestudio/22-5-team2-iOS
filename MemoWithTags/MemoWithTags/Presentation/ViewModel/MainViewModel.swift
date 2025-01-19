@@ -241,6 +241,19 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         }
     }
     
+    ///settings view에서 유저정보 가져오는 함수
+    func getUserInfo() async {
+        let result = await useCases.getUserInfoUseCase.execute()
+        
+        switch result {
+        case .success(let user):
+            appState.user.current = user
+        case .failure(let error):
+            appState.system.showAlert = true
+            appState.system.errorMessage = error.localizedDescription()
+        }
+    }
+    
     ///settings view에서 로그아웃하는 함수
     func logout() async {
         let result = await useCases.logoutUseCase.execute()
@@ -249,6 +262,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         case .success:
             clearVM()
             appState.user.isLoggedIn = false
+            appState.user.current = nil
             appState.navigation.reset()
             appState.navigation.push(to: .root)
         case .failure(let error):

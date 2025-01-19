@@ -10,4 +10,5 @@ import SwiftUI
 @MainActor
 final class UserState: ObservableObject {
     @Published var isLoggedIn: Bool = false
+    @Published var current: User?
 }

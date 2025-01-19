@@ -6,7 +6,7 @@
 //
 
 protocol getUserInfoUseCase {
-    func execute() async -> Result<User, ResetPasswordError>
+    func execute() async -> Result<User, GetUserInfoError>
 }
 
 final class DefaultGetUserInfoUseCase: getUserInfoUseCase {
@@ -16,14 +16,14 @@ final class DefaultGetUserInfoUseCase: getUserInfoUseCase {
         self.authRepository = authRepository
     }
     
-    func execute() async -> Result<User, ResetPasswordError> {
+    func execute() async -> Result<User, GetUserInfoError> {
         do {
             let dto = try await authRepository.getUserInfo()
             let user = dto.toUser()
             return .success(user)
         } catch {
             ///error 맵핑 구현
-            return .failure(.unknown)
+            return .failure(.from(baseError: error as! BaseError))
         }
     }
 }
