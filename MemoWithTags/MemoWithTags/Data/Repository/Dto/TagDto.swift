@@ -6,13 +6,23 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct TagDto: Decodable {
     let id: Int
     let name: String
-    let color: String
+    let colorHex: String
 
     func toTag() -> Tag {
-        return Tag(id: id, name: name, color: color)
+        
+        let tagColor = Color.TagColor.allCases.first {
+            $0.rawValue.lowercased() == colorHex.lowercased()
+        } ?? .color1
+        
+        return Tag(
+            id: id,
+            name: name,
+            color: tagColor
+        )
     }
 }

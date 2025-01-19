@@ -66,7 +66,7 @@ extension Color {
     }
     
     // TagColor enum
-    enum TagColor: String, CaseIterable {
+    enum TagColor: String, CaseIterable, Encodable, Decodable {
         case color1 = "#FF9C9C"
         case color2 = "#FFBDBD"
         case color3 = "#FFE3DA"

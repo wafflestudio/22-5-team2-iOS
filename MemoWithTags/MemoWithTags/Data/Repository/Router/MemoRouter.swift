@@ -10,9 +10,9 @@ import Foundation
 
 enum MemoRouter: Router {
     case fetchMemos(content: String?, tagIds: [Int]?, dateRange: ClosedRange<Date>?, page: Int)
-    case createMemo(content: String, tagIds: [Int])
+    case createMemo(content: String, tagIds: [Int], locked: Bool)
     case deleteMemo(memoId: Int)
-    case updateMemo(memoId: Int, content: String, tagIds: [Int])
+    case updateMemo(memoId: Int, content: String, tagIds: [Int], locked: Bool)
     
     var baseURL: URL {
         return URL(string: NetworkConfiguration.baseURL)!
@@ -37,7 +37,7 @@ enum MemoRouter: Router {
             return "/search-memo"
         case .createMemo:
             return "/memo"
-        case let .deleteMemo(memoId), let .updateMemo(memoId, _, _):
+        case let .deleteMemo(memoId), let .updateMemo(memoId, _, _, _):
             return "/memo/\(memoId)"
         }
     }
@@ -49,7 +49,8 @@ enum MemoRouter: Router {
             if let content = content {
                 params["content"] = content
             }
-            if let tagIds = tagIds {
+            // tagIds가 빈 리스트여도 params에서 제거한다.
+            if let tagIds = tagIds, !tagIds.isEmpty {
                 params["tagIds"] = tagIds.map { String($0) }.joined(separator: ",")
             }
             if let dateRange = dateRange {
@@ -58,13 +59,12 @@ enum MemoRouter: Router {
                 params["endDate"] = formatter.string(from: dateRange.upperBound)
             }
             return params
-        case let .createMemo(content, tagIds):
-            return ["content": content, "tagIds": tagIds]
-        case let .updateMemo(_, content, tagIds):
-            return ["content": content, "tagIds": tagIds]
+        case let .createMemo(content, tagIds, locked):
+            return ["content": content, "tagIds": tagIds, "locked": locked]
+        case let .updateMemo(_, content, tagIds, locked):
+            return ["content": content, "tagIds": tagIds, "locked": locked]
         case .deleteMemo:
             return nil
         }
     }
 }
-

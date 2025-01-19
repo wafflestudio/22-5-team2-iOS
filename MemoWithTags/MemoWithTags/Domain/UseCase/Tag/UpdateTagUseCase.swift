@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import SwiftUI
 
 protocol UpdateTagUseCase {
-    func execute(tagId: Int, name: String, color: String) async -> Result<Tag, TagError>
+    func execute(tagId: Int, name: String, color: Color.TagColor) async -> Result<Tag, TagError>
 }
 
 class DefaultUpdateTagUseCase: UpdateTagUseCase {
@@ -18,9 +19,9 @@ class DefaultUpdateTagUseCase: UpdateTagUseCase {
         self.tagRepository = tagRepository
     }
 
-    func execute(tagId: Int, name: String, color: String) async -> Result<Tag, TagError> {
+    func execute(tagId: Int, name: String, color: Color.TagColor) async -> Result<Tag, TagError> {
         do {
-            let dto = try await tagRepository.updateTag(tagId: tagId, name: name, color: color)
+            let dto = try await tagRepository.updateTag(tagId: tagId, name: name, colorHex: color.rawValue)
             let tag = dto.toTag()
             return .success(tag)
         } catch let error as BaseError {
