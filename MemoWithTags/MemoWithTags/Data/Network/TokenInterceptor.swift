@@ -34,9 +34,12 @@ final class TokenInterceptor: RequestInterceptor {
         Task {
             do {
                 guard let refreshToken = KeyChainManager.shared.readRefreshToken() else {
-                    return completion(.doNotRetryWithError(error))
+                    completion(.doNotRetryWithError(error))
+                    return
                 }
+                
                 print("refresh token")
+
                 let authDto = try await AF
                     .request(AuthRouter.refreshToken(token: refreshToken)).serializingDecodable(AuthDto.self).value
             

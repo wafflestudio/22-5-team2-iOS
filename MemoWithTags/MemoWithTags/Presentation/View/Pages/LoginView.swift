@@ -93,8 +93,40 @@ struct LoginView: View {
                     .padding(.top, 16)
                     .disabled(email.isEmpty || password.isEmpty)
                     
+                    Divider().padding(.vertical, 16)
+                    
                     HStack(spacing: 8) {
-                        DesignTagView(text: "이메일로 회원가입", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#FFBDBD", cornerRadius: 4) {
+                        // 카카오 로그인 버튼
+                        Image(.kakaoLogin)
+                            .resizable()
+                            .frame(width: 60, height: 30)
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                        
+                        // 네이버 로그인 버튼
+                        Image(.naverLogin)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 60, height: 30)
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                        
+                        // 구글 로그인 버튼
+                        HStack(spacing: 4) {
+                            Image(.googleIcon)
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                            
+                            Text("로그인")
+                                .font(.system(size: 12, weight: .regular))
+                                .foregroundColor(.gray)
+                        }
+                        .frame(width: 60, height: 30)
+                        .background(Color(hex: "#f5f5f5"))
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                        
+                    }
+                    
+                    HStack(spacing: 8) {
+                        DesignTagView(text: "회원가입", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#FFBDBD", cornerRadius: 4) {
                             viewModel.appState.navigation.push(to: .signup)
                         }
                         

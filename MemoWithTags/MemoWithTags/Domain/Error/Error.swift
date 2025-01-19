@@ -144,6 +144,28 @@ enum VerifyEmailError: Error {
     }
 }
 
+enum GetUserInfoError: Error {
+    case UserNotFound
+    case networkError
+    case unknown
+    
+    func localizedDescription() -> String {
+        switch self {
+        case .UserNotFound: return "사용자를 찾을 수 없습니다."
+        case .networkError: return "Network error"
+        case .unknown: return "Unknown error"
+        }
+    }
+    
+    static func from(baseError: BaseError) -> GetUserInfoError {
+        switch baseError {
+        case .UNAUTHORIZED: return .UserNotFound
+        case .INTERNAL_SERVER_ERROR: return .networkError
+        default: return .unknown
+        }
+    }
+}
+
 enum MemoError: Error {
     case wrongFormat
     case notSureUser
