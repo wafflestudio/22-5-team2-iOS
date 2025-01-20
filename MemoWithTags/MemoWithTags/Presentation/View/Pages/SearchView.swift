@@ -37,11 +37,12 @@ struct SearchView: View {
                                     }
                                 }
                         }
-                        
+                        /*
                         ForEachIndexed(viewModel.searchedMemos.reversed()) { index, memo in
                             MemoView(memo: memo, viewModel: viewModel)
                                 .id(memo.id)
                         }
+                         */
                     }
                 }
                 .padding(.horizontal, 12)
