@@ -33,6 +33,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     
     @Published var isLoading: Bool = false
     
+    // mainView에서 첫 검색을 할 때나, pagenation을 할 때 모두 사용된다.
     func fetchMemos() async {
         guard !isLoading else { return }
         
@@ -45,8 +46,6 @@ final class MainViewModel: BaseViewModel, ObservableObject {
             return
         }
         
-        // try? await Task.sleep(nanoseconds: 1_000_000_000) // 일부러 1초 딜레이
-        
         let result = await useCases.fetchMemoUseCase.execute(content: nil, tagIds: nil, dateRange: nil, page: mainCurrentPage)
         
         switch result {
@@ -57,8 +56,10 @@ final class MainViewModel: BaseViewModel, ObservableObject {
                 return updatedMemo
             }
             
-            self.memos.append(contentsOf: updatedMemos)
-            self.mainTotalPages = paginatedMemos.totalPages
+            await MainActor.run {
+                self.memos.insert(contentsOf: updatedMemos.reversed(), at: 0)
+                self.mainTotalPages = paginatedMemos.totalPages
+            }
 
         case .failure(let error):
             appState.system.showAlert = true
@@ -68,7 +69,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         isLoading = false
     }
     
-    // 검색을 할 때나, 검색된 결과로 pagenation을 할 때 모두 사용된다.
+    // searchView에서 첫 검색을 할 때나, pagenation을 할 때 모두 사용된다.
     func searchMemos(content: String? = nil, tagIds: [Int]? = nil, dateRange: ClosedRange<Date>? = nil) async {
         guard !isLoading else { return }
         
