@@ -82,6 +82,7 @@ struct MemoListView: View {
     
     @State private var canFetch: Bool = false
     @State private var scrollToId: Int? = nil
+    @State private var disableScroll: Bool = false
     
     var body: some View {
         ScrollViewReader { scrollViewProxy in
@@ -100,6 +101,10 @@ struct MemoListView: View {
                                     if canFetch {
                                         canFetch = false
                                         scrollToId = memo.id
+                                        // 모든 memo가 fetch 되어있으면 disableScroll을 하면 안된다.
+                                        if viewModel.mainCurrentPage != viewModel.mainTotalPages {
+                                            disableScroll = true
+                                        }
                                         print("Another Scrolling", scrollToId!)
                                         Task {
                                             await viewModel.fetchMemos()
@@ -113,6 +118,7 @@ struct MemoListView: View {
                                             scrollViewProxy.scrollTo(id, anchor: .zero)
                                             print("done Another Scrolling", id)
                                             canFetch = true
+                                            disableScroll = false
                                         }
                                     }
                                     // 왜 .onChange(of: viewModel.memos)를 안 쓰고 저렇게 하냐면,
@@ -123,6 +129,8 @@ struct MemoListView: View {
                 }
                 .padding(.horizontal, 12)
             }
+            // 사용자가 계속 Tap한 상태에서 scroll하면 scrollTo가 무시되기 때문에 잠시 멈춰야 한다.
+            .disabled(disableScroll)
             .onAppear {
                 guard viewModel.memos.isEmpty else { return }
                 Task {

@@ -25,7 +25,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     
     //searchPage 변수들
     @Published var searchBarText: String = ""
-    @Published var searchBarSelectedTags: [Tag] = [] //메모 검색할때 추가한 태그들 보관
+    @Published var searchBarSelectedTags: [Tag] = []
     @Published var searchedMemos: [Memo] = []
     @Published var searchedTags: [Tag] = []
     @Published var searchCurrentPage: Int = 0
