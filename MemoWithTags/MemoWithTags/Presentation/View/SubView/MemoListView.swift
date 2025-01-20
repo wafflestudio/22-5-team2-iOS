@@ -98,20 +98,18 @@ struct MemoListView: View {
                                 if memo.id == viewModel.memos[1].id {
                                     // viewModel.memos의 첫 memo인데 canFetch라는 것은,
                                     // 사용자가 자연스럽게 scroll해서 이전 memo를 fetch하고 싶어하는 상황이다.
-                                    if canFetch {
+                                    // 모든 memo가 fetch 되어있으면 disableScroll을 하면 안된다.
+                                    if canFetch && viewModel.mainCurrentPage != viewModel.mainTotalPages {
                                         canFetch = false
                                         scrollToId = memo.id
-                                        // 모든 memo가 fetch 되어있으면 disableScroll을 하면 안된다.
-                                        if viewModel.mainCurrentPage != viewModel.mainTotalPages {
-                                            disableScroll = true
-                                        }
+                                        disableScroll = true
                                         print("Another Scrolling", scrollToId!)
                                         Task {
                                             await viewModel.fetchMemos()
                                         }
                                     // viewModel.memos의 첫 memo인데 !canFetch라는 것은,
                                     // 새로운 memo가 fetch되어 swift가 강제로 scrollView의 가장 위로 자동 스크롤 되어 보이는 상황이다.
-                                    } else {
+                                    } else if !canFetch {
                                         guard let id = scrollToId else { return }
                                         DispatchQueue.main.async {
                                             usleep(10_000)
