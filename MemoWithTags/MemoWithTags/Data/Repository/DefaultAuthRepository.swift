@@ -52,4 +52,12 @@ final class DefaultAuthRepository: AuthRepository {
         
         return dto
     }
+    
+    func kakaoLogin(authCode: String) async throws -> AuthDto {
+        print("kakao login")
+        let response = await AF.request(AuthRouter.kakaoLogin(authCode: authCode)).serializingDecodable(AuthDto.self).response
+        let dto = try handleErrorDecodable(response: response)
+        print("accessToken: \(dto.accessToken)")
+        return dto
+    }
 }

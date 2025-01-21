@@ -166,6 +166,30 @@ enum GetUserInfoError: Error {
     }
 }
 
+enum SocialLoginError: Error {
+    case invalidCode
+    case networkError
+    case unknown
+    case tokenSaveError
+    
+    func localizedDescription() -> String {
+        switch self {
+        case .invalidCode: return "사용자를 불러오지 못했습니다."
+        case .networkError: return "Network error"
+        case .unknown: return "Unknown error"
+        case .tokenSaveError: return "Token save error"
+        }
+    }
+    
+    static func from(baseError: BaseError) -> SocialLoginError {
+        switch baseError {
+        case .UNAUTHORIZED: return .invalidCode
+        case .INTERNAL_SERVER_ERROR: return .networkError
+        default: return .unknown
+        }
+    }
+}
+
 enum MemoError: Error {
     case wrongFormat
     case notSureUser

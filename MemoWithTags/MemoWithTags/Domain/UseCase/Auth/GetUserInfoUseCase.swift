@@ -5,11 +5,11 @@
 //  Created by 최진모 on 1/13/25.
 //
 
-protocol getUserInfoUseCase {
+protocol GetUserInfoUseCase {
     func execute() async -> Result<User, GetUserInfoError>
 }
 
-final class DefaultGetUserInfoUseCase: getUserInfoUseCase {
+final class DefaultGetUserInfoUseCase: GetUserInfoUseCase {
     let authRepository: AuthRepository
     
     init(authRepository: AuthRepository) {

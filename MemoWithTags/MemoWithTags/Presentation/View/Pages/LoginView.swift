@@ -97,17 +97,22 @@ struct LoginView: View {
                     
                     HStack(spacing: 8) {
                         // 카카오 로그인 버튼
-                        Image(.kakaoLogin)
-                            .resizable()
-                            .frame(width: 60, height: 30)
-                            .clipShape(RoundedRectangle(cornerRadius: 4))
-                        
+                        Link(destination: URL(string: "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=ed92cd34690fb718013b559ebd98353a&redirect_uri=http://43.201.64.202:8080/api/v1/oauth/kakao")!) {
+                            Image(.kakaoLogin)
+                                .resizable()
+                                .frame(width: 60, height: 30)
+                                .clipShape(RoundedRectangle(cornerRadius: 4))
+                        }
+
                         // 네이버 로그인 버튼
-                        Image(.naverLogin)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 60, height: 30)
-                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                        Link(destination: URL(string: "memowithtags://oauth/kakao?code=-ewrawtw")!) {
+                            Image(.naverLogin)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 60, height: 30)
+                                .clipShape(RoundedRectangle(cornerRadius: 4))
+                        }
+
                         
                         // 구글 로그인 버튼
                         HStack(spacing: 4) {

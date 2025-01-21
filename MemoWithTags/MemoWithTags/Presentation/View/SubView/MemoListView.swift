@@ -145,5 +145,6 @@ struct MemoListView: View {
                 }
             }
         }
+        .padding(.top, 1)
     }
 }

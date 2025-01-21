@@ -16,16 +16,24 @@ enum AuthRouter: Router {
     case verifyEmail(email: String, code: String)
     case refreshToken(token: String)
     case getUserInfo
+    case kakaoLogin(authCode: String)
+    case naverLogin(authCode: String)
+    case googleLogin(authCode: String)
     
     var baseURL: URL {
-        return URL(string: NetworkConfiguration.baseURL + "/auth")!
+        switch self {
+        case .kakaoLogin, .naverLogin, .googleLogin:
+            return URL(string: NetworkConfiguration.baseURL + "/oauth")!
+        default:
+            return URL(string: NetworkConfiguration.baseURL + "/auth")!
+        }
     }
     
     var method: HTTPMethod {
         switch self {
         case .register, .login, .forgotPassword, .resetPassword, .verifyEmail, .refreshToken:
             return .post
-        case .getUserInfo:
+        case .getUserInfo, .kakaoLogin, .naverLogin, .googleLogin:
             return .get
         }
     }
@@ -46,6 +54,12 @@ enum AuthRouter: Router {
             return "/refresh-token"
         case .getUserInfo:
             return "/me"
+        case .kakaoLogin:
+            return "/kakao/login"
+        case .googleLogin:
+            return "/google/login"
+        case .naverLogin:
+            return "/naver/login"
         }
     }
     
@@ -64,6 +78,8 @@ enum AuthRouter: Router {
             return ["refreshToken": token]
         case .getUserInfo:
             return nil
+        case let .kakaoLogin(code), let .googleLogin(code), let .naverLogin(code):
+            return ["code": code]
         }
     }
 }

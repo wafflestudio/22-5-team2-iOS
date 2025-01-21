@@ -28,8 +28,10 @@ extension DIContainer {
         let emailVerificationUseCase: EmailVerificationUseCase
         let forgotPasswordUseCase: ForgotPasswordUseCase
         let resetPasswordUseCase: ResetPasswordUseCase
-        let socialLoginUseCase: SocialLoginUseCase
-        let getUserInfoUseCase: getUserInfoUseCase
+        let getUserInfoUseCase: GetUserInfoUseCase
+        let kakaoLoginUseCase: KakaoLoginUseCase
+//        let naverLoginUseCase: NaverLoginUseCase
+//        let googleLoginUseCase: GoogleLoginUseCase
         
         let createMemoUseCase: CreateMemoUseCase
         let updateMemoUseCase: UpdateMemoUseCase
@@ -69,8 +71,10 @@ extension DIContainer {
         let emailVerificationUseCase = DefaultEmailVerificationUseCase(authRepository: repositories.authRepository)
         let forgotPasswordUseCase = DefaultForgotPasswordUseCase(authRepository: repositories.authRepository)
         let resetPasswordUseCase = DefaultResetPasswordUseCase(authRepository: repositories.authRepository)
-        let socialLoginUseCase: DefaultSocialLoginUseCase = DefaultSocialLoginUseCase(authRepository: repositories.authRepository)
         let getUserInfoUseCase = DefaultGetUserInfoUseCase(authRepository: repositories.authRepository)
+        let kakaoLoginUseCase = DefaultKakaoLoginUseCase(authRepository: repositories.authRepository)
+//        let googleLoginUseCase = DefaultGoogleLoginUseCase(authRepository: repositories.authRepository)
+//        let naverLoginUseCase = DefaultNaverLoginUseCase(authRepository: repositories.authRepository)
         
         let createMemoUseCase = DefaultCreateMemoUseCase(memoRepository: repositories.memoRepository)
         let updateMemoUseCase = DefaultUpdateMemoUseCase(memoRepository: repositories.memoRepository)
@@ -89,12 +93,14 @@ extension DIContainer {
             emailVerificationUseCase: emailVerificationUseCase,
             forgotPasswordUseCase: forgotPasswordUseCase,
             resetPasswordUseCase: resetPasswordUseCase,
-            socialLoginUseCase: socialLoginUseCase,
             getUserInfoUseCase: getUserInfoUseCase,
+            kakaoLoginUseCase: kakaoLoginUseCase,
+            
             createMemoUseCase: createMemoUseCase,
             updateMemoUseCase: updateMemoUseCase,
             deleteMemoUseCase: deleteMemoUseCase,
             fetchMemoUseCase: fetchMemoUseCase,
+            
             createTagUseCase: createTagUseCase,
             updateTagUseCase: updateTagUseCase,
             deleteTagUseCase: deleteTagUseCase,
