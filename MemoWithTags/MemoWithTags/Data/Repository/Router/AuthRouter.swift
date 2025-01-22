@@ -57,9 +57,9 @@ enum AuthRouter: Router {
         case .kakaoLogin:
             return "/kakao/login"
         case .googleLogin:
-            return "/google/login"
+            return "/google"
         case .naverLogin:
-            return "/naver/login"
+            return "/naver"
         }
     }
     

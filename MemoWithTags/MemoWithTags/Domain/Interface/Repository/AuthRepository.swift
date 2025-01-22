@@ -22,9 +22,9 @@ protocol AuthRepository: BaseRepository {
     func getUserInfo() async throws -> UserDto
     ///카카오 로그인 하는 함수
     func kakaoLogin(authCode: String) async throws -> AuthDto
-//    ///네이버 로그인 하는 함수
-//    func naverLogin(authCode: String) async throws -> AuthDto
-//    ///구글 로그인 하는 함수
-//    func googleLogin(authCode: String) async throws -> AuthDto
+    ///네이버 로그인 하는 함수
+    func naverLogin(authCode: String) async throws -> AuthDto
+    ///구글 로그인 하는 함수
+    func googleLogin(authCode: String) async throws -> AuthDto
 }
 

@@ -60,4 +60,20 @@ final class DefaultAuthRepository: AuthRepository {
         print("accessToken: \(dto.accessToken)")
         return dto
     }
+    
+    func naverLogin(authCode: String) async throws -> AuthDto {
+        print("naver login")
+        let response = await AF.request(AuthRouter.naverLogin(authCode: authCode)).serializingDecodable(AuthDto.self).response
+        let dto = try handleErrorDecodable(response: response)
+        print("accessToken: \(dto.accessToken)")
+        return dto
+    }
+    
+    func googleLogin(authCode: String) async throws -> AuthDto {
+        print("google login")
+        let response = await AF.request(AuthRouter.googleLogin(authCode: authCode)).serializingDecodable(AuthDto.self).response
+        let dto = try handleErrorDecodable(response: response)
+        print("accessToken: \(dto.accessToken)")
+        return dto
+    }
 }

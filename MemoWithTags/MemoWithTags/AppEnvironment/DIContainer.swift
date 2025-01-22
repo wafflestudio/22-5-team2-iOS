@@ -29,9 +29,10 @@ extension DIContainer {
         let forgotPasswordUseCase: ForgotPasswordUseCase
         let resetPasswordUseCase: ResetPasswordUseCase
         let getUserInfoUseCase: GetUserInfoUseCase
+        
         let kakaoLoginUseCase: KakaoLoginUseCase
-//        let naverLoginUseCase: NaverLoginUseCase
-//        let googleLoginUseCase: GoogleLoginUseCase
+        let naverLoginUseCase: NaverLoginUseCase
+        let googleLoginUseCase: GoogleLoginUseCase
         
         let createMemoUseCase: CreateMemoUseCase
         let updateMemoUseCase: UpdateMemoUseCase
@@ -73,8 +74,8 @@ extension DIContainer {
         let resetPasswordUseCase = DefaultResetPasswordUseCase(authRepository: repositories.authRepository)
         let getUserInfoUseCase = DefaultGetUserInfoUseCase(authRepository: repositories.authRepository)
         let kakaoLoginUseCase = DefaultKakaoLoginUseCase(authRepository: repositories.authRepository)
-//        let googleLoginUseCase = DefaultGoogleLoginUseCase(authRepository: repositories.authRepository)
-//        let naverLoginUseCase = DefaultNaverLoginUseCase(authRepository: repositories.authRepository)
+        let googleLoginUseCase = DefaultGoogleLoginUseCase(authRepository: repositories.authRepository)
+        let naverLoginUseCase = DefaultNaverLoginUseCase(authRepository: repositories.authRepository)
         
         let createMemoUseCase = DefaultCreateMemoUseCase(memoRepository: repositories.memoRepository)
         let updateMemoUseCase = DefaultUpdateMemoUseCase(memoRepository: repositories.memoRepository)
@@ -94,7 +95,10 @@ extension DIContainer {
             forgotPasswordUseCase: forgotPasswordUseCase,
             resetPasswordUseCase: resetPasswordUseCase,
             getUserInfoUseCase: getUserInfoUseCase,
+            
             kakaoLoginUseCase: kakaoLoginUseCase,
+            naverLoginUseCase: naverLoginUseCase,
+            googleLoginUseCase: googleLoginUseCase,
             
             createMemoUseCase: createMemoUseCase,
             updateMemoUseCase: updateMemoUseCase,

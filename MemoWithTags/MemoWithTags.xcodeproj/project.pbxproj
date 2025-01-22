@@ -44,6 +44,8 @@
 		DA4018862D32E285008500E2 /* UpdateTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA40187C2D32E285008500E2 /* UpdateTagView.swift */; };
 		DA53E5192D338A0700C7C9F2 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53E5182D3389FD00C7C9F2 /* DIContainer.swift */; };
 		DA53E51C2D33941400C7C9F2 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53E51B2D33941000C7C9F2 /* AppState.swift */; };
+		DA6ACEB22D4139BF006427B3 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6ACEB12D4139B5006427B3 /* NaverLoginUseCase.swift */; };
+		DA6ACEB42D413A33006427B3 /* GoogleLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6ACEB32D413A2B006427B3 /* GoogleLoginUseCase.swift */; };
 		DA7230A72D34CD5C0065C65A /* SystemState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7230A62D34CD540065C65A /* SystemState.swift */; };
 		DA888AF52D2FA03B00525291 /* NavigationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA888AF42D2FA01500525291 /* NavigationState.swift */; };
 		DA888AF72D2FA73300525291 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA888AF62D2FA72F00525291 /* SplashView.swift */; };
@@ -127,6 +129,8 @@
 		DA40187C2D32E285008500E2 /* UpdateTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateTagView.swift; sourceTree = "<group>"; };
 		DA53E5182D3389FD00C7C9F2 /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		DA53E51B2D33941000C7C9F2 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		DA6ACEB12D4139B5006427B3 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
+		DA6ACEB32D413A2B006427B3 /* GoogleLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleLoginUseCase.swift; sourceTree = "<group>"; };
 		DA7230A62D34CD540065C65A /* SystemState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemState.swift; sourceTree = "<group>"; };
 		DA888AF42D2FA01500525291 /* NavigationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationState.swift; sourceTree = "<group>"; };
 		DA888AF62D2FA72F00525291 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -388,6 +392,8 @@
 				DABFE2312D28416000B314E2 /* ResetPasswordUseCase.swift */,
 				DA27DD9F2D3463F70044D3C1 /* GetUserInfoUseCase.swift */,
 				DABFE2332D28416000B314E2 /* KakaoLoginUseCase.swift */,
+				DA6ACEB12D4139B5006427B3 /* NaverLoginUseCase.swift */,
+				DA6ACEB32D413A2B006427B3 /* GoogleLoginUseCase.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -584,11 +590,13 @@
 				55E610BE2D2A65B200E452A8 /* SearchView.swift in Sources */,
 				DA3DA52A2D3650F9002C4839 /* UserState.swift in Sources */,
 				DA888AF72D2FA73300525291 /* SplashView.swift in Sources */,
+				DA6ACEB42D413A33006427B3 /* GoogleLoginUseCase.swift in Sources */,
 				DABFE2842D284E7200B314E2 /* TagRouter.swift in Sources */,
 				55E610C02D2A65C400E452A8 /* SettingsView.swift in Sources */,
 				DABFE25E2D28416000B314E2 /* KeyChainManager.swift in Sources */,
 				DABFE25F2D28416000B314E2 /* MemoRepository.swift in Sources */,
 				DABFE2602D28416000B314E2 /* TagRepository.swift in Sources */,
+				DA6ACEB22D4139BF006427B3 /* NaverLoginUseCase.swift in Sources */,
 				DAE6341B2D37CEB80098B9F0 /* ForgotPasswordView.swift in Sources */,
 				DABFE2612D28416000B314E2 /* EmailVerificationUseCase.swift in Sources */,
 				DA4018612D32D35C008500E2 /* MemoDto.swift in Sources */,

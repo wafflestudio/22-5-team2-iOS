@@ -11,6 +11,8 @@ import Foundation
 struct DeepLinkHandler {
     let appState: AppState
     let kakaoLoginUseCase: KakaoLoginUseCase
+    let naverLoginUseCase: NaverLoginUseCase
+    let googleLoginUseCase: GoogleLoginUseCase
     
     func handle(url: URL) async {
         guard url.scheme == "memowithtags",
@@ -37,9 +39,27 @@ struct DeepLinkHandler {
                     appState.system.errorMessage = error.localizedDescription()
                 }
             case "google":
-                print("Google login successful")
+                let result = await googleLoginUseCase.execute(authCode: code)
+                
+                switch result {
+                case .success:
+                    appState.user.isLoggedIn = true
+                    appState.navigation.push(to: .main)
+                case .failure(let error):
+                    appState.system.showAlert = true
+                    appState.system.errorMessage = error.localizedDescription()
+                }
             case "naver":
-                print("Naver login successful")
+                let result = await naverLoginUseCase.execute(authCode: code)
+                
+                switch result {
+                case .success:
+                    appState.user.isLoggedIn = true
+                    appState.navigation.push(to: .main)
+                case .failure(let error):
+                    appState.system.showAlert = true
+                    appState.system.errorMessage = error.localizedDescription()
+                }
             default:
                 appState.system.showAlert = true
                 appState.system.errorMessage = "유효하지 않은 접근"
