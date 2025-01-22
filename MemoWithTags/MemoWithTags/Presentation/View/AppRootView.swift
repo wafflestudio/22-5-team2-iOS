@@ -10,6 +10,8 @@ import SwiftUI
 struct AppRootView: View {
     var container: DIContainer
     
+    let deepLinkHandler: DeepLinkHandler
+    
     // stateobject로 관리해야하는 viewmodel들 = 큼직큼직한 뷰들
     @StateObject private var mainViewModel: MainViewModel
     @StateObject private var loginViewModel: LoginViewModel
@@ -20,6 +22,7 @@ struct AppRootView: View {
     
     init(container: DIContainer) {
         self.container = container
+        self.deepLinkHandler = .init(appState: container.appState, kakaoLoginUseCase: container.useCases.kakaoLoginUseCase, naverLoginUseCase: container.useCases.naverLoginUseCase, googleLoginUseCase: container.useCases.googleLoginUseCase)
         
         _mainViewModel = StateObject(wrappedValue: MainViewModel(container: container))
         _loginViewModel = StateObject(wrappedValue: LoginViewModel(container: container))
@@ -59,6 +62,11 @@ struct AppRootView: View {
                         SearchView(viewModel: mainViewModel)
                     }
                 }
+        }
+        .onOpenURL { url in
+            Task {
+                await deepLinkHandler.handle(url: url)
+            }
         }
         .alert(isPresented: container.appState.$system.showAlert) {
             return Alert(
