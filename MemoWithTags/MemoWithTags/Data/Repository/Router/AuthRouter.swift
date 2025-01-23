@@ -21,12 +21,7 @@ enum AuthRouter: Router {
     case googleLogin(authCode: String)
     
     var baseURL: URL {
-        switch self {
-        case .kakaoLogin, .naverLogin, .googleLogin:
-            return URL(string: NetworkConfiguration.baseURL + "/oauth")!
-        default:
-            return URL(string: NetworkConfiguration.baseURL + "/auth")!
-        }
+        return URL(string: NetworkConfiguration.baseURL + "/auth")!
     }
     
     var method: HTTPMethod {
@@ -55,11 +50,11 @@ enum AuthRouter: Router {
         case .getUserInfo:
             return "/me"
         case .kakaoLogin:
-            return "/kakao/login"
+            return "/login/kakao"
         case .googleLogin:
-            return "/google"
+            return "/login/google"
         case .naverLogin:
-            return "/naver"
+            return "/login/naver"
         }
     }
     

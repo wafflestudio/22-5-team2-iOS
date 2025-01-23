@@ -16,6 +16,7 @@
 		DA0A4EB82D2B9F0A007E481D /* EmailVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0A4EB72D2B9EF8007E481D /* EmailVerificationView.swift */; };
 		DA0A4EBA2D2BC544007E481D /* SignupSuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0A4EB92D2BC536007E481D /* SignupSuccessView.swift */; };
 		DA19C4E92D3FF9AF00ACDC00 /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA19C4E82D3FF9A200ACDC00 /* DeepLinkHandler.swift */; };
+		DA212CD12D429ADD005D1E15 /* RichTextKit in Frameworks */ = {isa = PBXBuildFile; productRef = DA212CD02D429ADD005D1E15 /* RichTextKit */; };
 		DA27DDA02D3464020044D3C1 /* GetUserInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA27DD9F2D3463F70044D3C1 /* GetUserInfoUseCase.swift */; };
 		DA2DA6632D2A9492000C0495 /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2DA6622D2A9487000C0495 /* SignupView.swift */; };
 		DA2F3EDA2D313050006F156E /* Flow in Frameworks */ = {isa = PBXBuildFile; productRef = DA2F3ED92D313050006F156E /* Flow */; };
@@ -185,6 +186,7 @@
 			files = (
 				DA2F3EDA2D313050006F156E /* Flow in Frameworks */,
 				DA0A4E752D2B7AFE007E481D /* Alamofire in Frameworks */,
+				DA212CD12D429ADD005D1E15 /* RichTextKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -507,6 +509,7 @@
 			packageProductDependencies = (
 				55E610D22D2AD5A500E452A8 /* Alamofire */,
 				DA2F3ED92D313050006F156E /* Flow */,
+				DA212CD02D429ADD005D1E15 /* RichTextKit */,
 			);
 			productName = MemoWithTags;
 			productReference = DA98BFF12D1D4B6B00F992AC /* MemoWithTags.app */;
@@ -539,6 +542,7 @@
 			packageReferences = (
 				55E610D12D2AD5A500E452A8 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				DA2F3ED82D313050006F156E /* XCRemoteSwiftPackageReference "SwiftUI-Flow" */,
+				DA212CCF2D429ADD005D1E15 /* XCRemoteSwiftPackageReference "RichTextKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DA98BFF22D1D4B6B00F992AC /* Products */;
@@ -865,6 +869,14 @@
 				minimumVersion = 5.10.2;
 			};
 		};
+		DA212CCF2D429ADD005D1E15 /* XCRemoteSwiftPackageReference "RichTextKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielsaidi/RichTextKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.2;
+			};
+		};
 		DA2F3ED82D313050006F156E /* XCRemoteSwiftPackageReference "SwiftUI-Flow" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/tevelee/SwiftUI-Flow";
@@ -880,6 +892,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 55E610D12D2AD5A500E452A8 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		DA212CD02D429ADD005D1E15 /* RichTextKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DA212CCF2D429ADD005D1E15 /* XCRemoteSwiftPackageReference "RichTextKit" */;
+			productName = RichTextKit;
 		};
 		DA2F3ED92D313050006F156E /* Flow */ = {
 			isa = XCSwiftPackageProductDependency;
