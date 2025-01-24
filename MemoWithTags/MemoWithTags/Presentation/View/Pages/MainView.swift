@@ -10,6 +10,8 @@ import SwiftUI
 struct MainView: View {
     @ObservedObject var viewModel: MainViewModel
     
+    @StateObject private var keyboardManager = KeyboardManager()
+    
     var body: some View {
         ZStack {
             Color.backgroundGray
@@ -20,10 +22,14 @@ struct MainView: View {
                 if !viewModel.editingMemoViewIsExpanded {
                     MemoListView(viewModel: viewModel)
                 }
-
                 // 메모 생성 or 수정 창
                 EditingMemoView(viewModel: viewModel)
+                
+                if keyboardManager.currentHeight > 0 {
+                    EditingTagListView(viewModel: viewModel)
+                }
             }
+
         }
         .onAppear {
             Task {
@@ -56,12 +62,6 @@ struct MainView: View {
                             viewModel.appState.navigation.push(to: .settings)
                         }
                 }
-            }
-            
-
-            // 키보드 바로 위 태그 리스트 창
-            ToolbarItem(placement: .keyboard) {
-                EditingTagListView(viewModel: viewModel)
             }
 
         }

@@ -21,6 +21,7 @@ enum Route: Hashable {
     case resetPasswordSuccess
     case settings
     case search
+    case memoEditor
 }
 
 @MainActor

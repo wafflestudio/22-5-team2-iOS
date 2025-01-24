@@ -114,7 +114,7 @@ struct LoginView: View {
                         }
                         
                         // 구글 로그인 버튼
-                        Link(destination: URL(string: "https://accounts.google.com/o/oauth2/v2/auth?client_id=596067660858-dtgcrfdb30tinv7ga272vnv0v53a2o9c.apps.googleusercontent.com&redirect_uri=http://ec2-43-201-64-202.ap-northeast-2.compute.amazonaws.com/api/v1/auth/code/google&response_type=code&scope=email%20profile")!) {
+                        Link(destination: URL(string: "https://accounts.google.com/o/oauth2/v2/auth?client_id=596067660858-dtgcrfdb30tinv7ga272vnv0v53a2o9c.apps.googleusercontent.com&redirect_uri=http://ec2-43-201-64-202.ap-northeast-2.compute.amazonaws.com:8080/api/v1/auth/code/google&response_type=code&scope=email%20profile")!) {
                             HStack(spacing: 4) {
                                 Image(.googleIcon)
                                     .resizable()
