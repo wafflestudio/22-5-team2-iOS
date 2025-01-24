@@ -8,10 +8,13 @@
 import SwiftUI
 import Flow
 
+@available(iOS 18.0, *)
 struct EditingMemoView: View {
     @ObservedObject var viewModel: MainViewModel
     
     @FocusState private var isTextEditorFocused: Bool
+    
+    @Namespace var namespace
     
     var body: some View {
         HStack(alignment: .bottom) {
@@ -35,12 +38,14 @@ struct EditingMemoView: View {
             }
 
             HStack {
-//                Button(action: { viewModel.appState.navigation.push(to: .memoEditor) }) {
-//                    Image(systemName: "arrow.down.left.and.arrow.up.right")
-//                        .font(.system(size: 15))
-//                        .foregroundColor(.black)
-//                }
-//                .padding(.bottom, 10)
+                Button {
+                    viewModel.appState.navigation.push(to: .memoEditor(namespace: namespace, id: "zoom"))
+                } label: {
+                    Image(systemName: "arrow.down.left.and.arrow.up.right")
+                        .font(.system(size: 15))
+                        .foregroundColor(.black)
+                }
+                .padding(.bottom, 10)
                 
                 // Create or Update Button
                 Button(action: (viewModel.isUpdating ? updateMemoAction : createMemoAction)) {
@@ -55,10 +60,10 @@ struct EditingMemoView: View {
         .padding(.horizontal, 17)
         .background(Color.memoBackgroundWhite)
         .cornerRadius(14)
-        .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 2)
-        .fixedSize(horizontal: false, vertical: true)
+        .matchedTransitionSource(id: "zoom", in: namespace)
         .padding(.horizontal, 7)
         .padding(.bottom, 14)
+        .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 2)
     }
     
     

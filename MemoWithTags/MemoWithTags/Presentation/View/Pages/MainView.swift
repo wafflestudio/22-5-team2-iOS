@@ -19,11 +19,15 @@ struct MainView: View {
             
             VStack {
                 // 메모 리스트
-                if !viewModel.editingMemoViewIsExpanded {
-                    MemoListView(viewModel: viewModel)
-                }
+                MemoListView(viewModel: viewModel)
+                    .padding(.vertical, 1)
+                
                 // 메모 생성 or 수정 창
-                EditingMemoView(viewModel: viewModel)
+                if #available(iOS 18.0, *) {
+                    EditingMemoView(viewModel: viewModel)
+                } else {
+                    // 애니메이션이 ios18부터 지원됨..
+                }
                 
                 if keyboardManager.currentHeight > 0 {
                     EditingTagListView(viewModel: viewModel)

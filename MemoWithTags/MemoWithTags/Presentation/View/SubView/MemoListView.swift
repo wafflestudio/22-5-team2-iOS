@@ -8,15 +8,17 @@ struct MemoListView: View {
             
             LazyVStack(alignment: .leading, spacing: 12) {
                 ForEach(viewModel.memos.reversed()) { memo in
-                    MemoView(memo: memo, viewModel: viewModel)
-                        .id(memo.id)
-                        .padding(.horizontal, 12)
+                    if #available(iOS 18.0, *) {
+                        MemoView(memo: memo, viewModel: viewModel)
+                            .id(memo.id)
+                    } else {
+                        // 애니메이션이 일단 ios18만 지원되는 상태..
+                    }
                 }
             }
             .padding(.bottom, 20)
 
         }
-        .padding(.top, 1)
         .defaultScrollAnchor(.bottom)
         
     }

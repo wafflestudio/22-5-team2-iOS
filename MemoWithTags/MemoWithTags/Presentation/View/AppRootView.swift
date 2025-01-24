@@ -12,8 +12,6 @@ struct AppRootView: View {
     
     let deepLinkHandler: DeepLinkHandler
     
-    @Namespace private var namespace
-    
     // stateobject로 관리해야하는 viewmodel들 = 큼직큼직한 뷰들
     @StateObject private var mainViewModel: MainViewModel
     @StateObject private var loginViewModel: LoginViewModel
@@ -62,10 +60,10 @@ struct AppRootView: View {
                         SettingsView(viewModel: mainViewModel)
                     case .search:
                         SearchView(viewModel: mainViewModel)
-                    case .memoEditor:
+                    case .memoEditor(let namespace, let id):
                         if #available(iOS 18.0, *) {
                             MemoEditorView(viewModel: mainViewModel)
-                                .navigationTransition(.zoom(sourceID: "zoom", in: namespace))
+                                .navigationTransition(.zoom(sourceID: id, in: namespace))
                         } else {
                             MemoEditorView(viewModel: mainViewModel)
                         }

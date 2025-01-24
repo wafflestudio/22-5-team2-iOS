@@ -8,6 +8,7 @@
 import SwiftUI
 import Flow
 
+@available(iOS 18.0, *)
 struct MemoView: View {
     let memo: Memo
     let lineLimit: Int = 2
@@ -15,6 +16,9 @@ struct MemoView: View {
     @ObservedObject var viewModel: MainViewModel
     @State private var isExpanded: Bool = false
     @State private var currentlyLocked = false
+    
+    @Namespace var namespace
+    @State private var showEditor = false
     
     var body: some View {
         VStack(alignment: .center) {
@@ -72,7 +76,7 @@ struct MemoView: View {
         .padding(.horizontal, 17)
         .background(Color.memoBackgroundWhite)
         .clipShape(RoundedRectangle(cornerRadius: 14))
-        .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
+        .matchedTransitionSource(id: "editor\(memo.id)", in: namespace)
         .onAppear {
             currentlyLocked = memo.locked
         }
@@ -94,7 +98,7 @@ struct MemoView: View {
                     isExpanded.toggle()
                 }
             } else {
-                viewModel.appState.navigation.push(to: .memoEditor)
+                viewModel.appState.navigation.push(to: .memoEditor(namespace: namespace, id: "editor\(memo.id)"))
             }
         }
         .contextMenu {
@@ -133,6 +137,8 @@ struct MemoView: View {
                 Label("삭제하기", systemImage: "trash")
             }
         }
+        .padding(.horizontal, 12)
+        .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
     }
 }
 

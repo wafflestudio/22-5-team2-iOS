@@ -43,10 +43,8 @@ struct MemoEditorView: View {
                     Button {
                         
                     } label: {
-                        Image(systemName: "highlighter")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 19, height: 21)
+                        Image(systemName: "pencil")
+                            .font(.system(size: 20))
                             .foregroundColor(.black)
                     }
         
@@ -103,10 +101,9 @@ struct MemoEditorView: View {
                     .onTapGesture {
                         viewModel.appState.navigation.pop()
                     }
-                Divider()
             }
         }
-        .navigationBarBackButtonHidden(true)
+        .navigationBarBackButtonHidden()
     }
 }
 
