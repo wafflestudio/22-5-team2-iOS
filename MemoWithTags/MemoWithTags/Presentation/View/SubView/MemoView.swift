@@ -8,20 +8,21 @@
 import SwiftUI
 import Flow
 
+@available(iOS 18.0, *)
 struct MemoView: View {
     let memo: Memo
-    let lineLimit: Int = 3
+    let lineLimit: Int = 2
     
     @ObservedObject var viewModel: MainViewModel
-    @State private var canExpand: Bool = false
     @State private var isExpanded: Bool = false
     @State private var currentlyLocked = false
     
+    @Namespace var namespace
+    @State private var showEditor = false
+    
     var body: some View {
-        VStack(alignment: .center, spacing: 8) {
-            // Memo Content
+        VStack(alignment: .center) {
             Text(memo.content)
-                .background(calculateTruncation())
                 .font(Font.custom("Pretendard", size: 16))
                 .foregroundColor(Color.memoTextBlack)
                 .lineLimit(isExpanded ? nil : lineLimit)
@@ -29,34 +30,53 @@ struct MemoView: View {
                 .animation(.spring, value: isExpanded)
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             
-            // Tags
-            HFlow{
+            HFlow {
                 ForEach(memo.tags, id: \.id) { tag in
                     TagView(viewModel: viewModel, tag: tag)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
-            // size 줄이는 아이콘
-            if canExpand && isExpanded {
-                Button(action: {
-                    withAnimation(.spring) {
-                        isExpanded.toggle()
+            // 한번 클릭 했을 때 나오는 밑에 버튼들
+            if isExpanded {
+                HStack {
+                    Button(action: {
+                        withAnimation(.spring) {
+                            isExpanded.toggle()
+                        }
+                    }) {
+                        Text("간략히")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color.dividerGray)
                     }
-                }) {
-                    Image(systemName: "chevron.up")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 10, height: 10)
-                        .foregroundColor(.gray)
+                    
+                    Spacer()
+                    
+                    Text("156년 XX월 XX일")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color.dividerGray)
+                    
+                    Button(action: {
+                        viewModel.isUpdating = true
+                        viewModel.updatingMemoId = memo.id
+                        viewModel.editingMemoContent = memo.content
+                        viewModel.editingMemoSelectedTags = memo.tags
+                        viewModel.updatingMemoIsLocked = memo.locked
+                    }) {
+                        Image(systemName: "pencil")
+                            .font(.system(size: 18))
+                            .foregroundStyle(Color.dividerGray)
+                    }
                 }
+                .padding(.top, 10)
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 13)
+        .padding(.top, 9)
+        .padding(.bottom, 12)
+        .padding(.horizontal, 17)
         .background(Color.memoBackgroundWhite)
-        .cornerRadius(14)
-        .shadow(color: Color.black.opacity(0.06), radius: 3, x: 0, y: 2)
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .matchedTransitionSource(id: "editor\(memo.id)", in: namespace)
         .onAppear {
             currentlyLocked = memo.locked
         }
@@ -73,16 +93,12 @@ struct MemoView: View {
                         }
                     }
                 }
-            } else if canExpand && !isExpanded {
+            } else if !isExpanded {
                 withAnimation(.spring) {
                     isExpanded.toggle()
                 }
             } else {
-                viewModel.isUpdating = true
-                viewModel.updatingMemoId = memo.id
-                viewModel.editingMemoContent = memo.content
-                viewModel.editingMemoSelectedTags = memo.tags
-                viewModel.updatingMemoIsLocked = memo.locked
+                viewModel.appState.navigation.push(to: .memoEditor(namespace: namespace, id: "editor\(memo.id)"))
             }
         }
         .contextMenu {
@@ -121,27 +137,8 @@ struct MemoView: View {
                 Label("삭제하기", systemImage: "trash")
             }
         }
-    }
-    
-    private func calculateTruncation() -> some View {
-        let singleLineHeight = 20 // font size 16이 line height 20을 차지할 것이라 가정.
-        let maxHeight = CGFloat(lineLimit * singleLineHeight)
-        
-        // ViewThatFits는 {} 안의 View 중에 보여줄 수 있는 View를 골라서 보여주는 View다.
-        // Text를 세 줄 안에 보여줄 수 있으면, canExpand는 false일 것이다. (기본값)
-        // 그렇지 않으면, Color.clear가 보일 것이고, canExpand는 true일 것이다.
-        return ViewThatFits {
-            Text(memo.content)
-                .font(Font.custom("Pretendard", size: 16))
-                .frame(maxWidth: .infinity, alignment: .topLeading)
-                .hidden()
-            
-            Color.clear
-                .onAppear {
-                    canExpand = true
-                }
-                .hidden()
-        }
-        .frame(height: maxHeight)
+        .padding(.horizontal, 12)
+        .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
     }
 }
+

@@ -56,11 +56,9 @@ final class MainViewModel: BaseViewModel, ObservableObject {
                 return updatedMemo
             }
             
-            await MainActor.run {
-                self.memos.insert(contentsOf: updatedMemos.reversed(), at: 0)
-                self.mainTotalPages = paginatedMemos.totalPages
-            }
-
+            self.memos.append(contentsOf: updatedMemos)
+            self.mainTotalPages = paginatedMemos.totalPages
+            
         case .failure(let error):
             appState.system.showAlert = true
             appState.system.errorMessage = error.localizedDescription()

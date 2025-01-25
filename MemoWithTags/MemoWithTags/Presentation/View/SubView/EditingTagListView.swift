@@ -61,6 +61,8 @@ struct EditingTagListView: View {
             
             // Spacer()
         }
+        .padding(.vertical, 7)
+        .padding(.horizontal, 10)
         .onAppear {
             generateRandomHexColor()
         }

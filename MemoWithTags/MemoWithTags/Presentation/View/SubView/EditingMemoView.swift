@@ -8,146 +8,64 @@
 import SwiftUI
 import Flow
 
+@available(iOS 18.0, *)
 struct EditingMemoView: View {
     @ObservedObject var viewModel: MainViewModel
     
-    @Namespace private var animationNamespace
-    
     @FocusState private var isTextEditorFocused: Bool
     
+    @Namespace var namespace
+    
     var body: some View {
-        VStack {
-            ZStack {
-                if !viewModel.editingMemoViewIsExpanded {
-                    smallView
-                        .matchedGeometryEffect(id: "editingMemoView", in: animationNamespace)
-                } else {
-                    expandedView
-                        .matchedGeometryEffect(id: "editingMemoView", in: animationNamespace)
-                }
-            }
-            .animation(.spring(), value: viewModel.editingMemoViewIsExpanded)
-        }
-        .navigationBarHidden(viewModel.editingMemoViewIsExpanded)
-    }
-    
-    
-    private var smallView: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            DynamicHeightTextEditor(
-                text: $viewModel.editingMemoContent,
-                maxHeight: 100
-            )
-            .matchedGeometryEffect(id: "textEditor", in: animationNamespace)
-            .focused($isTextEditorFocused)
+        HStack(alignment: .bottom) {
             
-            HStack(alignment: .bottom, spacing: 8) {
+            VStack(alignment: .leading) {
+                // 메모글 쓰는 곳
+                DynamicHeightTextEditor(
+                    text: $viewModel.editingMemoContent,
+                    maxHeight: 100
+                )
+                .focused($isTextEditorFocused)
+                
+                // 메모에 넣은 태그들
                 HFlow {
                     ForEach(viewModel.editingMemoSelectedTags, id: \.id) { tag in
                         TagView(viewModel: viewModel, tag: tag) {
                             removeTagFromSelectedTags(tag)
                         }
-                        .matchedGeometryEffect(id: "tag_\(tag.id)", in: animationNamespace)
                     }
-                }
-                
-                Spacer()
-                
-                // Expand Button
-                Button(action: {
-                    withAnimation {
-                        viewModel.editingMemoViewIsExpanded.toggle()
-                        // shrink 하고 나서도 키보드가 안 내려가게
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            self.isTextEditorFocused = true
-                        }
-                    }
-                }) {
-                    Image(systemName: "arrow.down.left.and.arrow.up.right")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 19, height: 21)
-                        .foregroundColor(.black)
-                }
-                
-                // Create or Update Button
-                Button(action: (viewModel.isUpdating ? updateMemoAction: createMemoAction)) {
-                    Image(systemName: "highlighter")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 19, height: 21)
-                        .foregroundColor(.black)
                 }
             }
+
+            HStack {
+                Button {
+                    viewModel.appState.navigation.push(to: .memoEditor(namespace: namespace, id: "zoom"))
+                } label: {
+                    Image(systemName: "arrow.down.left.and.arrow.up.right")
+                        .font(.system(size: 15))
+                        .foregroundColor(.black)
+                }
+                .padding(.bottom, 10)
+                
+                // Create or Update Button
+                Button(action: (viewModel.isUpdating ? updateMemoAction : createMemoAction)) {
+                    Image(systemName: "square.and.pencil")
+                        .font(.system(size: 20))
+                        .foregroundColor(.black)
+                }
+                .padding(.bottom, 10)
+            }
         }
-        .padding(.horizontal, 14)
-        .padding(.top, 9)
-        .padding(.bottom, 13)
+        .padding(.vertical, 5)
+        .padding(.horizontal, 17)
         .background(Color.memoBackgroundWhite)
         .cornerRadius(14)
-        .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 2)
-        .fixedSize(horizontal: false, vertical: true)
+        .matchedTransitionSource(id: "zoom", in: namespace)
         .padding(.horizontal, 7)
         .padding(.bottom, 14)
+        .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 2)
     }
     
-    
-    private var expandedView: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            DynamicHeightTextEditor(
-                text: $viewModel.editingMemoContent,
-                maxHeight: 400
-            )
-            .matchedGeometryEffect(id: "textEditor", in: animationNamespace)
-            .focused($isTextEditorFocused)
-            
-            Spacer()
-            
-            HStack(alignment: .bottom, spacing: 8) {
-                HFlow {
-                    ForEach(viewModel.editingMemoSelectedTags, id: \.id) { tag in
-                        TagView(viewModel: viewModel, tag: tag) {
-                            removeTagFromSelectedTags(tag)
-                        }
-                        .matchedGeometryEffect(id: "tag_\(tag.id)", in: animationNamespace)
-                    }
-                }
-                
-                Spacer()
-                
-                // Collapse Button
-                Button(action: {
-                    withAnimation {
-                        viewModel.editingMemoViewIsExpanded.toggle()
-                        // expand 하고 나서도 키보드가 안 내려가게
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            self.isTextEditorFocused = true
-                        }
-                    }
-                }) {
-                    Image(systemName: "arrow.up.right.and.arrow.down.left")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 19, height: 21)
-                        .foregroundColor(.black)
-                }
-                
-                // Create or Update Button
-                Button(action: (viewModel.isUpdating ? updateMemoAction: createMemoAction)) {
-                    Image(systemName: "highlighter")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 19, height: 21)
-                        .foregroundColor(.black)
-                }
-            }
-        }
-        .padding(.horizontal, 14)
-        .padding(.top, 9)
-        .padding(.bottom, 13)
-        .background(Color.memoBackgroundWhite)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
     
     private func removeTagFromSelectedTags(_ tag: Tag) {
         viewModel.editingMemoSelectedTags.removeAll { $0.id == tag.id }

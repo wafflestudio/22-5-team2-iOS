@@ -25,24 +25,7 @@ struct SearchView: View {
                 // Scroll view displaying search results
                 ScrollView {
                     VStack(alignment: .leading, spacing: 12) {
-                        GeometryReader { geometry in
-                            ProgressView()
-                                .frame(maxWidth: .infinity)
-                                .opacity(viewModel.isLoading ? 1 : 0)
-                                .onChange(of: geometry.frame(in: .named("scroll")).minY) {_, value in
-                                    Task {
-                                        if value > 0 && !viewModel.searchedMemos.isEmpty {
-                                            await fetchNextPage()
-                                        }
-                                    }
-                                }
-                        }
-                        /*
-                        ForEachIndexed(viewModel.searchedMemos.reversed()) { index, memo in
-                            MemoView(memo: memo, viewModel: viewModel)
-                                .id(memo.id)
-                        }
-                         */
+                        
                     }
                 }
                 .padding(.horizontal, 12)

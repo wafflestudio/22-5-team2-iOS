@@ -60,6 +60,13 @@ struct AppRootView: View {
                         SettingsView(viewModel: mainViewModel)
                     case .search:
                         SearchView(viewModel: mainViewModel)
+                    case .memoEditor(let namespace, let id):
+                        if #available(iOS 18.0, *) {
+                            MemoEditorView(viewModel: mainViewModel)
+                                .navigationTransition(.zoom(sourceID: id, in: namespace))
+                        } else {
+                            MemoEditorView(viewModel: mainViewModel)
+                        }
                     }
                 }
         }
