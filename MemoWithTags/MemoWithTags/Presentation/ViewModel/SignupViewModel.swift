@@ -32,12 +32,15 @@ final class SignupViewModel: BaseViewModel, ObservableObject {
         return emailPredicate.evaluate(with: email)
     }
     
-    func signup(email: String, password: String, passwordRepeat: String) async {
+    func signup(nickname: String, email: String, password: String, passwordRepeat: String) async {
         let isEmailValid = checkEmailValidity(email: email)
         checkPasswordValidity(password: password)
         let isPasswordSame = password == passwordRepeat
         
-        if !isEmailValid {
+        if nickname.count > 8 {
+            appState.system.showAlert = true
+            appState.system.errorMessage = "닉네임은 8자 이하입니다."
+        } else if !isEmailValid {
             appState.system.showAlert = true
             appState.system.errorMessage = RegisterError.invalidEmail.localizedDescription()
         } else if !isValidPassword {
@@ -47,7 +50,7 @@ final class SignupViewModel: BaseViewModel, ObservableObject {
             appState.system.showAlert = true
             appState.system.errorMessage = RegisterError.passwordNotMatch.localizedDescription()
         } else {
-            let result = await useCases.signupUseCase.execute(email: email, password: password)
+            let result = await useCases.signupUseCase.execute(nickname: nickname, email: email, password: password)
             
             switch result {
             case .success:

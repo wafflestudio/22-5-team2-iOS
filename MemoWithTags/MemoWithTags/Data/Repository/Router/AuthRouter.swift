@@ -9,13 +9,15 @@ import Foundation
 import Alamofire
 
 enum AuthRouter: Router {
-    case register(email: String, password: String)
+    case register(nickname: String, email: String, password: String)
     case login(email: String, password: String)
     case forgotPassword(email: String)
     case resetPassword(email: String, code: String, newPassword: String)
     case verifyEmail(email: String, code: String)
     case refreshToken(token: String)
     case getUserInfo
+    case setProfile(nickname: String)
+    case changePassword(currentPassword: String, newPassword: String)
     case kakaoLogin(authCode: String)
     case naverLogin(authCode: String)
     case googleLogin(authCode: String)
@@ -30,6 +32,8 @@ enum AuthRouter: Router {
             return .post
         case .getUserInfo, .kakaoLogin, .naverLogin, .googleLogin:
             return .get
+        case .changePassword, .setProfile:
+            return .put
         }
     }
     
@@ -49,6 +53,10 @@ enum AuthRouter: Router {
             return "/refresh-token"
         case .getUserInfo:
             return "/me"
+        case .setProfile:
+            return "/nickname"
+        case .changePassword:
+            return "/password"
         case .kakaoLogin:
             return "/login/kakao"
         case .googleLogin:
@@ -60,8 +68,9 @@ enum AuthRouter: Router {
     
     var parameters: Parameters? {
         switch self {
-        case let .register(email, password),
-             let .login(email, password):
+        case let .register(nickname, email, password):
+            return ["nickname": nickname, "email": email, "password": password]
+        case let .login(email, password):
             return ["email": email, "password": password]
         case let .verifyEmail(email, code):
             return ["email": email, "verificationCode": code]
@@ -75,6 +84,10 @@ enum AuthRouter: Router {
             return nil
         case let .kakaoLogin(code), let .googleLogin(code), let .naverLogin(code):
             return ["code": code]
+        case let .setProfile(nickname):
+            return ["nickname": nickname]
+        case let .changePassword(currentPassword, newPassword):
+            return ["password": newPassword]
         }
     }
 }

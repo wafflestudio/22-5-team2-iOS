@@ -11,87 +11,97 @@ import Flow
 struct MemoEditorView: View {
     @ObservedObject var viewModel: MainViewModel
     
-    @State private var text = NSAttributedString(string: "")
+    @State var text = NSAttributedString(string: "")
     @StateObject var context = RichTextContext()
     
-    @FocusState private var isTextEditorFocused: Bool
+    @StateObject private var keyboardManager = KeyboardManager()
 
     var body: some View {
         VStack(spacing: 0) {
             VStack {
                 RichTextEditor(text: $text, context: context)
-                    .focused($isTextEditorFocused)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled(true)
                     .overlay(Group { // placeholder
-                        if !isTextEditorFocused && text.string.isEmpty {
+                        if !context.isEditingText && text.string.isEmpty {
                             Text("메모를 작성해보세요.")
                                 .foregroundStyle(Color.dividerGray)
-                                .offset(x: 0, y: 5)
+                                .offset(x: 5, y: 8)
                         }
                     }, alignment: .topLeading)
-
-                HStack(alignment: .bottom, spacing: 8) {
-                    HFlow {
-                        ForEach(viewModel.editingMemoSelectedTags, id: \.id) { tag in
-                            TagView(viewModel: viewModel, tag: tag) {
-                                
-                            }
-                        }
-                    }
-                    
-                    Spacer()
-                    
-                    Button {
-                        
-                    } label: {
-                        Image(systemName: "pencil")
-                            .font(.system(size: 20))
-                            .foregroundColor(.black)
-                    }
-        
-                }
             }
-            .padding(.horizontal, 14)
+            .padding(.horizontal, 12)
             .padding(.vertical, 10)
             .background(Color.memoBackgroundWhite)
             
-
+            Spacer()
+            
+            HStack {
+                ForEach(viewModel.editorTags, id: \.id) { tag in
+                    TagView(viewModel: viewModel, tag: tag) {
+                        
+                    }
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
             
             Divider()
             
+            // 텍스트 편집기
             HStack(spacing: 10) {
-                Image(systemName: "textformat.size")
-                    .font(.system(size: 20))
-                    .foregroundColor(.tabBarNotSelectecdIconGray)
+                EditIcon(icon: "textformat", selected: false) {
+                    
+                }
+                    
+                EditIcon(icon: "bold", selected: context.hasStyle(.bold)) {
+                    context.toggleStyle(.bold)
+                }
                 
-                Image(systemName: "bold")
-                    .font(.system(size: 20))
-                    .foregroundColor(.tabBarNotSelectecdIconGray)
+                EditIcon(icon: "italic", selected: context.hasStyle(.italic)) {
+                    context.toggleStyle(.italic)
+                }
                 
-                Image(systemName: "italic")
-                    .font(.system(size: 20))
-                    .foregroundColor(.tabBarNotSelectecdIconGray)
+                EditIcon(icon: "underline", selected: context.hasStyle(.underlined)) {
+                    context.toggleStyle(.underlined)
+                }
                 
-                Image(systemName: "underline")
-                    .font(.system(size: 18))
-                    .foregroundColor(.tabBarNotSelectecdIconGray)
+                EditIcon(icon: "strikethrough", selected: context.hasStyle(.strikethrough)) {
+                    context.toggleStyle(.strikethrough)
+                }
                 
-                Image(systemName: "strikethrough")
-                    .font(.system(size: 20))
-                    .foregroundColor(.tabBarNotSelectecdIconGray)
+                EditIcon(icon: "increase.indent", selected: true) {
+                    context.handle(.stepIndent(points: 20))
+                }
+                
+                EditIcon(icon: "decrease.indent", selected: true) {
+                    context.handle(.stepIndent(points: -20))
+                }
+                
+                EditIcon(icon: "text.alignleft", selected: context.textAlignment == .left) {
+                    context.textAlignment = .left
+                }
+                
+                EditIcon(icon: "text.aligncenter", selected: context.textAlignment == .center) {
+                    context.textAlignment = .center
+                }
+                
+                EditIcon(icon: "text.alignright", selected: context.textAlignment == .right) {
+                    context.textAlignment = .right
+                }
+                
+                EditIcon(icon: "text.justify", selected: context.textAlignment == .justified) {
+                    context.textAlignment = .justified
+                }
 
-                Image(systemName: "list.bullet")
-                    .font(.system(size: 20))
-                    .foregroundColor(.tabBarNotSelectecdIconGray)
-                
-                Image(systemName: "list.number")
-                    .font(.system(size: 20))
-                    .foregroundColor(.tabBarNotSelectecdIconGray)
-                
-                Spacer()
             }
             .padding(.horizontal, 24)
             .padding(.vertical, 15)
             .background(Color.memoBackgroundWhite)
+            
+            if keyboardManager.currentHeight > 0 {
+                EditingTagListView(viewModel: viewModel)
+            }
             
         }
         .toolbar {
@@ -99,11 +109,23 @@ struct MemoEditorView: View {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 18))
                     .onTapGesture {
-                        viewModel.appState.navigation.pop()
+                        Task {
+//                            await viewModel.submit()
+                            viewModel.appState.navigation.pop()
+                        }
                     }
             }
         }
         .navigationBarBackButtonHidden()
+    }
+    
+    @ViewBuilder private func EditIcon(icon: String, selected: Bool, click: @escaping () -> Void) -> some View {
+        Image(systemName: icon)
+            .font(.system(size: 18))
+            .foregroundColor(selected ? .black : .tabBarNotSelectecdIconGray)
+            .onTapGesture {
+                click()
+            }
     }
 }
 

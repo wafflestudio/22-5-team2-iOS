@@ -13,4 +13,8 @@ struct Auth: Codable {
     let refreshToken: AuthToken
 }
 
-
+struct SocialAuth: Codable {
+    let accessToken: AuthToken
+    let refreshToken: AuthToken
+    let isNewUser: Bool
+}

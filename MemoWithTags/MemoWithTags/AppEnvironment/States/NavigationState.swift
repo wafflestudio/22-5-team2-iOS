@@ -19,7 +19,11 @@ enum Route: Hashable {
     case forgotPasswordEmailVerification(email: String)
     case resetPassword(email: String, code: String)
     case resetPasswordSuccess
+    case nicknameSetting
     case settings
+    case accountSetting
+    case changeNickname
+    case changePassword
     case search
     case memoEditor(namespace: Namespace.ID, id: String)
 }

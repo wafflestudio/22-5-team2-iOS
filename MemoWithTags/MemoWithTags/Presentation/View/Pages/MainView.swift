@@ -17,7 +17,7 @@ struct MainView: View {
             Color.backgroundGray
                 .ignoresSafeArea()
             
-            VStack {
+            VStack(spacing: 0) {
                 // 메모 리스트
                 MemoListView(viewModel: viewModel)
                     .padding(.vertical, 1)

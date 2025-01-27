@@ -7,106 +7,100 @@
 
 import SwiftUI
 import Flow
+import RichTextKit
 
 @available(iOS 18.0, *)
 struct EditingMemoView: View {
     @ObservedObject var viewModel: MainViewModel
     
-    @FocusState private var isTextEditorFocused: Bool
-    
     @Namespace var namespace
     
+    @State var dynamicHeight: CGFloat = 40
+    @StateObject var context = RichTextContext()
+    
     var body: some View {
-        HStack(alignment: .bottom) {
+        VStack(alignment: .leading, spacing: 6) {
+            // 메모글 쓰는 곳
+            DynamicHeightTextEditor(
+                text: $viewModel.editorContent,
+                maxHeight: 100
+            )
             
-            VStack(alignment: .leading) {
-                // 메모글 쓰는 곳
-                DynamicHeightTextEditor(
-                    text: $viewModel.editingMemoContent,
-                    maxHeight: 100
-                )
-                .focused($isTextEditorFocused)
-                
-                // 메모에 넣은 태그들
-                HFlow {
-                    ForEach(viewModel.editingMemoSelectedTags, id: \.id) { tag in
-                        TagView(viewModel: viewModel, tag: tag) {
-                            removeTagFromSelectedTags(tag)
-                        }
+            // 메모에 넣은 태그들
+            HFlow {
+                ForEach(viewModel.editorTags, id: \.id) { tag in
+                    TagView(viewModel: viewModel, tag: tag, addXmark: true) {
+                        removeTagFromSelectedTags(tag)
                     }
                 }
             }
-
+            
             HStack {
-                Button {
-                    viewModel.appState.navigation.push(to: .memoEditor(namespace: namespace, id: "zoom"))
-                } label: {
-                    Image(systemName: "arrow.down.left.and.arrow.up.right")
-                        .font(.system(size: 15))
-                        .foregroundColor(.black)
-                }
-                .padding(.bottom, 10)
-                
-                // Create or Update Button
-                Button(action: (viewModel.isUpdating ? updateMemoAction : createMemoAction)) {
+                switch viewModel.editorState {
+                case .create: // create 모드일 때
+                    Spacer()
+                    
                     Image(systemName: "square.and.pencil")
                         .font(.system(size: 20))
                         .foregroundColor(.black)
+                        .onTapGesture {
+                            Task {
+                                await viewModel.submit()
+                            }
+                        }
+
+                case .update: // 업데이트 모드일 때
+                    Image(systemName: "arrow.down.left.and.arrow.up.right")
+                        .font(.system(size: 17, weight: .regular))
+                        .foregroundColor(.dateGray)
+                        .onTapGesture {
+                            viewModel.appState.navigation.push(to: .memoEditor(namespace: namespace, id: "zoom"))
+                        }
+                    
+                    Spacer()
+                    
+                    Image(systemName: "xmark")
+                        .font(.system(size: 13, weight: .regular))
+                        .padding(.vertical, 4)
+                        .padding(.horizontal, 5)
+                        .foregroundColor(.memoBackgroundWhite)
+                        .background(Color.highlightRed)
+                        .clipShape(Circle())
+                        .onTapGesture {
+                            viewModel.editorState = .create
+                            viewModel.editorContent = ""
+                            viewModel.editorTags = []
+                        }
+                    
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 14, weight: .regular))
+                        .padding(.vertical, 3.5)
+                        .padding(.horizontal, 4)
+                        .foregroundColor(.black)
+                        .background(Color.backgroundGray)
+                        .clipShape(Circle())
+                        .onTapGesture {
+                            Task {
+                                await viewModel.submit()
+                            }
+                        }
                 }
-                .padding(.bottom, 10)
+                
             }
         }
-        .padding(.vertical, 5)
+        .padding(.top, 9)
+        .padding(.bottom, 12)
         .padding(.horizontal, 17)
         .background(Color.memoBackgroundWhite)
         .cornerRadius(14)
         .matchedTransitionSource(id: "zoom", in: namespace)
         .padding(.horizontal, 7)
-        .padding(.bottom, 14)
+        .padding(.bottom, 8)
         .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 2)
     }
     
     
     private func removeTagFromSelectedTags(_ tag: Tag) {
-        viewModel.editingMemoSelectedTags.removeAll { $0.id == tag.id }
-    }
-
-    private func createMemoAction() {
-        Task {
-            let trimmedContent = viewModel.editingMemoContent.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !trimmedContent.isEmpty else { return }
-            
-            let tagIds = viewModel.editingMemoSelectedTags.map { $0.id }
-            
-            await viewModel.createMemo(content: trimmedContent, tagIds: tagIds, locked: false)
-            
-            viewModel.memos = []
-            viewModel.mainCurrentPage = 0
-            await viewModel.fetchMemos()
-            
-            // Reset the input fields
-            viewModel.editingMemoContent = ""
-            viewModel.editingMemoSelectedTags = []
-            viewModel.hideKeyboard()
-        }
-    }
-    
-    private func updateMemoAction() {
-        Task {
-            let trimmedContent = viewModel.editingMemoContent.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !trimmedContent.isEmpty else { return}
-            
-            let tagIds = viewModel.editingMemoSelectedTags.map { $0.id }
-            
-            await viewModel.updateMemo(memoId: viewModel.updatingMemoId!, content: trimmedContent, tagIds: tagIds, locked: viewModel.updatingMemoIsLocked!)
-            
-            // Reset the input fields
-            viewModel.isUpdating = false
-            viewModel.updatingMemoId = nil
-            viewModel.editingMemoContent = ""
-            viewModel.editingMemoSelectedTags = []
-            viewModel.updatingMemoIsLocked = nil
-            viewModel.hideKeyboard()
-        }
+        viewModel.editorTags.removeAll { $0.id == tag.id }
     }
 }

@@ -10,7 +10,9 @@ import SwiftUI
 struct TagView: View {
     @ObservedObject var viewModel: MainViewModel
     @State private var isUpdating: Bool = false
+    
     var tag: Tag
+    var addXmark: Bool = false
     var onTap: (() -> Void)?
     
     var body: some View {
@@ -23,6 +25,16 @@ struct TagView: View {
             .cornerRadius(4)
             .lineLimit(1)
             .truncationMode(.tail)
+            .overlay (
+                Image(systemName: "xmark")
+                    .font(.system(size: 5, weight: .regular))
+                    .padding(.vertical, 2.5)
+                    .padding(.horizontal, 2.5)
+                    .foregroundColor(.memoBackgroundWhite)
+                    .background(Color.dateGray)
+                    .clipShape(Circle())
+                    .offset(x: 5, y: -5)
+                    .opacity(addXmark ? 1 : 0), alignment: .topTrailing)
             .onTapGesture {
                 onTap?()
             }

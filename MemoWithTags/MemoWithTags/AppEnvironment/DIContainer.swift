@@ -29,6 +29,8 @@ extension DIContainer {
         let forgotPasswordUseCase: ForgotPasswordUseCase
         let resetPasswordUseCase: ResetPasswordUseCase
         let getUserInfoUseCase: GetUserInfoUseCase
+        let setProfileUseCase: SetProfileUseCase
+        let changePasswordUseCase: ChangePasswordUseCase
         
         let kakaoLoginUseCase: KakaoLoginUseCase
         let naverLoginUseCase: NaverLoginUseCase
@@ -73,6 +75,9 @@ extension DIContainer {
         let forgotPasswordUseCase = DefaultForgotPasswordUseCase(authRepository: repositories.authRepository)
         let resetPasswordUseCase = DefaultResetPasswordUseCase(authRepository: repositories.authRepository)
         let getUserInfoUseCase = DefaultGetUserInfoUseCase(authRepository: repositories.authRepository)
+        let setProfileUseCase = DefaultSetProfileUseCase(authRepository: repositories.authRepository)
+        let changePasswordUseCase = DefaultChangePasswordUseCase(authRepository: repositories.authRepository)
+        
         let kakaoLoginUseCase = DefaultKakaoLoginUseCase(authRepository: repositories.authRepository)
         let googleLoginUseCase = DefaultGoogleLoginUseCase(authRepository: repositories.authRepository)
         let naverLoginUseCase = DefaultNaverLoginUseCase(authRepository: repositories.authRepository)
@@ -95,6 +100,8 @@ extension DIContainer {
             forgotPasswordUseCase: forgotPasswordUseCase,
             resetPasswordUseCase: resetPasswordUseCase,
             getUserInfoUseCase: getUserInfoUseCase,
+            setProfileUseCase: setProfileUseCase,
+            changePasswordUseCase: changePasswordUseCase,
             
             kakaoLoginUseCase: kakaoLoginUseCase,
             naverLoginUseCase: naverLoginUseCase,

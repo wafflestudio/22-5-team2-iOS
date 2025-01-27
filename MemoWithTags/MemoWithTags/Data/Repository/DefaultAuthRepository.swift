@@ -12,9 +12,9 @@ final class DefaultAuthRepository: AuthRepository {
     
     let tokenInterceptor = TokenInterceptor()
     
-    func register(email: String, password: String) async throws {
+    func register(nickname: String, email: String, password: String) async throws {
         print("register")
-        let response = await AF.request(AuthRouter.register(email: email, password: password)).serializingData().response
+        let response = await AF.request(AuthRouter.register(nickname: nickname, email: email, password: password)).serializingData().response
         try handleError(response: response)
     }
     
@@ -53,25 +53,39 @@ final class DefaultAuthRepository: AuthRepository {
         return dto
     }
     
-    func kakaoLogin(authCode: String) async throws -> AuthDto {
+    func setProfile(nickname: String) async throws {
+        print("set profile")
+        let response = await AF
+            .request(AuthRouter.setProfile(nickname: nickname), interceptor: tokenInterceptor).serializingDecodable(UserDto.self).response
+        let _ = try handleErrorDecodable(response: response)
+    }
+    
+    func changePassword(currentPassword: String, newPassword: String) async throws {
+        print("change password")
+        let response = await AF
+            .request(AuthRouter.changePassword(currentPassword: currentPassword, newPassword: newPassword), interceptor: tokenInterceptor).serializingDecodable(UserDto.self).response
+        let _ = try handleErrorDecodable(response: response)
+    }
+    
+    func kakaoLogin(authCode: String) async throws -> SocialAuthDto {
         print("kakao login")
-        let response = await AF.request(AuthRouter.kakaoLogin(authCode: authCode)).serializingDecodable(AuthDto.self).response
+        let response = await AF.request(AuthRouter.kakaoLogin(authCode: authCode)).serializingDecodable(SocialAuthDto.self).response
         let dto = try handleErrorDecodable(response: response)
         print("accessToken: \(dto.accessToken)")
         return dto
     }
     
-    func naverLogin(authCode: String) async throws -> AuthDto {
+    func naverLogin(authCode: String) async throws -> SocialAuthDto {
         print("naver login")
-        let response = await AF.request(AuthRouter.naverLogin(authCode: authCode)).serializingDecodable(AuthDto.self).response
+        let response = await AF.request(AuthRouter.naverLogin(authCode: authCode)).serializingDecodable(SocialAuthDto.self).response
         let dto = try handleErrorDecodable(response: response)
         print("accessToken: \(dto.accessToken)")
         return dto
     }
     
-    func googleLogin(authCode: String) async throws -> AuthDto {
+    func googleLogin(authCode: String) async throws -> SocialAuthDto {
         print("google login")
-        let response = await AF.request(AuthRouter.googleLogin(authCode: authCode)).serializingDecodable(AuthDto.self).response
+        let response = await AF.request(AuthRouter.googleLogin(authCode: authCode)).serializingDecodable(SocialAuthDto.self).response
         let dto = try handleErrorDecodable(response: response)
         print("accessToken: \(dto.accessToken)")
         return dto

@@ -14,3 +14,13 @@ struct AuthDto: Decodable {
         return Auth(accessToken: accessToken, refreshToken: refreshToken)
     }
 }
+
+struct SocialAuthDto: Decodable {
+    let accessToken: String
+    let refreshToken: String
+    let isNewUser: Bool
+    
+    func toAuth() -> SocialAuth {
+        return SocialAuth(accessToken: accessToken, refreshToken: refreshToken, isNewUser: isNewUser)
+    }
+}

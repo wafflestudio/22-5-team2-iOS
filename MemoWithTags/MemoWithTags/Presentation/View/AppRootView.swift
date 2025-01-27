@@ -56,8 +56,16 @@ struct AppRootView: View {
                         ResetPasswordView(viewModel: resetPasswordViewModel, email: email, code: code)
                     case .resetPasswordSuccess:
                         ResetPasswordSuccessView(viewModel: .init(container: container))
+                    case .nicknameSetting:
+                        NicknameSettingView(viewModel: .init(container: container))
                     case .settings:
                         SettingsView(viewModel: mainViewModel)
+                    case .accountSetting:
+                        AccountSettingView(viewModel: mainViewModel)
+                    case .changePassword:
+                        ChangePasswordView(viewModel: .init(container: container))
+                    case .changeNickname:
+                        ChangeNicknameView(viewModel: .init(container: container))
                     case .search:
                         SearchView(viewModel: mainViewModel)
                     case .memoEditor(let namespace, let id):

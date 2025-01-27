@@ -6,7 +6,7 @@
 //
 
 protocol KakaoLoginUseCase {
-    func execute(authCode: String) async -> Result<Void, SocialLoginError>
+    func execute(authCode: String) async -> Result<SocialAuth, SocialLoginError>
 }
 
 final class DefaultKakaoLoginUseCase: KakaoLoginUseCase {
@@ -16,7 +16,7 @@ final class DefaultKakaoLoginUseCase: KakaoLoginUseCase {
         self.authRepository = authRepository
     }
     
-    func execute(authCode: String) async -> Result<Void, SocialLoginError> {
+    func execute(authCode: String) async -> Result<SocialAuth, SocialLoginError> {
         do {
             let dto = try await authRepository.kakaoLogin(authCode: authCode)
             let auth = dto.toAuth()
@@ -25,7 +25,7 @@ final class DefaultKakaoLoginUseCase: KakaoLoginUseCase {
             let isRefreshSaved = KeyChainManager.shared.saveRefreshToken(token: auth.refreshToken)
             
             if isAccessSaved && isRefreshSaved {
-                return .success(())
+                return .success(auth)
             } else {
                 return .failure(.tokenSaveError)
             }

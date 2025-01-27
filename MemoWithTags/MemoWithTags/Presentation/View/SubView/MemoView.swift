@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Flow
+import RichTextKit
 
 @available(iOS 18.0, *)
 struct MemoView: View {
@@ -18,54 +19,73 @@ struct MemoView: View {
     @State private var currentlyLocked = false
     
     @Namespace var namespace
-    @State private var showEditor = false
     
     var body: some View {
-        VStack(alignment: .center) {
+        VStack(alignment: .center, spacing: 0) {
             Text(memo.content)
-                .font(Font.custom("Pretendard", size: 16))
                 .foregroundColor(Color.memoTextBlack)
                 .lineLimit(isExpanded ? nil : lineLimit)
                 .blur(radius: currentlyLocked ? 6 : 0)
                 .animation(.spring, value: isExpanded)
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             
-            HFlow {
-                ForEach(memo.tags, id: \.id) { tag in
-                    TagView(viewModel: viewModel, tag: tag)
+            if !memo.tags.isEmpty {
+                HFlow {
+                    ForEach(memo.tags, id: \.id) { tag in
+                        TagView(viewModel: viewModel, tag: tag)
+                    }
                 }
+                .padding(.top, 6)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
             
             // 한번 클릭 했을 때 나오는 밑에 버튼들
             if isExpanded {
-                HStack {
-                    Button(action: {
-                        withAnimation(.spring) {
-                            isExpanded.toggle()
-                        }
-                    }) {
-                        Text("간략히")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Color.dividerGray)
-                    }
+                HStack(alignment: .bottom) {
+                    Text(dateFormat(date: memo.createdAt))
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(Color.dateGray)
+                        .padding(.vertical, 3)
                     
                     Spacer()
                     
-                    Text("156년 XX월 XX일")
-                        .font(.system(size: 12))
-                        .foregroundStyle(Color.dividerGray)
+                    HStack(spacing: 4) {
+                        Text("관련 메모 검색")
+                            .font(.system(size: 11, weight: .medium))
+                        
+                            .foregroundStyle(Color.titleTextBlack)
+                        Image(.searchIcon)
+                            .resizable()
+                            .frame(width: 11.5, height: 11.5)
+                    }
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 13)
+                    .overlay(RoundedRectangle(cornerRadius: 22).stroke(.black.opacity(0.15), lineWidth: 1))
+                    .onTapGesture {
+                        viewModel.clearSearch()
+                        viewModel.searchBarText = memo.content
+                        // 현재 뷰가 search가 아닌 경우에만 searchPage로 이동
+                        if viewModel.appState.navigation.current != .search {
+                            viewModel.appState.navigation.push(to: .search)
+                        }
+                    }
                     
-                    Button(action: {
-                        viewModel.isUpdating = true
-                        viewModel.updatingMemoId = memo.id
-                        viewModel.editingMemoContent = memo.content
-                        viewModel.editingMemoSelectedTags = memo.tags
-                        viewModel.updatingMemoIsLocked = memo.locked
-                    }) {
-                        Image(systemName: "pencil")
-                            .font(.system(size: 18))
-                            .foregroundStyle(Color.dividerGray)
+                    HStack(spacing: 4) {
+                        Text("검색하며 수정")
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundStyle(Color.titleTextBlack)
+                        
+                        Image(.aiPenIcon)
+                            .resizable()
+                            .frame(width: 12, height: 11)
+                    }
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 13)
+                    .overlay(RoundedRectangle(cornerRadius: 22).stroke(.black.opacity(0.15), lineWidth: 1))
+                    .onTapGesture {
+                        viewModel.editorState = .update(target: memo)
+                        viewModel.editorContent = memo.content
+                        viewModel.editorTags = memo.tags
                     }
                 }
                 .padding(.top, 10)
@@ -98,6 +118,9 @@ struct MemoView: View {
                     isExpanded.toggle()
                 }
             } else {
+                viewModel.editorState = .update(target: memo)
+                viewModel.editorContent = memo.content
+                viewModel.editorTags = memo.tags
                 viewModel.appState.navigation.push(to: .memoEditor(namespace: namespace, id: "editor\(memo.id)"))
             }
         }
@@ -140,5 +163,13 @@ struct MemoView: View {
         .padding(.horizontal, 12)
         .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
     }
-}
+    
+    func dateFormat(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy년 MM월 dd일"
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        dateFormatter.locale = Locale(identifier: "ko_KR")
 
+        return dateFormatter.string(from: date)
+    }
+}

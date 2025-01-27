@@ -10,18 +10,14 @@ import SwiftUI
 
 @MainActor
 final class MainViewModel: BaseViewModel, ObservableObject {
+    
+    @Published var isLoading: Bool = false
+    
     //mainPage 변수들
     @Published var memos: [Memo] = []
     @Published var tags: [Tag] = []
     @Published var mainCurrentPage: Int = 0
     @Published var mainTotalPages: Int = 1
-    // main에서 edit과 관련된 변수들. edit을 create 또는 update으로 정의한다.
-    @Published var editingMemoViewIsExpanded: Bool = false
-    @Published var isUpdating: Bool = false
-    @Published var updatingMemoId: Int?
-    @Published var editingMemoContent: String = ""
-    @Published var editingMemoSelectedTags: [Tag] = []
-    @Published var updatingMemoIsLocked: Bool?
     
     //searchPage 변수들
     @Published var searchBarText: String = ""
@@ -31,7 +27,22 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     @Published var searchCurrentPage: Int = 0
     @Published var searchTotalPages: Int = 1
     
-    @Published var isLoading: Bool = false
+    // editor의 변수들 (축소, 확대 상태 모두)
+    @Published var editorState: EditorState = .create
+    @Published var editorContent: String = ""
+    @Published var editorTags: [Tag] = []
+    enum EditorState {
+        case create
+        case update(target: Memo)
+    }
+    
+    // 메모 정렬과 관련된 변수
+    @Published var sortMemo: Sort = .byCreate
+    @Published var sortSearch: Sort = .byCreate
+    enum Sort {
+        case byCreate
+        case byUpdate
+    }
     
     // mainView에서 첫 검색을 할 때나, pagenation을 할 때 모두 사용된다.
     func fetchMemos() async {
@@ -179,7 +190,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         switch result {
         case .success(let tag):
             self.tags.append(tag)
-            self.editingMemoSelectedTags.append(tag)
+//            self.editingMemoSelectedTags.append(tag)
         case .failure(let error):
             appState.system.showAlert = true
             appState.system.errorMessage = error.localizedDescription()
@@ -265,6 +276,7 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         
         switch result {
         case .success(let user):
+            appState.user.userId = user.id
             appState.user.userName = user.nickname
             appState.user.userEmail = user.email
         case .failure(let error):
@@ -283,7 +295,12 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         case .success:
             clearMain()
             clearSearch()
+            
             appState.user.isLoggedIn = false
+            appState.user.userId = nil
+            appState.user.userName = nil
+            appState.user.userEmail = nil
+            
             appState.navigation.reset()
             appState.navigation.push(to: .root)
         case .failure(let error):
@@ -292,9 +309,34 @@ final class MainViewModel: BaseViewModel, ObservableObject {
         }
     }
     
-    ///태그 추천 해주는 함수
+    ///태그 추천 해주는 함수: editor에 들어간 것들 뺴고
     func recommendTags() -> [Tag] {
-        tags.filter { !editingMemoSelectedTags.contains($0) }
+        tags.filter { !editorTags.contains($0) }
+    }
+    
+    ///editor에서 submit 했을 때 작동
+    func submit() async {
+        let trimmedContent = editorContent.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedContent.isEmpty else { return }
+    
+        let tagIds = editorTags.map { $0.id }
+        
+        switch editorState {
+        case .create:
+            await createMemo(content: trimmedContent, tagIds: tagIds, locked: false)
+            memos = []
+            mainCurrentPage = 0
+            await fetchMemos()
+
+        case .update(let target):
+            await updateMemo(memoId: target.id, content: trimmedContent, tagIds: tagIds, locked: target.locked)
+        }
+        
+        // Reset the input fields
+        editorState = .create
+        editorContent = ""
+        editorTags = []
+        hideKeyboard()
     }
     
     func hideKeyboard() {
@@ -309,9 +351,12 @@ final class MainViewModel: BaseViewModel, ObservableObject {
     func clearMain() {
         memos = []
         tags = []
-        editingMemoSelectedTags = []
         mainCurrentPage = 0
         mainTotalPages = 1
+        
+        editorState = .create
+        editorContent = ""
+        editorTags = []
     }
     
     func clearSearch() {

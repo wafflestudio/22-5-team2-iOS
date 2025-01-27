@@ -19,7 +19,7 @@ struct ForgotPasswordView: View {
             VStack(spacing: 36) {
                 
                 HStack(spacing: 4) {
-                    Text(viewModel.appState.navigation.path.count > 2 ? "비밀번호 재설정" : "비밀번호를 잊어버렸나요?")
+                    Text("비밀번호 찾기")
                         .font(.system(size: 21, weight: .semibold))
                         .foregroundStyle(Color.titleTextBlack)
                 }

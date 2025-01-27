@@ -38,7 +38,7 @@ struct EditingTagListView: View {
                 HStack(alignment: .center, spacing: 8) {
                     ForEach(filterTags(), id: \.id) { tag in
                         TagView(viewModel: viewModel, tag: tag) {
-                            appendTagToSelectedTags(tag)
+                            viewModel.editorTags.append(tag)
                         }
                     }
                     
@@ -66,11 +66,6 @@ struct EditingTagListView: View {
         .onAppear {
             generateRandomHexColor()
         }
-    }
-    
-    
-    private func appendTagToSelectedTags(_ tag: Tag) {
-        viewModel.editingMemoSelectedTags.append(tag)
     }
     
     // Function to filter tags based on search text
