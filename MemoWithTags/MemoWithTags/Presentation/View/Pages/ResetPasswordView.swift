@@ -198,7 +198,7 @@ struct ResetPasswordSuccessView: View {
                         //action
                         viewModel.start()
                     } label: {
-                        Text("시작하기")
+                        Text("로그인하러 가기")
                             .frame(maxWidth: .infinity)
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundStyle(.white)

@@ -20,77 +20,106 @@ struct SearchView: View {
                 .ignoresSafeArea()
             
             VStack(alignment: .leading, spacing: 0) {
-                Spacer()
-                
-                // Scroll view displaying search results
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 12) {
-                        
-                    }
-                }
-                .padding(.horizontal, 12)
-                .frame(maxWidth: .infinity)
-                .coordinateSpace(name: "scroll")
-                .defaultScrollAnchor(.bottom)
-                
-                HStack {
-                    ForEach(viewModel.searchBarSelectedTags, id: \.id) { tag in
-                        TagView(viewModel: viewModel, tag: tag) {
-                            removeTagFromSelectedTags(tag)
+                HStack(spacing: 10) {
+                    // 뒤로가기 버튼
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 18))
+                        .onTapGesture {
+                            viewModel.appState.navigation.pop()
                         }
-                    }
                     
-                    TextField("텍스트와 태그로 메모 검색", text: $viewModel.searchBarText)
-                        .onChange(of: viewModel.searchBarText) {
-                            // 실행하고 있는 searchTask를 종료
-                            searchTask?.cancel()
-                            
-                            // 새로운 searchTask 생성
-                            searchTask = Task {
-                                // 0.5초 기다리기
-                                try? await Task.sleep(nanoseconds: 500_000_000)
-                                
-                                await firstSearch()
+                    HStack {
+                        ForEach(viewModel.searchBarSelectedTags, id: \.id) { tag in
+                            TagView(viewModel: viewModel, tag: tag, addXmark: true) {
+                                removeTagFromSelectedTags(tag)
                             }
                         }
-                        .onAppear {
-                            UITextField.appearance().clearButtonMode = .whileEditing
-                        }
+                        
+                        TextField("텍스트와 태그로 메모 검색", text: $viewModel.searchBarText)
+                            .onChange(of: viewModel.searchBarText) {
+                                // 실행하고 있는 searchTask를 종료
+                                searchTask?.cancel()
+                                
+                                // 새로운 searchTask 생성
+                                searchTask = Task {
+                                    // 0.5초 기다리기
+                                    try? await Task.sleep(nanoseconds: 500_000_000)
+                                    
+                                    await firstSearch()
+                                }
+                            }
+                            .onAppear {
+                                UITextField.appearance().clearButtonMode = .whileEditing
+                            }
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .font(.system(size: 15, weight: .regular))
+                    .frame(maxWidth: .infinity)
+                    .background(Color.searchBarBackgroundGray)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
                 }
-                // SearchBar internal layout
-                .padding(.horizontal, 14)
-                .padding(.vertical, 8)
-                .font(.system(size: 15, weight: .regular))
-                .frame(maxWidth: .infinity)
-                .background(Color.searchBarBackgroundGray)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                // SearchBar external padding
                 .padding(.horizontal, 16)
-                .padding(.vertical, 8)
+                .padding(.bottom, 14)
                 
-                // Display searched tags
-                HFlow {
-                    ForEach(viewModel.searchedTags, id: \.id) { tag in
-                        TagView(viewModel: viewModel, tag: tag) {
-                            appendTagToSelectedTags(tag)
+                if viewModel.isLoading {
+                    VStack {
+                        ProgressView()
+                    }
+                    .padding(.vertical, 14)
+                    .frame(maxWidth: .infinity)
+                }
+                
+                // 태그 검색 결과
+                if !viewModel.searchedTags.isEmpty {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Tags")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(Color.dateGray)
+                            .padding(.horizontal, 14)
+
+                        
+                        HFlow {
+                            ForEach(viewModel.searchedTags, id: \.id) { tag in
+                                TagView(viewModel: viewModel, tag: tag) {
+                                    appendTagToSelectedTags(tag)
+                                }
+                            }
                         }
+                        .padding(.horizontal, 6)
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.bottom, 20)
+                }
+                
+                // 메모 검색 결과
+                if !viewModel.searchedMemos.isEmpty {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Memos")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(Color.dateGray)
+                            .padding(.horizontal, 26)
+                        
+                        ScrollView {
+                            LazyVStack(alignment: .leading, spacing: 12) {
+                                ForEach(viewModel.searchedMemos, id: \.id) { memo in
+                                    if #available(iOS 18.0, *) {
+                                        MemoView(memo: memo, viewModel: viewModel)
+                                    } else {
+                                        // 애니메이션이 일단 ios18만 지원되는 상태..
+                                    }
+                                }
+                            }
+                         }
+                         .frame(maxWidth: .infinity)
                     }
                 }
-                .padding(.horizontal, 16)
                 
+                Spacer()
             }
 
         }
         .navigationBarBackButtonHidden()
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 18))
-                    .onTapGesture {
-                        viewModel.appState.navigation.pop()
-                    }
-            }
-        }
         .onDisappear {
             viewModel.clearSearch()
         }

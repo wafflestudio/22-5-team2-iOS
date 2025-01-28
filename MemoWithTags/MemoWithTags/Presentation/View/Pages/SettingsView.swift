@@ -15,111 +15,129 @@ struct SettingsView: View {
             Color.backgroundGray
                 .ignoresSafeArea()
             
-            List {
-                VStack {
-                    Image(systemName: "person.fill")
-                        .font(.system(size: 30))
-                        .padding(10)
-                        .foregroundStyle(Color.white)
-                        .background(Color.searchBarBackgroundGray)
-                        .clipShape(Circle())
+            VStack(spacing: 12) {
+                HStack {
+                    Text("내 계정")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(Color.titleTextBlack)
+                    Spacer()
                     
-                    if viewModel.appState.user.userName != nil || viewModel.appState.user.userEmail != nil {
-                        Text(viewModel.appState.user.userName!)
-                            .font(.system(size: 20, weight: .medium))
-                            .foregroundColor(Color.titleTextBlack)
-                        
-                        Text(viewModel.appState.user.userEmail!)
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundColor(.black.opacity(0.5))
-                    } else {
-                        RoundedRectangle(cornerRadius: 14).frame(width: 80, height: 20)
-                            .foregroundStyle(.black.opacity(0.05))
-                        RoundedRectangle(cornerRadius: 14).frame(width: 150, height: 20)
-                            .foregroundStyle(.black.opacity(0.05))
-                    }
-                    
-                    
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 16, weight: .regular))
+                        .foregroundStyle(Color.dateGray)
                 }
-                .padding(.top, 60)
-                .padding(.bottom, 30)
-                .frame(maxWidth: .infinity)
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
+                .padding(.vertical, 13)
+                .padding(.horizontal, 17)
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+                .onTapGesture {
+                    viewModel.appState.navigation.push(to: .accountSetting)
+                }
                 
-                Section {
-                    CustomCell(icon: "person.crop.circle.fill", text: "프로필 수정") {
+                VStack(spacing: 20) {
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("메모 필터 기준")
+                            .font(.system(size: 12, weight: .regular))
+                            .foregroundStyle(Color.dateGray)
+                            .padding(.leading, 6)
                         
-                    }
-                    
-                    CustomCell(icon: "lock.fill", text: "비밀번호 재설정") {
-                        Task {
-                            viewModel.appState.navigation.push(to: .forgotPassword)
+                        HStack {
+                            Text("만든 날짜")
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(Color.titleTextBlack)
+                            
+                            Spacer()
+                            
+                            if viewModel.sortMemo == .byCreate {
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 16, weight: .regular))
+                                    .foregroundStyle(Color(hex: "#FF9C9C"))
+                            }
+                        }
+                        .onTapGesture {
+                            viewModel.sortMemo = .byCreate
+                        }
+                        
+                        HStack {
+                            Text("수정한 날짜")
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(Color.titleTextBlack)
+                            
+                            Spacer()
+                            
+                            if viewModel.sortMemo == .byUpdate {
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 16, weight: .regular))
+                                    .foregroundStyle(Color(hex: "#FF9C9C"))
+                            }
+                        }
+                        .onTapGesture {
+                            viewModel.sortMemo = .byUpdate
                         }
                     }
                     
-                    CustomCell(icon: "arrowshape.turn.up.backward.fill", text: "로그아웃", color: Color.red) {
-                        Task {
-                            await viewModel.logout()
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("검색 필터 기준")
+                            .font(.system(size: 12, weight: .regular))
+                            .foregroundStyle(Color.dateGray)
+                            .padding(.leading, 6)
+                    
+                        HStack {
+                            Text("만든 날짜")
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(Color.titleTextBlack)
+                            
+                            Spacer()
+                            
+                            if viewModel.sortSearch == .byCreate {
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 16, weight: .regular))
+                                    .foregroundStyle(Color(hex: "#FF9C9C"))
+                            }
+                        }
+                        .onTapGesture {
+                            viewModel.sortSearch = .byCreate
+                        }
+                        
+                        HStack {
+                            Text("수정한 날짜")
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(Color.titleTextBlack)
+                            
+                            Spacer()
+                            
+                            if viewModel.sortSearch == .byUpdate {
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 16, weight: .regular))
+                                    .foregroundStyle(Color(hex: "#FF9C9C"))
+                            }
+                        }
+                        .onTapGesture {
+                            viewModel.sortSearch = .byUpdate
                         }
                     }
-                    
-                } header: {
-                    Text("계정")
                 }
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-                
-                
-                //메모 관리
-                Section {
-                    CustomCell(icon: "text.page.fill", text: "잠긴 메모") {
-                        
-                    }
-                    
-                } header: {
-                    Text("메모 관리")
-                }
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-                
-                //태그 관리
-                Section {
-                    CustomCell(icon: "tag.fill", text: "전체 태그") {
-                        
-                    }
-                    
-                } header: {
-                    Text("태그 관리")
-                }
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
+                .padding(.vertical, 13)
+                .padding(.horizontal, 17)
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+
             }
-            .listStyle(.plain)
-            .listRowSpacing(10)
-            .scrollContentBackground(.hidden)
-            .padding(.horizontal, 14)
-        }
-        .onAppear {
-            Task {
-                await viewModel.getUserInfo()
-            }
+            .padding(.horizontal, 12)
+            
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Image(systemName: "chevron.left")
-                    .font(.system(size: 18))
+                    .font(.system(size: 17, weight: .regular))
                     .onTapGesture {
                         viewModel.appState.navigation.pop()
                     }
             }
             
             ToolbarItem(placement: .navigation) {
-                Text("Settings")
+                Text("설정")
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(Color.titleTextBlack)
             }

@@ -31,9 +31,14 @@ struct DeepLinkHandler {
                 let result = await kakaoLoginUseCase.execute(authCode: code)
                 
                 switch result {
-                case .success:
+                case .success(let auth):
                     appState.user.isLoggedIn = true
-                    appState.navigation.push(to: .main)
+                    if auth.isNewUser {
+                        appState.navigation.push(to: .nicknameSetting)
+                    } else {
+                        appState.navigation.push(to: .main)
+                    }
+
                 case .failure(let error):
                     appState.system.showAlert = true
                     appState.system.errorMessage = error.localizedDescription()
@@ -42,9 +47,14 @@ struct DeepLinkHandler {
                 let result = await googleLoginUseCase.execute(authCode: code)
                 
                 switch result {
-                case .success:
+                case .success(let auth):
                     appState.user.isLoggedIn = true
-                    appState.navigation.push(to: .main)
+                    if auth.isNewUser {
+                        appState.navigation.push(to: .nicknameSetting)
+                    } else {
+                        appState.navigation.push(to: .main)
+                    }
+                    
                 case .failure(let error):
                     appState.system.showAlert = true
                     appState.system.errorMessage = error.localizedDescription()
@@ -53,9 +63,14 @@ struct DeepLinkHandler {
                 let result = await naverLoginUseCase.execute(authCode: code)
                 
                 switch result {
-                case .success:
+                case .success(let auth):
                     appState.user.isLoggedIn = true
-                    appState.navigation.push(to: .main)
+                    if auth.isNewUser {
+                        appState.navigation.push(to: .nicknameSetting)
+                    } else {
+                        appState.navigation.push(to: .main)
+                    }
+                    
                 case .failure(let error):
                     appState.system.showAlert = true
                     appState.system.errorMessage = error.localizedDescription()

@@ -10,6 +10,7 @@ import SwiftUI
 struct SignupView: View {
     @ObservedObject var viewModel: SignupViewModel
     
+    @State private var nickname: String = ""
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var passwordRepeat: String = ""
@@ -32,6 +33,36 @@ struct SignupView: View {
                 //signup panel
                 VStack(spacing: 0) {
                     VStack(spacing: 10) {
+                        VStack(spacing: 4) {
+                            // 닉네임 입력 필드
+                            TextField (
+                                "",
+                                text: $nickname,
+                                prompt: Text("닉네임")
+                                    .font(.system(size: 16, weight: .regular))
+                                    .foregroundStyle(Color(hex: "#94979F"))
+                            )
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 14)
+                            .font(.system(size: 16, weight: .regular))
+                            .background(Color.white)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .stroke(Color(hex: "#181E2226"), lineWidth: 1)
+                            )
+                            .autocorrectionDisabled(true)
+                            .textInputAutocapitalization(.never)
+                            
+                            //조건 표시
+                            HStack {
+                                Spacer()
+                                Text("\(nickname.count)/8")
+                                    .font(.system(size: 12, weight: .regular))
+                                    .foregroundStyle(Color.dateGray)
+                                    .padding(.horizontal, 6)
+                            }
+                        }
+                        
                         //이메일 입력 필드
                         TextField (
                             "",
@@ -53,7 +84,7 @@ struct SignupView: View {
                         .textInputAutocapitalization(.never)
                         
                         // 비밀번호 입력 필드
-                        VStack(spacing: 2) {
+                        VStack(spacing: 4) {
                             SecureField(
                                 "",
                                 text: $password,
@@ -71,18 +102,13 @@ struct SignupView: View {
                             )
                             .autocorrectionDisabled(true)
                             .textInputAutocapitalization(.never)
-                            .onChange(of: password) {
-                                viewModel.checkPasswordValidity(password: password)
-                            }
                             
                             //조건 표시
                             HStack {
                                 Spacer()
-                                Text("\(viewModel.satisfiedCount)/5")
+                                Text("\(password.count)/8")
                                     .font(.system(size: 12, weight: .regular))
-                                    .foregroundStyle(
-                                        viewModel.isValidPassword ? Color.green : Color.dateGray
-                                    )
+                                    .foregroundStyle(Color.dateGray)
                                     .padding(.horizontal, 6)
                             }
                         }
@@ -111,7 +137,7 @@ struct SignupView: View {
                     Button {
                         //action
                         Task {
-                            await viewModel.signup(email: email, password: password, passwordRepeat: passwordRepeat)
+                            await viewModel.signup(nickname: nickname, email: email, password: password, passwordRepeat: passwordRepeat)
                         }
                     } label: {
                         Text("다음")
@@ -121,10 +147,10 @@ struct SignupView: View {
                             .padding(.vertical, 12)
 
                     }
-                    .background(email.isEmpty || password.isEmpty || passwordRepeat.isEmpty ? Color(hex: "#E3E3E7") : Color.titleTextBlack)
+                    .background(nickname.isEmpty || email.isEmpty || password.isEmpty || passwordRepeat.isEmpty ? Color(hex: "#E3E3E7") : Color.titleTextBlack)
                     .cornerRadius(22)
                     .padding(.top, 16)
-                    .disabled(email.isEmpty || password.isEmpty || passwordRepeat.isEmpty)
+                    .disabled(nickname.isEmpty || email.isEmpty || password.isEmpty || passwordRepeat.isEmpty)
                     
                     HStack(spacing: 8) {
                         DesignTagView(text: "로그인", fontSize: 14, fontWeight: .regular, horizontalPadding: 8, verticalPadding: 3, backGroundColor: "#F1F1F3", cornerRadius: 4) {

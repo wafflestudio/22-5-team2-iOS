@@ -17,6 +17,8 @@ struct MemoDto: Decodable {
 
     func toMemo() -> Memo {
         let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
         return Memo(
             id: id,
             content: content,

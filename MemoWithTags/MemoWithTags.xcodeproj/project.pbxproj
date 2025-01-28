@@ -45,6 +45,8 @@
 		DA4018842D32E285008500E2 /* MemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA40187A2D32E285008500E2 /* MemoView.swift */; };
 		DA4018852D32E285008500E2 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA40187B2D32E285008500E2 /* TagView.swift */; };
 		DA4018862D32E285008500E2 /* UpdateTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA40187C2D32E285008500E2 /* UpdateTagView.swift */; };
+		DA40BABC2D468EAA002A5893 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA40BABB2D468EAA002A5893 /* ChangePasswordView.swift */; };
+		DA40BABE2D468ED1002A5893 /* ChangeNickname.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA40BABD2D468EC3002A5893 /* ChangeNickname.swift */; };
 		DA53E5192D338A0700C7C9F2 /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53E5182D3389FD00C7C9F2 /* DIContainer.swift */; };
 		DA53E51C2D33941400C7C9F2 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA53E51B2D33941000C7C9F2 /* AppState.swift */; };
 		DA6ACEB22D4139BF006427B3 /* NaverLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6ACEB12D4139B5006427B3 /* NaverLoginUseCase.swift */; };
@@ -53,6 +55,7 @@
 		DA888AF52D2FA03B00525291 /* NavigationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA888AF42D2FA01500525291 /* NavigationState.swift */; };
 		DA888AF72D2FA73300525291 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA888AF62D2FA72F00525291 /* SplashView.swift */; };
 		DA8F562A2D34152000B8C23F /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8F56292D34151B00B8C23F /* BaseViewModel.swift */; };
+		DAA6789F2D45512F00EFB929 /* TextFormatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA6789E2D45512600EFB929 /* TextFormatManager.swift */; };
 		DABE95252D2F8CA900604FB7 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE95242D2F8CA300604FB7 /* SettingsViewModel.swift */; };
 		DABFE2542D28416000B314E2 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE21A2D28416000B314E2 /* Auth.swift */; };
 		DABFE2562D28416000B314E2 /* Memo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE21C2D28416000B314E2 /* Memo.swift */; };
@@ -92,6 +95,10 @@
 		DABFE2842D284E7200B314E2 /* TagRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2832D284E6800B314E2 /* TagRouter.swift */; };
 		DABFE2882D28634600B314E2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2872D28634400B314E2 /* User.swift */; };
 		DABFE28A2D286BDF00B314E2 /* EmailVerificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABFE2892D286BD200B314E2 /* EmailVerificationViewModel.swift */; };
+		DAD470B82D467EB500A3DFC3 /* AccountSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD470B72D467EAC00A3DFC3 /* AccountSettingView.swift */; };
+		DAE504052D465E0C0089B7D0 /* NicknameSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE504042D465DF90089B7D0 /* NicknameSettingView.swift */; };
+		DAE504072D4664C40089B7D0 /* SetProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE504062D4664BE0089B7D0 /* SetProfileUseCase.swift */; };
+		DAE504092D4664D90089B7D0 /* ChangePassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE504082D4664D10089B7D0 /* ChangePassword.swift */; };
 		DAE6341B2D37CEB80098B9F0 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE6341A2D37CE8A0098B9F0 /* ForgotPasswordView.swift */; };
 /* End PBXBuildFile section */
 
@@ -132,6 +139,8 @@
 		DA40187A2D32E285008500E2 /* MemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoView.swift; sourceTree = "<group>"; };
 		DA40187B2D32E285008500E2 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		DA40187C2D32E285008500E2 /* UpdateTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateTagView.swift; sourceTree = "<group>"; };
+		DA40BABB2D468EAA002A5893 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
+		DA40BABD2D468EC3002A5893 /* ChangeNickname.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNickname.swift; sourceTree = "<group>"; };
 		DA53E5182D3389FD00C7C9F2 /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		DA53E51B2D33941000C7C9F2 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		DA6ACEB12D4139B5006427B3 /* NaverLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverLoginUseCase.swift; sourceTree = "<group>"; };
@@ -141,6 +150,7 @@
 		DA888AF62D2FA72F00525291 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		DA8F56292D34151B00B8C23F /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		DA98BFF12D1D4B6B00F992AC /* MemoWithTags.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemoWithTags.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAA6789E2D45512600EFB929 /* TextFormatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormatManager.swift; sourceTree = "<group>"; };
 		DABE95242D2F8CA300604FB7 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		DABFE21A2D28416000B314E2 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
 		DABFE21C2D28416000B314E2 /* Memo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memo.swift; sourceTree = "<group>"; };
@@ -180,6 +190,10 @@
 		DABFE2832D284E6800B314E2 /* TagRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagRouter.swift; sourceTree = "<group>"; };
 		DABFE2872D28634400B314E2 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DABFE2892D286BD200B314E2 /* EmailVerificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVerificationViewModel.swift; sourceTree = "<group>"; };
+		DAD470B72D467EAC00A3DFC3 /* AccountSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingView.swift; sourceTree = "<group>"; };
+		DAE504042D465DF90089B7D0 /* NicknameSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameSettingView.swift; sourceTree = "<group>"; };
+		DAE504062D4664BE0089B7D0 /* SetProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProfileUseCase.swift; sourceTree = "<group>"; };
+		DAE504082D4664D10089B7D0 /* ChangePassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePassword.swift; sourceTree = "<group>"; };
 		DAE6341A2D37CE8A0098B9F0 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -203,6 +217,7 @@
 				DABFE2292D28416000B314E2 /* KeyChainManager.swift */,
 				55ECA11D2D3A7DC4003E1517 /* AuthenticationManager.swift */,
 				DA0DE63B2D43BD290006668A /* KeyboardManager.swift */,
+				DAA6789E2D45512600EFB929 /* TextFormatManager.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -398,6 +413,8 @@
 				DABFE22E2D28416000B314E2 /* ForgotPasswordUseCase.swift */,
 				DABFE2312D28416000B314E2 /* ResetPasswordUseCase.swift */,
 				DA27DD9F2D3463F70044D3C1 /* GetUserInfoUseCase.swift */,
+				DAE504062D4664BE0089B7D0 /* SetProfileUseCase.swift */,
+				DAE504082D4664D10089B7D0 /* ChangePassword.swift */,
 				DABFE2332D28416000B314E2 /* KakaoLoginUseCase.swift */,
 				DA6ACEB12D4139B5006427B3 /* NaverLoginUseCase.swift */,
 				DA6ACEB32D413A2B006427B3 /* GoogleLoginUseCase.swift */,
@@ -422,6 +439,7 @@
 				DABFE23E2D28416000B314E2 /* LoginView.swift */,
 				DA2DA6622D2A9487000C0495 /* SignupView.swift */,
 				DA0A4EB72D2B9EF8007E481D /* EmailVerificationView.swift */,
+				DAE504042D465DF90089B7D0 /* NicknameSettingView.swift */,
 				DA0A4EB92D2BC536007E481D /* SignupSuccessView.swift */,
 				DAE6341A2D37CE8A0098B9F0 /* ForgotPasswordView.swift */,
 				DA3641C92D396F2D0001EB20 /* ResetPasswordView.swift */,
@@ -429,6 +447,9 @@
 				DA212CD42D42A136005D1E15 /* MemoEditorView.swift */,
 				55E610BD2D2A65B200E452A8 /* SearchView.swift */,
 				55E610BF2D2A65C400E452A8 /* SettingsView.swift */,
+				DAD470B72D467EAC00A3DFC3 /* AccountSettingView.swift */,
+				DA40BABB2D468EAA002A5893 /* ChangePasswordView.swift */,
+				DA40BABD2D468EC3002A5893 /* ChangeNickname.swift */,
 			);
 			path = Pages;
 			sourceTree = "<group>";
@@ -580,6 +601,7 @@
 				DA4018642D32D3E5008500E2 /* TagDto.swift in Sources */,
 				DA53E5192D338A0700C7C9F2 /* DIContainer.swift in Sources */,
 				DABFE2542D28416000B314E2 /* Auth.swift in Sources */,
+				DAA6789F2D45512F00EFB929 /* TextFormatManager.swift in Sources */,
 				DA3641CA2D396F350001EB20 /* ResetPasswordView.swift in Sources */,
 				DA40185F2D32D336008500E2 /* UserDto.swift in Sources */,
 				DA3641CC2D3971EC0001EB20 /* ResetPasswordViewModel.swift in Sources */,
@@ -587,6 +609,8 @@
 				DA4018712D32DD02008500E2 /* DefaultTagRepository.swift in Sources */,
 				DABFE2562D28416000B314E2 /* Memo.swift in Sources */,
 				DABFE2572D28416000B314E2 /* Tag.swift in Sources */,
+				DA40BABE2D468ED1002A5893 /* ChangeNickname.swift in Sources */,
+				DAD470B82D467EB500A3DFC3 /* AccountSettingView.swift in Sources */,
 				DABFE2582D28416000B314E2 /* NetworkConfiguration.swift in Sources */,
 				DABFE2592D28416000B314E2 /* TokenInterceptor.swift in Sources */,
 				DABFE25A2D28416000B314E2 /* AuthRouter.swift in Sources */,
@@ -602,6 +626,7 @@
 				DA888AF72D2FA73300525291 /* SplashView.swift in Sources */,
 				DA6ACEB42D413A33006427B3 /* GoogleLoginUseCase.swift in Sources */,
 				DABFE2842D284E7200B314E2 /* TagRouter.swift in Sources */,
+				DAE504092D4664D90089B7D0 /* ChangePassword.swift in Sources */,
 				55E610C02D2A65C400E452A8 /* SettingsView.swift in Sources */,
 				DABFE25E2D28416000B314E2 /* KeyChainManager.swift in Sources */,
 				DABFE25F2D28416000B314E2 /* MemoRepository.swift in Sources */,
@@ -620,6 +645,7 @@
 				DABFE2672D28416000B314E2 /* KakaoLoginUseCase.swift in Sources */,
 				DABFE2882D28634600B314E2 /* User.swift in Sources */,
 				DABFE2682D28416000B314E2 /* CreateMemoUseCase.swift in Sources */,
+				DAE504072D4664C40089B7D0 /* SetProfileUseCase.swift in Sources */,
 				DA4018732D32DD5D008500E2 /* BaseRepositoryImpl.swift in Sources */,
 				DABFE2822D28481100B314E2 /* MemoRouter.swift in Sources */,
 				DA0A4EBA2D2BC544007E481D /* SignupSuccessView.swift in Sources */,
@@ -631,9 +657,11 @@
 				DA4018832D32E285008500E2 /* MemoListView.swift in Sources */,
 				DA4018842D32E285008500E2 /* MemoView.swift in Sources */,
 				DA212CD52D42A13C005D1E15 /* MemoEditorView.swift in Sources */,
+				DA40BABC2D468EAA002A5893 /* ChangePasswordView.swift in Sources */,
 				DA4018852D32E285008500E2 /* TagView.swift in Sources */,
 				DA4018862D32E285008500E2 /* UpdateTagView.swift in Sources */,
 				DABFE26A2D28416000B314E2 /* DeleteMemoUseCase.swift in Sources */,
+				DAE504052D465E0C0089B7D0 /* NicknameSettingView.swift in Sources */,
 				DA53E51C2D33941400C7C9F2 /* AppState.swift in Sources */,
 				DA19C4E92D3FF9AF00ACDC00 /* DeepLinkHandler.swift in Sources */,
 				DA40186B2D32DC2E008500E2 /* DefaultAuthRepository.swift in Sources */,
